@@ -117,18 +117,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
   // Photos Gallery Manager State
   const [newPhotoUrl, setNewPhotoUrl] = useState('');
-  const [photoGallery, setPhotoGallery] = useState<string[]>([
-    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85',
-    'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1600&q=85',
-    'https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=1600&q=85',
-    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=85',
-    'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1600&q=85',
-    'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1600&q=85',
-    'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1600&q=85',
-    'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1200&q=80',
-  ]);
+  const [photoGallery, setPhotoGallery] = useState<string[]>([]);
 
   // Status Filter for Budgets
   const [budgetStatusFilter, setBudgetStatusFilter] = useState<string>('ALL');
@@ -387,6 +376,47 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     if (!newPhotoUrl.trim()) return;
     setPhotoGallery([newPhotoUrl.trim(), ...photoGallery]);
     setNewPhotoUrl('');
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setLoading(true);
+    try {
+      const uploadPromises = Array.from(files).map((file) => {
+        return new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = async () => {
+            try {
+              const fileData = reader.result as string;
+              const res = await fetch('/api/upload', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fileData, fileName: file.name }),
+              });
+              
+              if (!res.ok) throw new Error(`Falha no upload: ${file.name}`);
+              const data = await res.json();
+              resolve(data.url);
+            } catch (err) {
+              reject(err);
+            }
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      });
+      
+      const urls = await Promise.all(uploadPromises);
+      setPhotoGallery(prev => [...urls, ...prev]);
+    } catch (err: any) {
+      alert(err.message || 'Erro ao importar imagens');
+    } finally {
+      setLoading(false);
+      // Reset input value to allow selecting the same files again
+      e.target.value = '';
+    }
   };
 
   if (!isOpen) return null;
@@ -1196,11 +1226,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   />
                   <button
                     onClick={handleAddPhotoToGallery}
-                    className="px-5 py-2.5 rounded-lg bg-[#D4AF37] text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:brightness-110"
+                    className="px-5 py-2.5 rounded-lg bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-neutral-700"
                   >
                     <Plus className="w-4 h-4" />
-                    <span>Adicionar à Galeria</span>
+                    <span>Por URL</span>
                   </button>
+                  <label className="px-5 py-2.5 rounded-lg bg-[#D4AF37] text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:brightness-110 cursor-pointer">
+                    <Upload className="w-4 h-4" />
+                    <span>Importar Imagem</span>
+                    <input type="file" accept="image/*" multiple className="hidden" onChange={handleFileUpload} />
+                  </label>
                 </div>
 
                 {/* Photos Grid */}
