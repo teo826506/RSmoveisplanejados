@@ -199,7 +199,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const fetchAllData = async () => {
     setLoading(true);
     try {
-      const [statsRes, projRes, budgRes, msgRes, cliRes, vidRes, settRes] = await Promise.all([
+      const [statsRes, projRes, budgRes, msgRes, cliRes, vidRes, settRes, galleryRes] = await Promise.all([
         fetch('/api/stats').then((r) => r.json()).catch(() => null),
         fetch('/api/projects?includeInactive=true').then((r) => r.json()).catch(() => []),
         fetch('/api/budgets').then((r) => r.json()).catch(() => []),
@@ -207,6 +207,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         fetch('/api/clients').then((r) => r.json()).catch(() => []),
         fetch('/api/videos?includeInactive=true').then((r) => r.json()).catch(() => []),
         fetch('/api/settings').then((r) => r.json()).catch(() => INITIAL_SETTINGS),
+        fetch('/api/gallery').then((r) => r.json()).catch(() => []),
       ]);
 
       if (statsRes) setStats(statsRes);
@@ -216,10 +217,23 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       if (cliRes) setClients(cliRes);
       if (vidRes) setVideos(vidRes);
       if (settRes) setSiteSettings(settRes);
+      if (Array.isArray(galleryRes)) setPhotoGallery(galleryRes);
     } catch (err) {
       console.error('Error fetching admin data:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const saveGallery = async (urls: string[]) => {
+    try {
+      await fetch('/api/gallery', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ urls }),
+      });
+    } catch (err) {
+      console.error('Erro ao salvar galeria:', err);
     }
   };
 
@@ -373,11 +387,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     setConfirmDelete({ type: 'message', id });
   };
 
-  const handleAddPhotoToGallery = () => {
-    if (!newPhotoUrl.trim()) return;
-    setPhotoGallery([newPhotoUrl.trim(), ...photoGallery]);
-    setNewPhotoUrl('');
-  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -410,14 +419,29 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       });
       
       const urls = await Promise.all(uploadPromises);
-      setPhotoGallery(prev => [...urls, ...prev]);
+      const updatedGallery = [...urls, ...photoGallery];
+      setPhotoGallery(updatedGallery);
+      await saveGallery(updatedGallery);
     } catch (err: any) {
       alert(err.message || 'Erro ao importar imagens');
     } finally {
       setLoading(false);
-      // Reset input value to allow selecting the same files again
       e.target.value = '';
     }
+  };
+
+  const handleAddPhotoToGalleryAndSave = () => {
+    if (!newPhotoUrl.trim()) return;
+    const updatedGallery = [newPhotoUrl.trim(), ...photoGallery];
+    setPhotoGallery(updatedGallery);
+    setNewPhotoUrl('');
+    saveGallery(updatedGallery);
+  };
+
+  const handleRemovePhotoFromGallery = (index: number) => {
+    const updatedGallery = photoGallery.filter((_, idx) => idx !== index);
+    setPhotoGallery(updatedGallery);
+    saveGallery(updatedGallery);
   };
 
   if (!isOpen) return null;
@@ -1232,7 +1256,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     className="flex-1 px-4 py-2.5 rounded-lg bg-black border border-neutral-800 text-white text-xs outline-none font-mono"
                   />
                   <button
-                    onClick={handleAddPhotoToGallery}
+                    type="button"
+                    onClick={handleAddPhotoToGalleryAndSave}
                     className="px-5 py-2.5 rounded-lg bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-neutral-700"
                   >
                     <Plus className="w-4 h-4" />
@@ -1269,7 +1294,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setPhotoGallery(photoGallery.filter((_, idx) => idx !== i));
+                            handleRemovePhotoFromGallery(i);
                           }}
                           className="text-[10px] text-red-400 hover:underline"
                         >

@@ -23,6 +23,7 @@ interface DbSchema {
   messages: Mensagem[];
   videos: VideoItem[];
   settings: SiteSettings;
+  gallery: string[];
 }
 
 function extractYouTubeId(url: string): string {
@@ -46,7 +47,8 @@ function initDatabase(): DbSchema {
         budgets: parsed.budgets || INITIAL_BUDGETS,
         messages: parsed.messages || INITIAL_MESSAGES,
         videos: parsed.videos || INITIAL_VIDEOS,
-        settings: parsed.settings ? { ...INITIAL_SETTINGS, ...parsed.settings } : INITIAL_SETTINGS
+        settings: parsed.settings ? { ...INITIAL_SETTINGS, ...parsed.settings } : INITIAL_SETTINGS,
+        gallery: parsed.gallery || []
       };
     } catch {
       console.warn('Could not parse existing database, resetting to initial seed.');
@@ -59,7 +61,8 @@ function initDatabase(): DbSchema {
     budgets: INITIAL_BUDGETS,
     messages: INITIAL_MESSAGES,
     videos: INITIAL_VIDEOS,
-    settings: INITIAL_SETTINGS
+    settings: INITIAL_SETTINGS,
+    gallery: []
   };
 
   try {
@@ -82,7 +85,8 @@ function loadDatabase(): DbSchema {
         budgets: parsed.budgets || INITIAL_BUDGETS,
         messages: parsed.messages || INITIAL_MESSAGES,
         videos: parsed.videos || INITIAL_VIDEOS,
-        settings: parsed.settings ? { ...INITIAL_SETTINGS, ...parsed.settings } : INITIAL_SETTINGS
+        settings: parsed.settings ? { ...INITIAL_SETTINGS, ...parsed.settings } : INITIAL_SETTINGS,
+        gallery: parsed.gallery || []
       };
     } catch {
       // fallback
@@ -149,6 +153,21 @@ app.put('/api/settings', (req, res) => {
   };
   saveDatabase();
   res.json({ success: true, settings: db.settings, message: 'Configurações atualizadas com sucesso!' });
+});
+
+// GALLERY ENDPOINTS
+app.get('/api/gallery', (req, res) => {
+  res.json(db.gallery || []);
+});
+
+app.put('/api/gallery', (req, res) => {
+  const { urls } = req.body;
+  if (!Array.isArray(urls)) {
+    return res.status(400).json({ error: 'urls deve ser um array de strings.' });
+  }
+  db.gallery = urls;
+  saveDatabase();
+  res.json({ success: true, gallery: db.gallery });
 });
 
 // VIDEOS & YOUTUBE ENDPOINTS
