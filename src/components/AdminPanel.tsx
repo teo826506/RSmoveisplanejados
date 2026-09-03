@@ -1181,7 +1181,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                         <div className="flex items-center justify-between pt-4 mt-3 border-t border-neutral-800">
                           <button
-                            onClick={() => {
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setVideoForm(vid);
                               setIsEditingVideo(true);
                             }}
@@ -1190,7 +1192,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                             <Edit2 className="w-3.5 h-3.5" /> Editar
                           </button>
                           <button
-                            onClick={() => handleDeleteVideo(vid.id)}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteVideo(vid.id);
+                            }}
                             className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1"
                           >
                             <Trash2 className="w-3.5 h-3.5" /> Excluir
@@ -1248,7 +1254,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       <img src={img} alt={`Foto ${i}`} className="w-full h-full object-cover" />
                       <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2 text-center">
                         <button
-                          onClick={() => {
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
                             navigator.clipboard.writeText(img);
                             alert('Link da foto copiado para a área de transferência!');
                           }}
@@ -1257,7 +1265,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           Copiar URL
                         </button>
                         <button
-                          onClick={() => setPhotoGallery(photoGallery.filter((_, idx) => idx !== i))}
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPhotoGallery(photoGallery.filter((_, idx) => idx !== i));
+                          }}
                           className="text-[10px] text-red-400 hover:underline"
                         >
                           Remover
@@ -1453,7 +1465,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                         <div className="flex items-center justify-between pt-4 mt-3 border-t border-neutral-800">
                           <button
-                            onClick={() => {
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setProjectForm(proj);
                               setIsEditingProject(true);
                             }}
@@ -1462,7 +1476,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                             <Edit2 className="w-3.5 h-3.5" /> Editar
                           </button>
                           <button
-                            onClick={() => handleDeleteProject(proj.id)}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteProject(proj.id);
+                            }}
                             className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1"
                           >
                             <Trash2 className="w-3.5 h-3.5" /> Excluir

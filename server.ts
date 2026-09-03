@@ -8,7 +8,9 @@ import { Projeto, Cliente, Orcamento, Mensagem, VideoItem, SiteSettings } from '
 const app = express();
 const PORT = 3000;
 
-app.use(express.json({ limit: '15mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use('/uploads', express.static(path.join(process.cwd(), 'public', 'uploads')));
 
 // Data file persistence path
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -528,17 +530,42 @@ app.post('/api/auth/login', (req, res) => {
   return res.status(401).json({ error: 'Senha ou usuário incorreto. Apenas o administrador possui acesso.' });
 });
 
-// IMAGE UPLOAD ENDPOINT (Vercel Blob mock/adapter)
+// IMAGE UPLOAD ENDPOINT (Local storage)
 app.post('/api/upload', (req, res) => {
   const { fileData, fileName } = req.body;
   if (!fileData) {
     return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
   }
-  // In serverless / dev mode, we return the base64 or a generated URL
-  // If actual Vercel Blob token is set, it will upload to Vercel Blob
-  const blobUrl = fileData.startsWith('data:') ? fileData : `https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80`;
+
+  if (fileData.startsWith('data:')) {
+    const matches = fileData.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return res.status(400).json({ error: 'Formato de arquivo inválido.' });
+    }
+    
+    const ext = matches[1].split('/')[1] || 'webp';
+    const buffer = Buffer.from(matches[2], 'base64');
+    
+    // Create a safe file name
+    const safeName = (fileName || `img-${Date.now()}.${ext}`).replace(/[^a-zA-Z0-9.\-]/g, '');
+    const finalName = `${Date.now()}-${safeName}`;
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+    
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    
+    fs.writeFileSync(path.join(uploadDir, finalName), buffer);
+    
+    return res.json({
+      url: `/uploads/${finalName}`,
+      pathname: finalName,
+      contentType: matches[1]
+    });
+  }
+
   res.json({
-    url: blobUrl,
+    url: `https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80`,
     pathname: fileName || `projeto-${Date.now()}.webp`,
     contentType: 'image/webp'
   });
