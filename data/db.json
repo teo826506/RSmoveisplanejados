@@ -1,35 +1,6 @@
 {
   "projects": [
     {
-      "id": "proj-14",
-      "titulo": "Estação de Trabalho Minimalista com Armários Flutuantes",
-      "slug": "estacao-trabalho-minimalista-armarios-flutuantes",
-      "categoria": "Home Office",
-      "descricao": "Bancada suspensa sob medida em MDF Carvalho Hanover com estrutura em mão francesa reforçada oculta, armários aéreos basculantes com pistão a gás e gaveteiro volante com rodízios de silicone.",
-      "imagemPrincipal": "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=1600&q=85",
-      "imagens": [
-        "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=1600&q=85",
-        "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "destaque": false,
-      "ordem": 14,
-      "ativo": true,
-      "materiais": [
-        "MDF Carvalho Hanover 25mm",
-        "Pistões a Gás Häfele",
-        "Passa-Cabos Escovado",
-        "Rodízios em Gel"
-      ],
-      "detalhes": {
-        "ambiente": "Home Office de Apartamento",
-        "acabamento": "Madeirado Natural & Design Minimalista",
-        "tempoExecucao": "12 dias úteis",
-        "garantia": "5 anos de garantia total"
-      },
-      "createdAt": "2026-08-23T09:30:00.000Z",
-      "updatedAt": "2026-08-23T09:30:00.000Z"
-    },
-    {
       "id": "proj-15",
       "titulo": "Gabinete Suspenso de Banheiro com Espelheira Camarim LED",
       "slug": "gabinete-suspenso-banheiro-espelheira-camarim-led",

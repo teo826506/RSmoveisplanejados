@@ -122,6 +122,34 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   // Status Filter for Budgets
   const [budgetStatusFilter, setBudgetStatusFilter] = useState<string>('ALL');
 
+  // Inline confirmation state (replaces window.confirm to avoid tab reset)
+  const [confirmDelete, setConfirmDelete] = useState<{ type: string; id: string } | null>(null);
+
+  const handleConfirmDelete = async () => {
+    if (!confirmDelete) return;
+    const { type, id } = confirmDelete;
+    setConfirmDelete(null);
+    try {
+      if (type === 'project') {
+        await fetch(`/api/projects/${id}`, { method: 'DELETE' });
+        fetchAllData();
+        if (onDataChanged) onDataChanged();
+      } else if (type === 'video') {
+        await fetch(`/api/videos/${id}`, { method: 'DELETE' });
+        fetchAllData();
+        if (onDataChanged) onDataChanged();
+      } else if (type === 'budget') {
+        await fetch(`/api/budgets/${id}`, { method: 'DELETE' });
+        fetchAllData();
+      } else if (type === 'message') {
+        await fetch(`/api/messages/${id}`, { method: 'DELETE' });
+        fetchAllData();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Track previous isOpen to detect panel opening (false -> true)
   const prevIsOpenRef = useRef(false);
 
@@ -271,14 +299,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   const handleDeleteVideo = async (id: string) => {
-    if (!window.confirm('Tem certeza que deseja excluir este vídeo?')) return;
-    try {
-      await fetch(`/api/videos/${id}`, { method: 'DELETE' });
-      fetchAllData();
-      if (onDataChanged) onDataChanged();
-    } catch (err) {
-      console.error(err);
-    }
+    setConfirmDelete({ type: 'video', id });
   };
 
   // ---------------- PROJECTS ACTIONS ----------------
@@ -314,14 +335,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   const handleDeleteProject = async (id: string) => {
-    if (!window.confirm('Tem certeza que deseja excluir este projeto?')) return;
-    try {
-      await fetch(`/api/projects/${id}`, { method: 'DELETE' });
-      fetchAllData();
-      if (onDataChanged) onDataChanged();
-    } catch (err) {
-      console.error(err);
-    }
+    setConfirmDelete({ type: 'project', id });
   };
 
   // ---------------- BUDGET & MESSAGES ACTIONS ----------------
@@ -339,13 +353,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   const handleDeleteBudget = async (id: string) => {
-    if (!window.confirm('Excluir este orçamento?')) return;
-    try {
-      await fetch(`/api/budgets/${id}`, { method: 'DELETE' });
-      fetchAllData();
-    } catch (err) {
-      console.error(err);
-    }
+    setConfirmDelete({ type: 'budget', id });
   };
 
   const handleOpenClientWhatsApp = (budget: Orcamento) => {
@@ -372,13 +380,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   const handleDeleteMessage = async (id: string) => {
-    if (!window.confirm('Excluir esta mensagem?')) return;
-    try {
-      await fetch(`/api/messages/${id}`, { method: 'DELETE' });
-      fetchAllData();
-    } catch (err) {
-      console.error(err);
-    }
+    setConfirmDelete({ type: 'message', id });
   };
 
   const handleAddPhotoToGallery = () => {
@@ -1662,6 +1664,44 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           </main>
         </div>
       </div>
+
+      {/* Inline Delete Confirmation Modal (replaces window.confirm) */}
+      {confirmDelete && (
+        <div className="fixed inset-0 z-[60] bg-black/70 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-[#111] border border-red-800/60 rounded-2xl shadow-2xl p-6 max-w-sm w-full space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-red-900/40 border border-red-700/50 flex items-center justify-center shrink-0">
+                <Trash2 className="w-5 h-5 text-red-400" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-white">Confirmar exclusão</h4>
+                <p className="text-xs text-neutral-400 mt-0.5">
+                  {confirmDelete.type === 'project' && 'Tem certeza que deseja excluir este projeto? Esta ação não pode ser desfeita.'}
+                  {confirmDelete.type === 'video' && 'Tem certeza que deseja excluir este vídeo?'}
+                  {confirmDelete.type === 'budget' && 'Tem certeza que deseja excluir este orçamento?'}
+                  {confirmDelete.type === 'message' && 'Tem certeza que deseja excluir esta mensagem?'}
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(null)}
+                className="px-4 py-2 rounded-lg border border-neutral-700 text-neutral-400 hover:text-white text-xs font-semibold transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 rounded-lg bg-red-700 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5" /> Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
