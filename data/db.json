@@ -1,5 +1,726 @@
 {
-  "projects": [],
+  "projects": [
+    {
+      "id": "proj-auto-0",
+      "titulo": "Projeto 1",
+      "descricao": "Descrição do projeto 1",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788477141590-WhatsAppImage2026-09-03at07.45.01.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 1,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.656Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-1",
+      "titulo": "Projeto 2",
+      "descricao": "Descrição do projeto 2",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788477141590-WhatsAppImage2026-09-03at07.45.01.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 2,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-2",
+      "titulo": "Projeto 3",
+      "descricao": "Descrição do projeto 3",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475907852-WhatsAppImage2026-09-03at13.55.17.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 3,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-3",
+      "titulo": "Projeto 4",
+      "descricao": "Descrição do projeto 4",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475907863-WhatsAppImage2026-09-03at13.55.181.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 4,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-4",
+      "titulo": "Projeto 5",
+      "descricao": "Descrição do projeto 5",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475907904-WhatsAppImage2026-09-03at13.55.18.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 5,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-5",
+      "titulo": "Projeto 6",
+      "descricao": "Descrição do projeto 6",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475907953-WhatsAppImage2026-09-03at13.55.191.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 6,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-6",
+      "titulo": "Projeto 7",
+      "descricao": "Descrição do projeto 7",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475907981-WhatsAppImage2026-09-03at13.55.19.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 7,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-7",
+      "titulo": "Projeto 8",
+      "descricao": "Descrição do projeto 8",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475907988-WhatsAppImage2026-09-03at13.55.201.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 8,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-8",
+      "titulo": "Projeto 9",
+      "descricao": "Descrição do projeto 9",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475907999-WhatsAppImage2026-09-03at13.55.202.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 9,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-9",
+      "titulo": "Projeto 10",
+      "descricao": "Descrição do projeto 10",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908003-WhatsAppImage2026-09-03at13.55.20.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 10,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-10",
+      "titulo": "Projeto 11",
+      "descricao": "Descrição do projeto 11",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908011-WhatsAppImage2026-09-03at13.54.43.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 11,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-11",
+      "titulo": "Projeto 12",
+      "descricao": "Descrição do projeto 12",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908019-WhatsAppImage2026-09-03at13.54.49.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 12,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-12",
+      "titulo": "Projeto 13",
+      "descricao": "Descrição do projeto 13",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908021-WhatsAppImage2026-09-03at13.54.52.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 13,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-13",
+      "titulo": "Projeto 14",
+      "descricao": "Descrição do projeto 14",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908027-WhatsAppImage2026-09-03at13.54.59.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 14,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-14",
+      "titulo": "Projeto 15",
+      "descricao": "Descrição do projeto 15",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908034-WhatsAppImage2026-09-03at13.55.031.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 15,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-15",
+      "titulo": "Projeto 16",
+      "descricao": "Descrição do projeto 16",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908037-WhatsAppImage2026-09-03at13.55.03.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 16,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-16",
+      "titulo": "Projeto 17",
+      "descricao": "Descrição do projeto 17",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908040-WhatsAppImage2026-09-03at13.55.041.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 17,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-17",
+      "titulo": "Projeto 18",
+      "descricao": "Descrição do projeto 18",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908051-WhatsAppImage2026-09-03at13.55.04.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 18,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-18",
+      "titulo": "Projeto 19",
+      "descricao": "Descrição do projeto 19",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908056-WhatsAppImage2026-09-03at13.55.071.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 19,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-19",
+      "titulo": "Projeto 20",
+      "descricao": "Descrição do projeto 20",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908063-WhatsAppImage2026-09-03at13.55.21.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 20,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-20",
+      "titulo": "Projeto 21",
+      "descricao": "Descrição do projeto 21",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908068-WhatsAppImage2026-09-03at13.54.42.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 21,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-21",
+      "titulo": "Projeto 22",
+      "descricao": "Descrição do projeto 22",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908086-WhatsAppImage2026-09-03at13.54.47.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 22,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-22",
+      "titulo": "Projeto 23",
+      "descricao": "Descrição do projeto 23",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908089-WhatsAppImage2026-09-03at13.55.05.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 23,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-23",
+      "titulo": "Projeto 24",
+      "descricao": "Descrição do projeto 24",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908096-WhatsAppImage2026-09-03at13.55.07.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 24,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-24",
+      "titulo": "Projeto 25",
+      "descricao": "Descrição do projeto 25",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908101-WhatsAppImage2026-09-03at13.55.091.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 25,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-25",
+      "titulo": "Projeto 26",
+      "descricao": "Descrição do projeto 26",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908105-WhatsAppImage2026-09-03at13.55.09.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 26,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-26",
+      "titulo": "Projeto 27",
+      "descricao": "Descrição do projeto 27",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908110-WhatsAppImage2026-09-03at13.55.111.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 27,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-27",
+      "titulo": "Projeto 28",
+      "descricao": "Descrição do projeto 28",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908117-WhatsAppImage2026-09-03at13.55.11.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 28,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-28",
+      "titulo": "Projeto 29",
+      "descricao": "Descrição do projeto 29",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908120-WhatsAppImage2026-09-03at13.55.16.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 29,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-29",
+      "titulo": "Projeto 30",
+      "descricao": "Descrição do projeto 30",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908123-WhatsAppImage2026-09-03at13.55.08.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 30,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-30",
+      "titulo": "Projeto 31",
+      "descricao": "Descrição do projeto 31",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908173-WhatsAppImage2026-09-03at13.55.10.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 31,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-31",
+      "titulo": "Projeto 32",
+      "descricao": "Descrição do projeto 32",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475908182-WhatsAppImage2026-09-03at13.55.14.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 32,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-32",
+      "titulo": "Projeto 33",
+      "descricao": "Descrição do projeto 33",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917069-WhatsAppImage2026-09-03at07.44.37.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 33,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-33",
+      "titulo": "Projeto 34",
+      "descricao": "Descrição do projeto 34",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917086-WhatsAppImage2026-09-03at07.44.39.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 34,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-34",
+      "titulo": "Projeto 35",
+      "descricao": "Descrição do projeto 35",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917101-WhatsAppImage2026-09-03at07.44.41.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 35,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-35",
+      "titulo": "Projeto 36",
+      "descricao": "Descrição do projeto 36",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917113-WhatsAppImage2026-09-03at07.44.51.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 36,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-36",
+      "titulo": "Projeto 37",
+      "descricao": "Descrição do projeto 37",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917119-WhatsAppImage2026-09-03at07.44.53.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 37,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-37",
+      "titulo": "Projeto 38",
+      "descricao": "Descrição do projeto 38",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917132-WhatsAppImage2026-09-03at07.44.43.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 38,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-38",
+      "titulo": "Projeto 39",
+      "descricao": "Descrição do projeto 39",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917148-WhatsAppImage2026-09-03at07.44.55.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 39,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-39",
+      "titulo": "Projeto 40",
+      "descricao": "Descrição do projeto 40",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917159-WhatsAppImage2026-09-03at07.44.45.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 40,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-40",
+      "titulo": "Projeto 41",
+      "descricao": "Descrição do projeto 41",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917163-WhatsAppImage2026-09-03at07.44.47.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 41,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-41",
+      "titulo": "Projeto 42",
+      "descricao": "Descrição do projeto 42",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917170-WhatsAppImage2026-09-03at07.44.49.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 42,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-42",
+      "titulo": "Projeto 43",
+      "descricao": "Descrição do projeto 43",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917176-WhatsAppImage2026-09-03at07.44.57.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 43,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-43",
+      "titulo": "Projeto 44",
+      "descricao": "Descrição do projeto 44",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917182-WhatsAppImage2026-09-03at07.44.59.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 44,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    },
+    {
+      "id": "proj-auto-44",
+      "titulo": "Projeto 45",
+      "descricao": "Descrição do projeto 45",
+      "categoria": "Cozinhas",
+      "imagemPrincipal": "/uploads/1788475917205-WhatsAppImage2026-09-03at07.45.01.jpeg",
+      "imagens": [],
+      "destaque": true,
+      "ordem": 45,
+      "ativo": true,
+      "createdAt": "2026-09-03T23:26:23.657Z",
+      "updatedAt": "2026-09-03T23:26:23.657Z",
+      "materiais": [
+        "100% MDF Premium"
+      ]
+    }
+  ],
   "clients": [
     {
       "id": "cli-1",
@@ -212,5 +933,52 @@
     "adminEmail": "admin@rsplanejados.com.br",
     "adminPassword": "admin",
     "updatedAt": "2026-09-03T22:09:12.760Z"
-  }
+  },
+  "gallery": [
+    "/uploads/1788477141590-WhatsAppImage2026-09-03at07.45.01.jpeg",
+    "/uploads/1788477141590-WhatsAppImage2026-09-03at07.45.01.jpeg",
+    "/uploads/1788475907852-WhatsAppImage2026-09-03at13.55.17.jpeg",
+    "/uploads/1788475907863-WhatsAppImage2026-09-03at13.55.181.jpeg",
+    "/uploads/1788475907904-WhatsAppImage2026-09-03at13.55.18.jpeg",
+    "/uploads/1788475907953-WhatsAppImage2026-09-03at13.55.191.jpeg",
+    "/uploads/1788475907981-WhatsAppImage2026-09-03at13.55.19.jpeg",
+    "/uploads/1788475907988-WhatsAppImage2026-09-03at13.55.201.jpeg",
+    "/uploads/1788475907999-WhatsAppImage2026-09-03at13.55.202.jpeg",
+    "/uploads/1788475908003-WhatsAppImage2026-09-03at13.55.20.jpeg",
+    "/uploads/1788475908011-WhatsAppImage2026-09-03at13.54.43.jpeg",
+    "/uploads/1788475908019-WhatsAppImage2026-09-03at13.54.49.jpeg",
+    "/uploads/1788475908021-WhatsAppImage2026-09-03at13.54.52.jpeg",
+    "/uploads/1788475908027-WhatsAppImage2026-09-03at13.54.59.jpeg",
+    "/uploads/1788475908034-WhatsAppImage2026-09-03at13.55.031.jpeg",
+    "/uploads/1788475908037-WhatsAppImage2026-09-03at13.55.03.jpeg",
+    "/uploads/1788475908040-WhatsAppImage2026-09-03at13.55.041.jpeg",
+    "/uploads/1788475908051-WhatsAppImage2026-09-03at13.55.04.jpeg",
+    "/uploads/1788475908056-WhatsAppImage2026-09-03at13.55.071.jpeg",
+    "/uploads/1788475908063-WhatsAppImage2026-09-03at13.55.21.jpeg",
+    "/uploads/1788475908068-WhatsAppImage2026-09-03at13.54.42.jpeg",
+    "/uploads/1788475908086-WhatsAppImage2026-09-03at13.54.47.jpeg",
+    "/uploads/1788475908089-WhatsAppImage2026-09-03at13.55.05.jpeg",
+    "/uploads/1788475908096-WhatsAppImage2026-09-03at13.55.07.jpeg",
+    "/uploads/1788475908101-WhatsAppImage2026-09-03at13.55.091.jpeg",
+    "/uploads/1788475908105-WhatsAppImage2026-09-03at13.55.09.jpeg",
+    "/uploads/1788475908110-WhatsAppImage2026-09-03at13.55.111.jpeg",
+    "/uploads/1788475908117-WhatsAppImage2026-09-03at13.55.11.jpeg",
+    "/uploads/1788475908120-WhatsAppImage2026-09-03at13.55.16.jpeg",
+    "/uploads/1788475908123-WhatsAppImage2026-09-03at13.55.08.jpeg",
+    "/uploads/1788475908173-WhatsAppImage2026-09-03at13.55.10.jpeg",
+    "/uploads/1788475908182-WhatsAppImage2026-09-03at13.55.14.jpeg",
+    "/uploads/1788475917069-WhatsAppImage2026-09-03at07.44.37.jpeg",
+    "/uploads/1788475917086-WhatsAppImage2026-09-03at07.44.39.jpeg",
+    "/uploads/1788475917101-WhatsAppImage2026-09-03at07.44.41.jpeg",
+    "/uploads/1788475917113-WhatsAppImage2026-09-03at07.44.51.jpeg",
+    "/uploads/1788475917119-WhatsAppImage2026-09-03at07.44.53.jpeg",
+    "/uploads/1788475917132-WhatsAppImage2026-09-03at07.44.43.jpeg",
+    "/uploads/1788475917148-WhatsAppImage2026-09-03at07.44.55.jpeg",
+    "/uploads/1788475917159-WhatsAppImage2026-09-03at07.44.45.jpeg",
+    "/uploads/1788475917163-WhatsAppImage2026-09-03at07.44.47.jpeg",
+    "/uploads/1788475917170-WhatsAppImage2026-09-03at07.44.49.jpeg",
+    "/uploads/1788475917176-WhatsAppImage2026-09-03at07.44.57.jpeg",
+    "/uploads/1788475917182-WhatsAppImage2026-09-03at07.44.59.jpeg",
+    "/uploads/1788475917205-WhatsAppImage2026-09-03at07.45.01.jpeg"
+  ]
 }

@@ -38,10 +38,10 @@ export default function App() {
         fetch('/api/settings').then((r) => r.json()).catch(() => null),
       ]);
 
-      if (Array.isArray(projRes) && projRes.length > 0) {
+      if (Array.isArray(projRes)) {
         setProjects(projRes);
       }
-      if (Array.isArray(vidRes) && vidRes.length > 0) {
+      if (Array.isArray(vidRes)) {
         setVideos(vidRes);
       }
       if (setRes && setRes.nomeEmpresa) {
