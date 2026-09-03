@@ -1,0 +1,6 @@
+{
+  "name": "RS Móveis Planejados em MDF",
+  "description": "Site institucional e plataforma de orçamentos e projetos de luxo para a RS Móveis Planejados em MDF.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

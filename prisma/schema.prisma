@@ -1,0 +1,82 @@
+// Prisma Schema for RS Móveis Planejados em MDF
+// Database: Neon PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id          String      @id @default(cuid())
+  nome        String
+  email       String?
+  telefone    String
+  cidade      String?
+  observacoes String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  orcamentos  Orcamento[]
+
+  @@map("clientes")
+}
+
+model Orcamento {
+  id                String   @id @default(cuid())
+  clienteId         String
+  ambiente          String
+  descricao         String
+  medidas           String?
+  orcamentoEstimado String?
+  status            String   @default("PENDENTE")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  cliente           Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  @@map("orcamentos")
+}
+
+model Projeto {
+  id              String   @id @default(cuid())
+  titulo          String
+  slug            String   @unique
+  descricao       String
+  categoria       String
+  imagemPrincipal String
+  imagens         Json?
+  destaque        Boolean  @default(false)
+  ordem           Int      @default(0)
+  ativo           Boolean  @default(true)
+  materiais       Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("projetos")
+}
+
+model Mensagem {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String?
+  telefone  String?
+  assunto   String?
+  mensagem  String
+  status    String   @default("NOVA")
+  createdAt DateTime @default(now())
+
+  @@map("mensagens")
+}
+
+model Administrador {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String   @unique
+  senhaHash String
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("administradores")
+}

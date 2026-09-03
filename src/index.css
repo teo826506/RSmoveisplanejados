@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-primary: #080808;
+    --bg-secondary: #111111;
+    --bg-card: #141414;
+    --gold-primary: #D4AF37;
+    --gold-secondary: #B8860B;
+    --gold-light: #F7E7A9;
+    --gold-dark: #8B6508;
+    --border-gold: rgba(212, 175, 55, 0.25);
+  }
+
+  body {
+    background-color: #080808;
+    color: #f3f4f6;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-serif-luxury {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .font-display-rs {
+    font-family: 'Cinzel', 'Playfair Display', serif;
+  }
+}
+
+/* Luxury Gold Text Gradients */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #FFF6D5 0%, #D4AF37 40%, #B8860B 80%, #F3E5AB 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gold-bright {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5E09A 40%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gold-metallic {
+  background: linear-gradient(90deg, #d4af37 0%, #ffebb3 50%, #aa8012 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Gold Glowing Borders & Backgrounds */
+.border-gold-subtle {
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.border-gold-glow {
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #e3c457 0%, #d4af37 50%, #9e7307 100%);
+}
+
+.bg-gold-gradient-hover:hover {
+  background: linear-gradient(135deg, #f2d777 0%, #dfbc45 50%, #b3840e 100%);
+}
+
+.bg-dark-surface {
+  background-color: #111111;
+  background-image: radial-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.glass-gold-panel {
+  background: rgba(18, 18, 18, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+/* Subtle Shimmer Animation */
+@keyframes goldShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-gold {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0) 0%, rgba(212, 175, 55, 0.2) 50%, rgba(212, 175, 55, 0) 100%);
+  background-size: 200% 100%;
+  animation: goldShimmer 3s infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080808;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2416;
+  border-radius: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
+
