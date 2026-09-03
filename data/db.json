@@ -936,7 +936,6 @@
   },
   "gallery": [
     "/uploads/1788477141590-WhatsAppImage2026-09-03at07.45.01.jpeg",
-    "/uploads/1788477141590-WhatsAppImage2026-09-03at07.45.01.jpeg",
     "/uploads/1788475907852-WhatsAppImage2026-09-03at13.55.17.jpeg",
     "/uploads/1788475907863-WhatsAppImage2026-09-03at13.55.181.jpeg",
     "/uploads/1788475907904-WhatsAppImage2026-09-03at13.55.18.jpeg",
@@ -980,5 +979,6 @@
     "/uploads/1788475917176-WhatsAppImage2026-09-03at07.44.57.jpeg",
     "/uploads/1788475917182-WhatsAppImage2026-09-03at07.44.59.jpeg",
     "/uploads/1788475917205-WhatsAppImage2026-09-03at07.45.01.jpeg"
-  ]
+  ],
+  "updatedAt": "2026-09-03T23:41:58.513Z"
 }
