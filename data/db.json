@@ -1,35 +1,6 @@
 {
   "projects": [
     {
-      "id": "proj-15",
-      "titulo": "Gabinete Suspenso de Banheiro com Espelheira Camarim LED",
-      "slug": "gabinete-suspenso-banheiro-espelheira-camarim-led",
-      "categoria": "Banheiros",
-      "descricao": "Gabinete suspenso com estrutura 100% em MDF Naval Ultra resistente a umidade e vapores, gavetões com divisores acrílicos para cosméticos, toalheiro embutido e espelheira camarim com iluminação anti-embaçante.",
-      "imagemPrincipal": "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1600&q=85",
-      "imagens": [
-        "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1600&q=85",
-        "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "destaque": true,
-      "ordem": 15,
-      "ativo": true,
-      "materiais": [
-        "100% MDF Hidrorrepelente Ultra",
-        "Laca Branca PU Alto Brilho",
-        "Espelho Cristal Bisotado",
-        "Puxadores Usinados"
-      ],
-      "detalhes": {
-        "ambiente": "Banheiro Master / Suíte",
-        "acabamento": "100% MDF Naval Anti-Umidade & Laca PU",
-        "tempoExecucao": "12 dias úteis",
-        "garantia": "5 anos de garantia total"
-      },
-      "createdAt": "2026-08-24T08:30:00.000Z",
-      "updatedAt": "2026-08-24T08:30:00.000Z"
-    },
-    {
       "id": "proj-16",
       "titulo": "Móvel para Lavabo de Luxo com Frente Ripada & Nicho Oculto",
       "slug": "movel-para-lavabo-luxo-frente-ripada-nicho-oculto",
@@ -57,35 +28,6 @@
       },
       "createdAt": "2026-08-25T14:00:00.000Z",
       "updatedAt": "2026-08-25T14:00:00.000Z"
-    },
-    {
-      "id": "proj-18",
-      "titulo": "Balcão Bar Gourmet Ilhado com Cristaleira Aérea",
-      "slug": "balcao-bar-gourmet-ilhado-cristaleira-aerea",
-      "categoria": "Espaço Gourmet",
-      "descricao": "Balcão ilha gourmet com acabamento em MDF Preto Matt anti-marcas de dedos, estrutura de prateleiras suspensas em serralheria dourada para copos e taças, espaço planejado para embutir chopeira e frigobar.",
-      "imagemPrincipal": "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1600&q=85",
-      "imagens": [
-        "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1600&q=85",
-        "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "destaque": false,
-      "ordem": 18,
-      "ativo": true,
-      "materiais": [
-        "MDF Preto Fosco Anti-Marcas",
-        "Prateleiras em Metal Dourado Escovado",
-        "Nichos para Embutir Eletros",
-        "Fitas LED 3000K"
-      ],
-      "detalhes": {
-        "ambiente": "Espaço Convivência Gourmet & Bar",
-        "acabamento": "MDF Anti-Marcas & Serralheria Dourada",
-        "tempoExecucao": "18 dias úteis",
-        "garantia": "5 anos de garantia total"
-      },
-      "createdAt": "2026-08-27T10:00:00.000Z",
-      "updatedAt": "2026-08-27T10:00:00.000Z"
     }
   ],
   "clients": [

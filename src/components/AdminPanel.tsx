@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   LayoutDashboard,
@@ -49,6 +49,8 @@ interface AdminPanelProps {
   isOpen: boolean;
   onClose: () => void;
   initialTab?: string;
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
   onDataChanged?: () => void;
 }
 
@@ -56,6 +58,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   isOpen,
   onClose,
   initialTab = 'dashboard',
+  activeTab: activeTabProp = 'dashboard',
+  onTabChange,
   onDataChanged,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
@@ -72,7 +76,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [authLoading, setAuthLoading] = useState(false);
 
   type TabType = 'dashboard' | 'config' | 'videos' | 'fotos' | 'projetos' | 'orcamentos' | 'mensagens' | 'deploy';
-  const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+  const activeTab = activeTabProp as TabType;
+  const setActiveTab = (tab: TabType) => { if (onTabChange) onTabChange(tab); };
 
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [projects, setProjects] = useState<Projeto[]>([]);
@@ -149,21 +154,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       console.error(err);
     }
   };
-
-  // Track previous isOpen to detect panel opening (false -> true)
-  const prevIsOpenRef = useRef(false);
-
-  useEffect(() => {
-    const wasOpen = prevIsOpenRef.current;
-    prevIsOpenRef.current = isOpen;
-
-    // Only reset the tab when the panel is actually opening (not on re-renders while already open)
-    if (isOpen && !wasOpen) {
-      if (initialTab && ['dashboard', 'config', 'videos', 'fotos', 'projetos', 'orcamentos', 'mensagens', 'deploy'].includes(initialTab)) {
-        setActiveTab(initialTab as TabType);
-      }
-    }
-  }, [initialTab, isOpen]);
 
   useEffect(() => {
     if (isOpen && isAuthenticated) {

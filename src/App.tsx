@@ -25,7 +25,8 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState<Projeto | null>(null);
   const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
-  const [adminInitialTab, setAdminInitialTab] = useState<string>('config');
+  const [adminInitialTab, setAdminInitialTab] = useState<string>('dashboard');
+  const [adminActiveTab, setAdminActiveTab] = useState<string>('dashboard');
   const [preSelectedAmbiente, setPreSelectedAmbiente] = useState<string>('Cozinha');
   const [activeSection, setActiveSection] = useState('inicio');
 
@@ -90,8 +91,9 @@ export default function App() {
     setIsBudgetModalOpen(true);
   };
 
-  const handleOpenAdmin = (tab: string = 'config') => {
+  const handleOpenAdmin = (tab: string = 'dashboard') => {
     setAdminInitialTab(tab);
+    setAdminActiveTab(tab);
     setIsAdminPanelOpen(true);
   };
 
@@ -177,6 +179,8 @@ export default function App() {
       <AdminPanel
         isOpen={isAdminPanelOpen}
         initialTab={adminInitialTab}
+        activeTab={adminActiveTab}
+        onTabChange={setAdminActiveTab}
         onClose={() => setIsAdminPanelOpen(false)}
         onDataChanged={fetchAppData}
       />
