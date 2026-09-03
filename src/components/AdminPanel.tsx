@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   X,
   LayoutDashboard,
@@ -122,9 +122,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   // Status Filter for Budgets
   const [budgetStatusFilter, setBudgetStatusFilter] = useState<string>('ALL');
 
+  // Track previous isOpen to detect panel opening (false -> true)
+  const prevIsOpenRef = useRef(false);
+
   useEffect(() => {
-    if (initialTab && ['dashboard', 'config', 'videos', 'fotos', 'projetos', 'orcamentos', 'mensagens', 'deploy'].includes(initialTab)) {
-      setActiveTab(initialTab as TabType);
+    const wasOpen = prevIsOpenRef.current;
+    prevIsOpenRef.current = isOpen;
+
+    // Only reset the tab when the panel is actually opening (not on re-renders while already open)
+    if (isOpen && !wasOpen) {
+      if (initialTab && ['dashboard', 'config', 'videos', 'fotos', 'projetos', 'orcamentos', 'mensagens', 'deploy'].includes(initialTab)) {
+        setActiveTab(initialTab as TabType);
+      }
     }
   }, [initialTab, isOpen]);
 
