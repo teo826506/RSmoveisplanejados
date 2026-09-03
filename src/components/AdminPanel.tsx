@@ -384,7 +384,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
     setLoading(true);
     try {
-      const uploadPromises = Array.from(files).map((file) => {
+      const uploadPromises = Array.from<File>(files).map((file) => {
         return new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.onloadend = async () => {

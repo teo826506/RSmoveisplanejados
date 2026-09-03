@@ -1,35 +1,6 @@
 {
   "projects": [
     {
-      "id": "proj-11",
-      "titulo": "Estante Divisória de Ambientes em MDF Vazado & Nichos",
-      "slug": "estante-divisoria-ambientes-mdf-vazado-nichos",
-      "categoria": "Salas",
-      "descricao": "Móvel divisor arquitetônico vazado que separa sutilmente o living da sala de jantar sem barrar a luz natural. Estrutura em MDF Carvalho Nobre combinada a perfis metálicos dourados e nichos decorativos com spots em LED.",
-      "imagemPrincipal": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85",
-      "imagens": [
-        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85",
-        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "destaque": false,
-      "ordem": 11,
-      "ativo": true,
-      "materiais": [
-        "MDF Carvalho 25mm",
-        "Perfis Metálicos com Pintura Eletrostática Ouro",
-        "Spots LED Embutidos",
-        "Nichos Assimétricos"
-      ],
-      "detalhes": {
-        "ambiente": "Living Integrado / Divisória de Ambientes",
-        "acabamento": "Vazado Arquitetônico & Iluminação Decorativa",
-        "tempoExecucao": "15 dias úteis",
-        "garantia": "5 anos de garantia total"
-      },
-      "createdAt": "2026-08-20T10:00:00.000Z",
-      "updatedAt": "2026-08-20T10:00:00.000Z"
-    },
-    {
       "id": "proj-12",
       "titulo": "Buffet Aparador & Cristaleira Iluminada para Sala de Jantar",
       "slug": "buffet-aparador-cristaleira-iluminada-sala-jantar",
