@@ -1,35 +1,6 @@
 {
   "projects": [
     {
-      "id": "proj-13",
-      "titulo": "Home Office Executivo com Mesa em L & Estante Modular",
-      "slug": "home-office-executivo-com-mesa-em-l-estante-modular",
-      "categoria": "Home Office",
-      "descricao": "Ambiente de trabalho funcional e imponente com mesa ampla em L com calha de fiação oculta e conectividade integrada, gaveteiro com fechadura e estante iluminada com nichos para livros e troféus.",
-      "imagemPrincipal": "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=1600&q=85",
-      "imagens": [
-        "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=1600&q=85",
-        "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "destaque": true,
-      "ordem": 13,
-      "ativo": true,
-      "materiais": [
-        "MDF Ébano Chess",
-        "MDF Cinza Sagrado",
-        "Conectividade Oculta no Tampo",
-        "Fitas LED 4000K Neutro"
-      ],
-      "detalhes": {
-        "ambiente": "Home Office Executivo / Gabinete",
-        "acabamento": "Textura Madeirada Fosca & Laca Acetinada",
-        "tempoExecucao": "15 dias úteis",
-        "garantia": "5 anos de garantia total"
-      },
-      "createdAt": "2026-08-22T11:00:00.000Z",
-      "updatedAt": "2026-08-22T11:00:00.000Z"
-    },
-    {
       "id": "proj-14",
       "titulo": "Estação de Trabalho Minimalista com Armários Flutuantes",
       "slug": "estacao-trabalho-minimalista-armarios-flutuantes",
