@@ -1,35 +1,5 @@
 {
-  "projects": [
-    {
-      "id": "proj-16",
-      "titulo": "Móvel para Lavabo de Luxo com Frente Ripada & Nicho Oculto",
-      "slug": "movel-para-lavabo-luxo-frente-ripada-nicho-oculto",
-      "categoria": "Banheiros",
-      "descricao": "Móvel exclusivo para lavabo social executado em MDF Louro Freijó naval com frente ripada usinada, suporte para cuba de sobrepor esculpida e nicho inferior embutido com iluminação quente para toalhas e aromatizador.",
-      "imagemPrincipal": "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1600&q=85",
-      "imagens": [
-        "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1600&q=85",
-        "https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "destaque": false,
-      "ordem": 16,
-      "ativo": true,
-      "materiais": [
-        "MDF Louro Freijó Naval 18mm",
-        "Usinagem Ripada Fina",
-        "Spot LED Integrado 3000K",
-        "Corrediças Ocultas Amortecidas"
-      ],
-      "detalhes": {
-        "ambiente": "Lavabo Social de Luxo",
-        "acabamento": "Ripado Nobre & Cuba Esculpida",
-        "tempoExecucao": "10 dias úteis",
-        "garantia": "5 anos de garantia total"
-      },
-      "createdAt": "2026-08-25T14:00:00.000Z",
-      "updatedAt": "2026-08-25T14:00:00.000Z"
-    }
-  ],
+  "projects": [],
   "clients": [
     {
       "id": "cli-1",
