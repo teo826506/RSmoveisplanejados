@@ -1,6 +1,11 @@
 {
   "outputDirectory": "dist",
   "buildCommand": "DATABASE_URL=\"postgresql://postgres:postgres@dummy:5432/dummy\" npx prisma generate && vite build",
+  "functions": {
+    "api/index.ts": {
+      "includeFiles": "api/_lib/**"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
