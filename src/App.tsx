@@ -15,13 +15,15 @@ import { Footer } from './components/Footer';
 import { BudgetModal } from './components/BudgetModal';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { AdminPanel } from './components/AdminPanel';
+import { PhotoGallerySection } from './components/PhotoGallerySection';
 import { Projeto, VideoItem, SiteSettings } from './types';
-import { INITIAL_PROJECTS, INITIAL_VIDEOS, INITIAL_SETTINGS } from './data/initialData';
+import { INITIAL_PROJECTS, INITIAL_VIDEOS, INITIAL_SETTINGS, INITIAL_GALLERY } from './data/initialData';
 
 export default function App() {
   const [projects, setProjects] = useState<Projeto[]>(INITIAL_PROJECTS);
   const [videos, setVideos] = useState<VideoItem[]>(INITIAL_VIDEOS);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(INITIAL_SETTINGS);
+  const [photoGallery, setPhotoGallery] = useState<string[]>(INITIAL_GALLERY);
   const [selectedProject, setSelectedProject] = useState<Projeto | null>(null);
   const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
@@ -32,10 +34,11 @@ export default function App() {
 
   const fetchAppData = async () => {
     try {
-      const [projRes, vidRes, setRes] = await Promise.all([
+      const [projRes, vidRes, setRes, galRes] = await Promise.all([
         fetch('/api/projects').then((r) => r.json()).catch(() => null),
         fetch('/api/videos').then((r) => r.json()).catch(() => null),
         fetch('/api/settings').then((r) => r.json()).catch(() => null),
+        fetch('/api/gallery').then((r) => r.json()).catch(() => null),
       ]);
 
       if (Array.isArray(projRes)) {
@@ -47,6 +50,9 @@ export default function App() {
       if (setRes && setRes.nomeEmpresa) {
         setSiteSettings(setRes);
       }
+      if (Array.isArray(galRes) && galRes.length > 0) {
+        setPhotoGallery(galRes);
+      }
     } catch (err) {
       console.warn('Using client initial state:', err);
     }
@@ -56,7 +62,7 @@ export default function App() {
     fetchAppData();
 
     const handleScroll = () => {
-      const sections = ['inicio', 'sobre', 'projetos', 'videos', 'servicos', 'materiais', 'orcamento', 'contato'];
+      const sections = ['inicio', 'sobre', 'projetos', 'galeria', 'videos', 'servicos', 'materiais', 'orcamento', 'contato'];
       const scrollPos = window.scrollY + 250;
 
       for (const section of sections) {
@@ -123,6 +129,12 @@ export default function App() {
         <ProjectsGallery
           projects={projects}
           onSelectProject={(p) => setSelectedProject(p)}
+          onOpenBudget={(amb) => handleOpenBudget(amb)}
+        />
+
+        {/* Real Photos Gallery Showcase */}
+        <PhotoGallerySection
+          photos={photoGallery}
           onOpenBudget={(amb) => handleOpenBudget(amb)}
         />
 

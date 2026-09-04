@@ -33,12 +33,8 @@ export const INITIAL_SETTINGS: SiteSettings = (dbJson.settings as SiteSettings) 
 };
 
 export const INITIAL_PROJECTS: Projeto[] = (dbJson.projects as Projeto[]) || [];
-
 export const INITIAL_CLIENTS: Cliente[] = (dbJson.clients as Cliente[]) || [];
-
 export const INITIAL_BUDGETS: Orcamento[] = (dbJson.budgets as Orcamento[]) || [];
-
 export const INITIAL_MESSAGES: Mensagem[] = (dbJson.messages as Mensagem[]) || [];
-
 export const INITIAL_VIDEOS: VideoItem[] = (dbJson.videos as VideoItem[]) || [];
-
+export const INITIAL_GALLERY: string[] = (dbJson.gallery as string[]) || [];

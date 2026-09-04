@@ -30,6 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
     { label: 'INÍCIO', id: 'inicio' },
     { label: 'SOBRE NÓS', id: 'sobre' },
     { label: 'PROJETOS', id: 'projetos' },
+    { label: 'GALERIA DE FOTOS', id: 'galeria' },
     { label: 'VÍDEOS & TOURS', id: 'videos' },
     { label: 'NOSSOS SERVIÇOS', id: 'servicos' },
     { label: 'MATERIAIS', id: 'materiais' },
