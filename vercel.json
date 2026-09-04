@@ -1,9 +1,9 @@
 {
   "outputDirectory": "dist",
-  "buildCommand": "vite build",
+  "buildCommand": "npx prisma generate && vite build",
   "functions": {
     "api/index.ts": {
-      "runtime": "@vercel/node@3"
+      "includeFiles": "node_modules/.prisma/client/**"
     }
   },
   "rewrites": [
