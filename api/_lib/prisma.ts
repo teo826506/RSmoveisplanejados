@@ -1,9 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import { createRequire } from 'module';
 
-let prismaInstance: PrismaClient | null = null;
+let prismaInstance: any = null;
 let isDisabled = false;
 
-export function getPrisma(): PrismaClient | null {
+export function getPrisma(): any {
   if (isDisabled) return null;
   if (prismaInstance) return prismaInstance;
 
@@ -14,6 +14,8 @@ export function getPrisma(): PrismaClient | null {
   }
 
   try {
+    const customRequire = createRequire(import.meta.url);
+    const { PrismaClient } = customRequire('@prisma/client');
     prismaInstance = new PrismaClient({
       log: ['error']
     });

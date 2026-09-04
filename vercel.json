@@ -1,15 +1,10 @@
 {
   "outputDirectory": "dist",
   "buildCommand": "npx prisma generate && vite build",
-  "functions": {
-    "api/index.ts": {
-      "includeFiles": "node_modules/.prisma/client/**"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.ts"
+      "destination": "/api/index"
     }
   ]
 }
