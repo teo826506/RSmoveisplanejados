@@ -1,29 +1,55 @@
 import express from 'express';
 import { getPrisma, extractYouTubeId } from './_lib/prisma';
-import dbJson from '../data/db.json';
+import path from 'path';
+import fs from 'fs';
 
+// Load db.json safely at runtime (works on Vercel with includeFiles)
+function loadDbJson(): any {
+  try {
+    // Try different possible paths for Vercel environment
+    const paths = [
+      path.join(__dirname, '../data/db.json'),
+      path.join(process.cwd(), 'data/db.json'),
+      path.join(__dirname, '../../data/db.json'),
+    ];
+    for (const p of paths) {
+      if (fs.existsSync(p)) {
+        return JSON.parse(fs.readFileSync(p, 'utf-8'));
+      }
+    }
+  } catch (e) {
+    console.error('Could not load db.json:', e);
+  }
+  return null;
+}
+
+const dbJson = loadDbJson() || { projects: [], gallery: [], videos: [], budgets: [], messages: [], clients: [], settings: null };
+
+// Default settings fallback from db.json or hardcoded
 const INITIAL_SETTINGS = dbJson.settings || {
   nomeEmpresa: 'RS Móveis Planejados em MDF',
-  slogan: 'Elegância em cada detalhe',
-  subtitulo: 'Móveis 100% MDF sob medida',
-  heroTagline: 'EXCELÊNCIA EM MÓVEIS SOB MEDIDA',
-  heroTituloLinha1: 'Transformamos',
-  heroTituloLinha2: 'Seus Sonhos em Realidade',
-  heroDescricao: 'Projetos exclusivos em MDF de alta qualidade',
-  heroImagemFundo: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c',
+  slogan: 'Em MDF, para espaços únicos como você.',
+  subtitulo: 'SOFISTICAÇÃO QUE TRANSFORMA',
+  heroTagline: 'SOFISTICAÇÃO QUE TRANSFORMA',
+  heroTituloLinha1: 'MÓVEIS',
+  heroTituloLinha2: 'PLANEJADOS',
+  heroDescricao: 'Em MDF, para espaços únicos como você. Projetos sob medida de alto luxo com acabamentos nobres, ferragens com amortecedores e 5 anos de garantia.',
+  heroImagemFundo: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=90',
   telefonePrincipal: '(11) 99999-8888',
   telefoneFixo: '(11) 3456-7890',
   whatsappNumero: '5511999998888',
   emailPrincipal: 'contato@rsplanejados.com.br',
   emailProjetos: 'orcamentos@rsplanejados.com.br',
-  endereco: 'São Paulo, SP',
+  endereco: 'São Paulo, SP - Atendimento em toda Grande SP, Alphaville, Litoral e Interior',
   instagram: 'https://instagram.com/rsplanejados',
   facebook: 'https://facebook.com/rsplanejados',
   youtube: 'https://youtube.com/@rsplanejados',
   statProjetos: '+500',
   statClientes: '+98%',
   statAnos: '+10 ANOS',
-  statAtendimento: 'PERSONALIZADO',
+  statAtendimento: 'PERSONALIZADO E LOCAL',
+  logoTamanho: 'grande',
+  brilhoOuroIntensidade: 'extremo',
   adminEmail: 'admin@rsplanejados.com.br',
   adminPassword: 'admin',
 };
@@ -138,8 +164,12 @@ router.get('/stats', async (_req, res) => {
 
 // Settings
 router.get('/settings', async (_req, res) => {
-  const s = await safeGetSettings();
-  res.json(s);
+  try {
+    const s = await safeGetSettings();
+    res.json(s);
+  } catch {
+    res.json(INITIAL_SETTINGS);
+  }
 });
 
 router.put('/settings', async (req, res) => {
@@ -160,8 +190,12 @@ router.put('/settings', async (req, res) => {
 
 // Gallery
 router.get('/gallery', async (_req, res) => {
-  const gallery = await safeGetGallery();
-  res.json(gallery);
+  try {
+    const gallery = await safeGetGallery();
+    res.json(gallery);
+  } catch {
+    res.json([]);
+  }
 });
 
 router.put('/gallery', async (req, res) => {
@@ -180,13 +214,17 @@ router.put('/gallery', async (req, res) => {
 
 // Videos
 router.get('/videos', async (req, res) => {
-  const { includeInactive, categoria } = req.query;
-  let list = await safeGetVideos();
-  if (includeInactive !== 'true') list = list.filter((v: any) => v.ativo !== false);
-  if (categoria && categoria !== 'Todas') {
-    list = list.filter((v: any) => (v.categoria || '').toLowerCase() === (categoria as string).toLowerCase());
+  try {
+    const { includeInactive, categoria } = req.query;
+    let list = await safeGetVideos();
+    if (includeInactive !== 'true') list = list.filter((v: any) => v.ativo !== false);
+    if (categoria && categoria !== 'Todas') {
+      list = list.filter((v: any) => (v.categoria || '').toLowerCase() === (categoria as string).toLowerCase());
+    }
+    res.json(list);
+  } catch {
+    res.json([]);
   }
-  res.json(list);
 });
 
 router.post('/videos', async (req, res) => {
@@ -235,23 +273,31 @@ router.delete('/videos/:id', async (req, res) => {
 
 // Projects
 router.get('/projects', async (req, res) => {
-  const { categoria, destaque, includeInactive } = req.query;
-  let list = await safeGetProjects();
-  if (includeInactive !== 'true') list = list.filter((p: any) => p.ativo !== false);
-  if (categoria && categoria !== 'Todas') {
-    list = list.filter((p: any) => (p.categoria || '').toLowerCase() === (categoria as string).toLowerCase());
+  try {
+    const { categoria, destaque, includeInactive } = req.query;
+    let list = await safeGetProjects();
+    if (includeInactive !== 'true') list = list.filter((p: any) => p.ativo !== false);
+    if (categoria && categoria !== 'Todas') {
+      list = list.filter((p: any) => (p.categoria || '').toLowerCase() === (categoria as string).toLowerCase());
+    }
+    if (destaque === 'true') {
+      list = list.filter((p: any) => Boolean(p.destaque));
+    }
+    res.json(list);
+  } catch {
+    res.json([]);
   }
-  if (destaque === 'true') {
-    list = list.filter((p: any) => Boolean(p.destaque));
-  }
-  res.json(list);
 });
 
 router.get('/projects/:slug', async (req, res) => {
-  const list = await safeGetProjects();
-  const p = list.find((item: any) => item.slug === req.params.slug || item.id === req.params.slug);
-  if (!p) return res.status(404).json({ error: 'Projeto não encontrado' });
-  res.json(p);
+  try {
+    const list = await safeGetProjects();
+    const p = list.find((item: any) => item.slug === req.params.slug || item.id === req.params.slug);
+    if (!p) return res.status(404).json({ error: 'Projeto não encontrado' });
+    res.json(p);
+  } catch {
+    res.status(404).json({ error: 'Projeto não encontrado' });
+  }
 });
 
 router.post('/projects', async (req, res) => {

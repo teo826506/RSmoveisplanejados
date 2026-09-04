@@ -1,33 +1,26 @@
 import { PrismaClient } from '@prisma/client';
 
 let prismaInstance: PrismaClient | null = null;
+let initAttempted = false;
 
 export function getPrisma(): PrismaClient | null {
-  if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes('dummy')) {
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl || dbUrl.includes('dummy') || dbUrl.includes('localhost')) {
     return null;
   }
+  if (initAttempted && !prismaInstance) return null;
   try {
     if (!prismaInstance) {
+      initAttempted = true;
       prismaInstance = new PrismaClient();
     }
     return prismaInstance;
   } catch (err) {
     console.error('Failed to initialize Prisma Client:', err);
+    initAttempted = true;
     return null;
   }
 }
-
-// Proxy wrapper for backward compatibility
-export const prisma = new Proxy({} as PrismaClient, {
-  get(_target, prop) {
-    const instance = getPrisma();
-    if (!instance) {
-      throw new Error('DATABASE_URL is not configured.');
-    }
-    const value = (instance as any)[prop];
-    return typeof value === 'function' ? value.bind(instance) : value;
-  }
-});
 
 export function extractYouTubeId(url: string): string {
   if (!url) return '';
