@@ -1,7 +1,43 @@
-import { DB_DATA } from './_lib/db-data';
-import { getPrisma, extractYouTubeId, withTimeout } from './_lib/prisma';
+// ─── Inline helpers (previously in _lib/prisma.ts) ───────────────────────────
+let _prismaInstance: any = null;
+let _prismaDisabled = false;
 
-const dbJson: any = DB_DATA || { projects: [], gallery: [], videos: [], settings: {}, budgets: [], messages: [], clients: [] };
+function getPrisma(): any {
+  if (_prismaDisabled) return null;
+  if (_prismaInstance) return _prismaInstance;
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl || dbUrl.includes('placeholder')) {
+    _prismaDisabled = true;
+    return null;
+  }
+  try {
+    const { PrismaClient } = require('@prisma/client');
+    _prismaInstance = new PrismaClient({ log: ['error'], datasources: { db: { url: dbUrl } } });
+    return _prismaInstance;
+  } catch (e) {
+    console.error('Prisma init failed:', e);
+    _prismaDisabled = true;
+    return null;
+  }
+}
+
+function withTimeout<T = any>(promise: Promise<T>, ms: number = 2500): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`DB timeout after ${ms}ms`)), ms);
+    promise.then((r) => { clearTimeout(timer); resolve(r); }).catch((e) => { clearTimeout(timer); reject(e); });
+  });
+}
+
+function extractYouTubeId(url: string): string {
+  if (!url) return '';
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  return m ? m[1] : '';
+}
+
+// ─── Inline fallback data (previously in _lib/db-data.ts) ────────────────────
+const DB_DATA: any = { projects: [], gallery: [], videos: [], settings: {}, budgets: [], messages: [], clients: [] };
+
+const dbJson: any = DB_DATA;
 const SETTINGS = dbJson.settings || {};
 
 export default async function handler(req: any, res: any) {
