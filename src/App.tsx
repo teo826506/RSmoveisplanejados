@@ -50,7 +50,7 @@ export default function App() {
       if (setRes && setRes.nomeEmpresa) {
         setSiteSettings(setRes);
       }
-      if (Array.isArray(galRes) && galRes.length > 0) {
+      if (Array.isArray(galRes)) {
         setPhotoGallery(galRes);
       }
     } catch (err) {

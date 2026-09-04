@@ -260,6 +260,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ urls }),
       });
+      if (onDataChanged) onDataChanged();
     } catch (err) {
       console.error('Erro ao salvar galeria:', err);
     }
@@ -431,7 +432,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               const res = await fetch('/api/upload', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fileData, fileName: file.name }),
+                body: JSON.stringify({ fileData, fileName: file.name, autoAddToGallery: true }),
               });
               
               if (!res.ok) throw new Error(`Falha no upload: ${file.name}`);
@@ -447,11 +448,68 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       });
       
       const urls = await Promise.all(uploadPromises);
-      const updatedGallery = [...urls, ...photoGallery];
+      const updatedGallery = Array.from(new Set([...urls, ...photoGallery]));
       setPhotoGallery(updatedGallery);
       await saveGallery(updatedGallery);
+      setSaveSuccessMsg(`${urls.length} imagem(ns) importada(s) com sucesso para a galeria!`);
+      setTimeout(() => setSaveSuccessMsg(''), 4000);
     } catch (err: any) {
       alert(err.message || 'Erro ao importar imagens');
+    } finally {
+      setLoading(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleProjectFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setLoading(true);
+    try {
+      const uploadPromises = Array.from<File>(files).map((file) => {
+        return new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = async () => {
+            try {
+              const fileData = reader.result as string;
+              const res = await fetch('/api/upload', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fileData, fileName: file.name, autoAddToGallery: true }),
+              });
+              
+              if (!res.ok) throw new Error(`Falha no upload: ${file.name}`);
+              const data = await res.json();
+              resolve(data.url);
+            } catch (err) {
+              reject(err);
+            }
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      });
+      
+      const urls = await Promise.all(uploadPromises);
+      if (urls.length > 0) {
+        const primary = urls[0];
+        const existingImgs = projectForm.imagens || [];
+        const updatedImgs = Array.from(new Set([...urls, ...existingImgs]));
+        setProjectForm((prev) => ({
+          ...prev,
+          imagemPrincipal: prev.imagemPrincipal || primary,
+          imagens: updatedImgs,
+        }));
+        
+        const updatedGallery = Array.from(new Set([...urls, ...photoGallery]));
+        setPhotoGallery(updatedGallery);
+        await saveGallery(updatedGallery);
+        setSaveSuccessMsg(`${urls.length} imagem(ns) vinculada(s) ao projeto e salva(s) na galeria!`);
+        setTimeout(() => setSaveSuccessMsg(''), 4000);
+      }
+    } catch (err: any) {
+      alert(err.message || 'Erro ao importar imagens para o projeto');
     } finally {
       setLoading(false);
       e.target.value = '';
@@ -1414,15 +1472,27 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-xs text-neutral-400 mb-1">Imagem Principal (URL) *</label>
-                          <input
-                            type="text"
-                            required
-                            value={projectForm.imagemPrincipal || ''}
-                            onChange={(e) => setProjectForm({ ...projectForm, imagemPrincipal: e.target.value })}
-                            placeholder="https://images.unsplash.com/..."
-                            className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none font-mono"
-                          />
+                          <label className="block text-xs text-neutral-400 mb-1">Imagem Principal (URL ou Upload) *</label>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              required
+                              value={projectForm.imagemPrincipal || ''}
+                              onChange={(e) => setProjectForm({ ...projectForm, imagemPrincipal: e.target.value })}
+                              placeholder="https://... ou escolha um arquivo"
+                              className="flex-1 px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none font-mono"
+                            />
+                            <label className="px-3.5 py-2.5 rounded-lg bg-[#D4AF37] text-black font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 hover:brightness-110 cursor-pointer whitespace-nowrap shrink-0">
+                              <Upload className="w-3.5 h-3.5" />
+                              <span>Importar</span>
+                              <input type="file" accept="image/*" multiple className="hidden" onChange={handleProjectFileUpload} />
+                            </label>
+                          </div>
+                          {projectForm.imagemPrincipal && (
+                            <div className="mt-2 relative aspect-video w-32 rounded-lg overflow-hidden border border-neutral-800">
+                              <img src={projectForm.imagemPrincipal} alt="Preview" className="w-full h-full object-cover" />
+                            </div>
+                          )}
                         </div>
                         <div>
                           <label className="block text-xs text-neutral-400 mb-1">Vídeo Vinculado (YouTube URL)</label>

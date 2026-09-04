@@ -20,6 +20,32 @@ function extractYouTubeId(url: string): string {
   return match ? match[1] : '';
 }
 
+const DB_FILE = path.join(process.cwd(), 'data', 'db.json');
+
+function readDbJson(): Record<string, any> {
+  try {
+    if (fs.existsSync(DB_FILE)) {
+      const raw = fs.readFileSync(DB_FILE, 'utf-8');
+      return JSON.parse(raw);
+    }
+  } catch (e) {
+    console.error('Error reading db.json:', e);
+  }
+  return { projects: [], clients: [], budgets: [], messages: [], videos: [], settings: {}, gallery: [] };
+}
+
+function writeDbJson(data: Record<string, any>) {
+  try {
+    const dir = path.dirname(DB_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    const current = readDbJson();
+    const updated = { ...current, ...data };
+    fs.writeFileSync(DB_FILE, JSON.stringify(updated, null, 2), 'utf-8');
+  } catch (e) {
+    console.error('Error writing db.json:', e);
+  }
+}
+
 // ---------------- API ROUTES ----------------
 
 // Health check
@@ -107,11 +133,14 @@ app.put('/api/settings', async (req, res) => {
 app.get('/api/gallery', async (_req, res) => {
   try {
     const items = await prisma.galeria.findMany({ orderBy: { createdAt: 'desc' } });
-    res.json(items.map(i => i.url));
+    if (items && items.length > 0) {
+      return res.json(items.map(i => i.url));
+    }
   } catch (err) {
-    console.error('Error fetching gallery:', err);
-    res.json([]);
+    console.warn('Prisma gallery fetch warning, using db.json fallback:', err);
   }
+  const dbData = readDbJson();
+  res.json(dbData.gallery || []);
 });
 
 app.put('/api/gallery', async (req, res) => {
@@ -120,13 +149,17 @@ app.put('/api/gallery', async (req, res) => {
     return res.status(400).json({ error: 'urls deve ser um array de strings.' });
   }
   try {
-    // Delete all existing gallery items and re-insert the new list
-    await prisma.galeria.deleteMany();
-    if (urls.length > 0) {
-      await prisma.galeria.createMany({
-        data: urls.map((url: string) => ({ url })),
-        skipDuplicates: true
-      });
+    writeDbJson({ gallery: urls });
+    try {
+      await prisma.galeria.deleteMany();
+      if (urls.length > 0) {
+        await prisma.galeria.createMany({
+          data: urls.map((url: string) => ({ url })),
+          skipDuplicates: true
+        });
+      }
+    } catch (dbErr) {
+      console.warn('Prisma gallery update warning:', dbErr);
     }
     res.json({ success: true, gallery: urls });
   } catch (err) {
@@ -560,18 +593,21 @@ app.post('/api/auth/login', async (req, res) => {
 
 // IMAGE UPLOAD ENDPOINT (Local storage)
 app.post('/api/upload', (req, res) => {
-  const { fileData, fileName } = req.body;
+  const { fileData, fileName, autoAddToGallery = true } = req.body;
   if (!fileData) {
     return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
   }
 
   if (fileData.startsWith('data:')) {
-    const matches = fileData.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    const matches = fileData.match(/^data:([A-Za-z0-9\/+.\-]+);base64,([\s\S]+)$/);
     if (!matches || matches.length !== 3) {
       return res.status(400).json({ error: 'Formato de arquivo inválido.' });
     }
     
-    const ext = matches[1].split('/')[1] || 'webp';
+    const extParts = matches[1].split('/');
+    let ext = extParts[1] ? extParts[1].split('+')[0] : 'webp';
+    if (ext === 'jpeg') ext = 'jpg';
+    
     const buffer = Buffer.from(matches[2], 'base64');
     
     // Create a safe file name
@@ -584,9 +620,21 @@ app.post('/api/upload', (req, res) => {
     }
     
     fs.writeFileSync(path.join(uploadDir, finalName), buffer);
+    const fileUrl = `/uploads/${finalName}`;
+
+    // Auto-add uploaded image to gallery so it automatically shows in the gallery
+    if (autoAddToGallery) {
+      const dbData = readDbJson();
+      const currentGallery: string[] = Array.isArray(dbData.gallery) ? dbData.gallery : [];
+      if (!currentGallery.includes(fileUrl)) {
+        const updatedGallery = [fileUrl, ...currentGallery];
+        writeDbJson({ gallery: updatedGallery });
+        prisma.galeria.create({ data: { url: fileUrl } }).catch(() => {});
+      }
+    }
     
     return res.json({
-      url: `/uploads/${finalName}`,
+      url: fileUrl,
       pathname: finalName,
       contentType: matches[1]
     });
