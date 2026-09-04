@@ -2,7 +2,6 @@ import express from 'express';
 import { prisma, extractYouTubeId } from './_lib/prisma';
 import dbJson from '../data/db.json';
 
-// Default settings fallback
 const INITIAL_SETTINGS = dbJson.settings || {
   nomeEmpresa: 'RS Móveis Planejados em MDF',
   slogan: 'Elegância em cada detalhe',
@@ -31,11 +30,6 @@ const INITIAL_SETTINGS = dbJson.settings || {
 
 const app = express();
 app.use(express.json({ limit: '50mb' }));
-
-// Health check
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString(), service: 'RS Móveis Planejados API' });
-});
 
 // Helper functions with Prisma -> db.json fallback
 async function safeGetSettings() {
@@ -80,8 +74,15 @@ async function safeGetVideos() {
   return dbJson.videos || [];
 }
 
+const router = express.Router();
+
+// Health check
+router.get('/health', (_req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString(), service: 'RS Móveis Planejados API' });
+});
+
 // Stats
-app.get('/api/stats', async (_req, res) => {
+router.get('/stats', async (_req, res) => {
   try {
     const projects = await safeGetProjects();
     const videos = await safeGetVideos();
@@ -112,12 +113,12 @@ app.get('/api/stats', async (_req, res) => {
 });
 
 // Settings
-app.get('/api/settings', async (_req, res) => {
+router.get('/settings', async (_req, res) => {
   const s = await safeGetSettings();
   res.json(s);
 });
 
-app.put('/api/settings', async (req, res) => {
+router.put('/settings', async (req, res) => {
   try {
     const data = { ...req.body }; delete data.id; delete data.updatedAt;
     const s = await prisma.siteSettings.upsert({
@@ -132,12 +133,12 @@ app.put('/api/settings', async (req, res) => {
 });
 
 // Gallery
-app.get('/api/gallery', async (_req, res) => {
+router.get('/gallery', async (_req, res) => {
   const gallery = await safeGetGallery();
   res.json(gallery);
 });
 
-app.put('/api/gallery', async (req, res) => {
+router.put('/gallery', async (req, res) => {
   const { urls } = req.body;
   if (!Array.isArray(urls)) return res.status(400).json({ error: 'urls deve ser um array.' });
   try {
@@ -150,7 +151,7 @@ app.put('/api/gallery', async (req, res) => {
 });
 
 // Videos
-app.get('/api/videos', async (req, res) => {
+router.get('/videos', async (req, res) => {
   const { includeInactive, categoria } = req.query;
   let list = await safeGetVideos();
   if (includeInactive !== 'true') list = list.filter((v: any) => v.ativo !== false);
@@ -160,7 +161,7 @@ app.get('/api/videos', async (req, res) => {
   res.json(list);
 });
 
-app.post('/api/videos', async (req, res) => {
+router.post('/videos', async (req, res) => {
   const { titulo, descricao, tipo, url, categoria, thumbnail, duracao, destaque, ordem } = req.body;
   if (!titulo || !url) return res.status(400).json({ error: 'Título e URL são obrigatórios.' });
   try {
@@ -172,7 +173,7 @@ app.post('/api/videos', async (req, res) => {
   } catch (err) { res.status(500).json({ error: 'Erro ao criar vídeo.' }); }
 });
 
-app.put('/api/videos/:id', async (req, res) => {
+router.put('/videos/:id', async (req, res) => {
   try {
     const existing = await prisma.video.findUnique({ where: { id: req.params.id } });
     if (!existing) return res.status(404).json({ error: 'Vídeo não encontrado' });
@@ -183,13 +184,13 @@ app.put('/api/videos/:id', async (req, res) => {
   } catch (err) { res.status(500).json({ error: 'Erro ao atualizar vídeo.' }); }
 });
 
-app.delete('/api/videos/:id', async (req, res) => {
+router.delete('/videos/:id', async (req, res) => {
   try { await prisma.video.delete({ where: { id: req.params.id } }); res.json({ success: true }); }
   catch { res.status(404).json({ error: 'Vídeo não encontrado' }); }
 });
 
 // Projects
-app.get('/api/projects', async (req, res) => {
+router.get('/projects', async (req, res) => {
   const { categoria, destaque, includeInactive } = req.query;
   let list = await safeGetProjects();
   if (includeInactive !== 'true') list = list.filter((p: any) => p.ativo !== false);
@@ -202,14 +203,14 @@ app.get('/api/projects', async (req, res) => {
   res.json(list);
 });
 
-app.get('/api/projects/:slug', async (req, res) => {
+router.get('/projects/:slug', async (req, res) => {
   const list = await safeGetProjects();
   const p = list.find((item: any) => item.slug === req.params.slug || item.id === req.params.slug);
   if (!p) return res.status(404).json({ error: 'Projeto não encontrado' });
   res.json(p);
 });
 
-app.post('/api/projects', async (req, res) => {
+router.post('/projects', async (req, res) => {
   const { titulo, categoria, descricao, imagemPrincipal, imagens, destaque, ordem, materiais } = req.body;
   if (!titulo || !categoria || !descricao || !imagemPrincipal) return res.status(400).json({ error: 'Campos obrigatórios ausentes.' });
   try {
@@ -220,7 +221,7 @@ app.post('/api/projects', async (req, res) => {
   } catch (err) { console.error(err); res.status(500).json({ error: 'Erro ao criar projeto.' }); }
 });
 
-app.put('/api/projects/:id', async (req, res) => {
+router.put('/projects/:id', async (req, res) => {
   try {
     const existing = await prisma.projeto.findUnique({ where: { id: req.params.id } });
     if (!existing) return res.status(404).json({ error: 'Projeto não encontrado' });
@@ -230,18 +231,18 @@ app.put('/api/projects/:id', async (req, res) => {
   } catch (err) { res.status(500).json({ error: 'Erro ao atualizar projeto.' }); }
 });
 
-app.delete('/api/projects/:id', async (req, res) => {
+router.delete('/projects/:id', async (req, res) => {
   try { await prisma.projeto.delete({ where: { id: req.params.id } }); res.json({ success: true }); }
   catch { res.status(404).json({ error: 'Projeto não encontrado' }); }
 });
 
 // Budgets
-app.get('/api/budgets', async (_req, res) => {
+router.get('/budgets', async (_req, res) => {
   try { res.json(await prisma.orcamento.findMany({ include: { cliente: true }, orderBy: { createdAt: 'desc' } })); }
   catch { res.json(dbJson.budgets || []); }
 });
 
-app.post('/api/budgets', async (req, res) => {
+router.post('/budgets', async (req, res) => {
   const { nome, telefone, email, cidade, ambiente, medidas, descricao, observacoes } = req.body;
   if (!nome || !telefone || !ambiente || !descricao) return res.status(400).json({ error: 'Campos obrigatórios ausentes.' });
   try {
@@ -262,23 +263,23 @@ app.post('/api/budgets', async (req, res) => {
   }
 });
 
-app.patch('/api/budgets/:id/status', async (req, res) => {
+router.patch('/budgets/:id/status', async (req, res) => {
   try { res.json(await prisma.orcamento.update({ where: { id: req.params.id }, data: { status: req.body.status } })); }
   catch { res.status(404).json({ error: 'Orçamento não encontrado' }); }
 });
 
-app.delete('/api/budgets/:id', async (req, res) => {
+router.delete('/budgets/:id', async (req, res) => {
   try { await prisma.orcamento.delete({ where: { id: req.params.id } }); res.json({ success: true }); }
   catch { res.status(404).json({ error: 'Orçamento não encontrado' }); }
 });
 
 // Messages
-app.get('/api/messages', async (_req, res) => {
+router.get('/messages', async (_req, res) => {
   try { res.json(await prisma.mensagem.findMany({ orderBy: { createdAt: 'desc' } })); }
   catch { res.json(dbJson.messages || []); }
 });
 
-app.post('/api/messages', async (req, res) => {
+router.post('/messages', async (req, res) => {
   const { nome, email, telefone, assunto, mensagem } = req.body;
   if (!nome || !mensagem) return res.status(400).json({ error: 'Nome e mensagem são obrigatórios.' });
   try {
@@ -289,24 +290,24 @@ app.post('/api/messages', async (req, res) => {
   }
 });
 
-app.patch('/api/messages/:id/status', async (req, res) => {
+router.patch('/messages/:id/status', async (req, res) => {
   try { res.json(await prisma.mensagem.update({ where: { id: req.params.id }, data: { status: req.body.status } })); }
   catch { res.status(404).json({ error: 'Mensagem não encontrada' }); }
 });
 
-app.delete('/api/messages/:id', async (req, res) => {
+router.delete('/messages/:id', async (req, res) => {
   try { await prisma.mensagem.delete({ where: { id: req.params.id } }); res.json({ success: true }); }
   catch { res.status(404).json({ error: 'Mensagem não encontrada' }); }
 });
 
 // Clients
-app.get('/api/clients', async (_req, res) => {
+router.get('/clients', async (_req, res) => {
   try { res.json(await prisma.cliente.findMany({ orderBy: { createdAt: 'desc' } })); }
   catch { res.json(dbJson.clients || []); }
 });
 
 // Auth
-app.post('/api/auth/login', async (req, res) => {
+router.post('/auth/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const settings = await safeGetSettings();
@@ -342,7 +343,7 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 // Upload (base64 -> return URL)
-app.post('/api/upload', (req, res) => {
+router.post('/upload', (req, res) => {
   const { fileData, fileName } = req.body;
   if (!fileData) return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
   if (fileData.startsWith('data:')) {
@@ -353,5 +354,8 @@ app.post('/api/upload', (req, res) => {
   res.json({ url: fileData, pathname: fileName || `img-${Date.now()}.webp`, contentType: 'image/webp' });
 });
 
-export default app;
+// Mount router under root / and under /api for robust Vercel compatibility
+app.use('/', router);
+app.use('/api', router);
 
+export default app;
