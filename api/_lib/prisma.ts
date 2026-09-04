@@ -1,5 +1,3 @@
-import { PrismaClient } from '@prisma/client';
-
 let prismaInstance: any = null;
 let isDisabled = false;
 
@@ -15,8 +13,12 @@ export function getPrisma(): any {
   }
 
   try {
+    // Dynamic require to avoid module load failure at cold start
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { PrismaClient } = require('@prisma/client');
     prismaInstance = new PrismaClient({
-      log: ['error']
+      log: ['error'],
+      datasources: { db: { url: dbUrl } }
     });
     return prismaInstance;
   } catch (e) {

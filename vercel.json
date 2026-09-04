@@ -1,6 +1,6 @@
 {
   "outputDirectory": "dist",
-  "buildCommand": "npx prisma generate && vite build",
+  "buildCommand": "DATABASE_URL=\"postgresql://postgres:postgres@dummy:5432/dummy\" npx prisma generate && vite build",
   "rewrites": [
     {
       "source": "/api/(.*)",
