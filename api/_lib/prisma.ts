@@ -1,8 +1,25 @@
-// Prisma is disabled in serverless environment (no DATABASE_URL on Vercel)
-// All data comes from the embedded db-data.ts snapshot
+import { PrismaClient } from '@prisma/client';
 
-export function getPrisma(): null {
-  return null;
+let prismaInstance: PrismaClient | null = null;
+let initAttempted = false;
+
+export function getPrisma(): PrismaClient | null {
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl || dbUrl.includes('dummy') || dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1')) {
+    return null;
+  }
+  if (initAttempted && !prismaInstance) return null;
+  try {
+    if (!prismaInstance) {
+      initAttempted = true;
+      prismaInstance = new PrismaClient();
+    }
+    return prismaInstance;
+  } catch (err) {
+    console.error('Prisma init failed:', err);
+    initAttempted = true;
+    return null;
+  }
 }
 
 export function extractYouTubeId(url: string): string {
