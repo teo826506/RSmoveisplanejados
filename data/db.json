@@ -1,708 +1,928 @@
 {
   "projects": [
     {
-      "id": "proj-auto-0",
-      "titulo": "Projeto 1",
-      "descricao": "Descrição do projeto 1",
+      "id": "proj-auto-1",
+      "titulo": "Cozinha Planejada em MDF de Luxo #1",
+      "slug": "projeto-cozinhas-1",
+      "descricao": "Projeto de cozinha sob medida em 100% MDF naval com ferragens ocultas com amortecimento soft-close e iluminação em LED.",
       "categoria": "Cozinhas",
       "imagemPrincipal": "/uploads/1788477141590-WhatsAppImage2026-09-03at07.45.01.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788477141590-WhatsAppImage2026-09-03at07.45.01.jpeg"
+      ],
       "destaque": true,
       "ordem": 1,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.656Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "100% MDF Premium 18mm",
+        "Ferragens Blum Soft-Close",
+        "Fita de Borda PUR Waterproof"
+      ],
+      "createdAt": "2026-09-04T17:05:25.214Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-2",
-      "titulo": "Projeto 3",
-      "descricao": "Descrição do projeto 3",
-      "categoria": "Cozinhas",
+      "titulo": "Suíte Master com Marcenaria Sob Medida #1",
+      "slug": "projeto-quartos-2",
+      "descricao": "Dormitório de alto luxo com cabeceira ripada em madeira nobre, mesas suspensas e iluminação embutida.",
+      "categoria": "Quartos",
       "imagemPrincipal": "/uploads/1788475907852-WhatsAppImage2026-09-03at13.55.17.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 3,
+      "imagens": [
+        "/uploads/1788475907852-WhatsAppImage2026-09-03at13.55.17.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 2,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Madeirado Louro Freijó",
+        "Iluminação LED 3000K",
+        "Puxadores Cava Usinados"
+      ],
+      "createdAt": "2026-09-03T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-3",
-      "titulo": "Projeto 4",
-      "descricao": "Descrição do projeto 4",
-      "categoria": "Cozinhas",
+      "titulo": "Closet Walk-In Sob Medida #1",
+      "slug": "projeto-closets-3",
+      "descricao": "Closet espaçoso com divisões inteligentes para vestuário, sapateiras inclinadas iluminadas e portas em perfil de alumínio.",
+      "categoria": "Closets",
       "imagemPrincipal": "/uploads/1788475907863-WhatsAppImage2026-09-03at13.55.181.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 4,
+      "imagens": [
+        "/uploads/1788475907863-WhatsAppImage2026-09-03at13.55.181.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 3,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Naval Ultra",
+        "Laca Acetinada Grafite",
+        "Corrediças Telescópicas Ocultas"
+      ],
+      "createdAt": "2026-09-02T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-4",
-      "titulo": "Projeto 5",
-      "descricao": "Descrição do projeto 5",
-      "categoria": "Cozinhas",
+      "titulo": "Home Theater & Painel Ripado #1",
+      "slug": "projeto-salas-4",
+      "descricao": "Painel monumental para TV com usinagem ripada em CNC, rack inferior suspenso e passagem oculta de fiações.",
+      "categoria": "Salas",
       "imagemPrincipal": "/uploads/1788475907904-WhatsAppImage2026-09-03at13.55.18.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475907904-WhatsAppImage2026-09-03at13.55.18.jpeg"
+      ],
       "destaque": true,
-      "ordem": 5,
+      "ordem": 4,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Carvalho Nobre",
+        "Vidro Reflecta Bronze",
+        "Perfis de Alumínio Anodizado"
+      ],
+      "createdAt": "2026-09-01T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-5",
-      "titulo": "Projeto 6",
-      "descricao": "Descrição do projeto 6",
-      "categoria": "Cozinhas",
+      "titulo": "Área Gourmet Integrada #1",
+      "slug": "projeto-espaço-gourmet-5",
+      "descricao": "Bancada gourmet com isolamento para churrasqueira, nichos para adega de vinhos e balcão em MDF resistente.",
+      "categoria": "Espaço Gourmet",
       "imagemPrincipal": "/uploads/1788475907953-WhatsAppImage2026-09-03at13.55.191.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 6,
+      "imagens": [
+        "/uploads/1788475907953-WhatsAppImage2026-09-03at13.55.191.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 5,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Preto Matt Anti-Marcas",
+        "Serralheria Dourada",
+        "Pistões a Gás Reforçados"
+      ],
+      "createdAt": "2026-08-31T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-6",
-      "titulo": "Projeto 7",
-      "descricao": "Descrição do projeto 7",
-      "categoria": "Cozinhas",
+      "titulo": "Gabinete Suspenso de Banheiro #1",
+      "slug": "projeto-banheiros-6",
+      "descricao": "Gabinete suspenso em MDF ultra hidrorrepelente com gavetões organizadores e espelheira camarim.",
+      "categoria": "Banheiros",
       "imagemPrincipal": "/uploads/1788475907981-WhatsAppImage2026-09-03at13.55.19.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 7,
+      "imagens": [
+        "/uploads/1788475907981-WhatsAppImage2026-09-03at13.55.19.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 6,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "100% MDF Premium 18mm",
+        "Ferragens Blum Soft-Close",
+        "Fita de Borda PUR Waterproof"
+      ],
+      "createdAt": "2026-08-30T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-7",
-      "titulo": "Projeto 8",
-      "descricao": "Descrição do projeto 8",
-      "categoria": "Cozinhas",
+      "titulo": "Estação de Trabalho Executiva #1",
+      "slug": "projeto-home-office-7",
+      "descricao": "Bancada de trabalho ampla com calha de conectividade oculta, gaveteiro e prateleiras iluminadas.",
+      "categoria": "Home Office",
       "imagemPrincipal": "/uploads/1788475907988-WhatsAppImage2026-09-03at13.55.201.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475907988-WhatsAppImage2026-09-03at13.55.201.jpeg"
+      ],
       "destaque": true,
-      "ordem": 8,
+      "ordem": 7,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Madeirado Louro Freijó",
+        "Iluminação LED 3000K",
+        "Puxadores Cava Usinados"
+      ],
+      "createdAt": "2026-08-29T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-8",
-      "titulo": "Projeto 9",
-      "descricao": "Descrição do projeto 9",
-      "categoria": "Cozinhas",
+      "titulo": "Recepção Corporativa de Alto Padrão #1",
+      "slug": "projeto-corporativo-8",
+      "descricao": "Marcenaria corporativa imponente para recepção e salas de reunião com design monolítico.",
+      "categoria": "Corporativo",
       "imagemPrincipal": "/uploads/1788475907999-WhatsAppImage2026-09-03at13.55.202.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 9,
+      "imagens": [
+        "/uploads/1788475907999-WhatsAppImage2026-09-03at13.55.202.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 8,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Naval Ultra",
+        "Laca Acetinada Grafite",
+        "Corrediças Telescópicas Ocultas"
+      ],
+      "createdAt": "2026-08-28T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-9",
-      "titulo": "Projeto 10",
-      "descricao": "Descrição do projeto 10",
+      "titulo": "Cozinha Planejada em MDF de Luxo #2",
+      "slug": "projeto-cozinhas-9",
+      "descricao": "Projeto de cozinha sob medida em 100% MDF naval com ferragens ocultas com amortecimento soft-close e iluminação em LED.",
       "categoria": "Cozinhas",
       "imagemPrincipal": "/uploads/1788475908003-WhatsAppImage2026-09-03at13.55.20.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 10,
+      "imagens": [
+        "/uploads/1788475908003-WhatsAppImage2026-09-03at13.55.20.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 9,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Carvalho Nobre",
+        "Vidro Reflecta Bronze",
+        "Perfis de Alumínio Anodizado"
+      ],
+      "createdAt": "2026-08-27T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-10",
-      "titulo": "Projeto 11",
-      "descricao": "Descrição do projeto 11",
-      "categoria": "Cozinhas",
+      "titulo": "Suíte Master com Marcenaria Sob Medida #2",
+      "slug": "projeto-quartos-10",
+      "descricao": "Dormitório de alto luxo com cabeceira ripada em madeira nobre, mesas suspensas e iluminação embutida.",
+      "categoria": "Quartos",
       "imagemPrincipal": "/uploads/1788475908011-WhatsAppImage2026-09-03at13.54.43.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475908011-WhatsAppImage2026-09-03at13.54.43.jpeg"
+      ],
       "destaque": true,
-      "ordem": 11,
+      "ordem": 10,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Preto Matt Anti-Marcas",
+        "Serralheria Dourada",
+        "Pistões a Gás Reforçados"
+      ],
+      "createdAt": "2026-08-26T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-11",
-      "titulo": "Projeto 12",
-      "descricao": "Descrição do projeto 12",
-      "categoria": "Cozinhas",
+      "titulo": "Closet Walk-In Sob Medida #2",
+      "slug": "projeto-closets-11",
+      "descricao": "Closet espaçoso com divisões inteligentes para vestuário, sapateiras inclinadas iluminadas e portas em perfil de alumínio.",
+      "categoria": "Closets",
       "imagemPrincipal": "/uploads/1788475908019-WhatsAppImage2026-09-03at13.54.49.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 12,
+      "imagens": [
+        "/uploads/1788475908019-WhatsAppImage2026-09-03at13.54.49.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 11,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "100% MDF Premium 18mm",
+        "Ferragens Blum Soft-Close",
+        "Fita de Borda PUR Waterproof"
+      ],
+      "createdAt": "2026-08-25T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-12",
-      "titulo": "Projeto 13",
-      "descricao": "Descrição do projeto 13",
-      "categoria": "Cozinhas",
+      "titulo": "Home Theater & Painel Ripado #2",
+      "slug": "projeto-salas-12",
+      "descricao": "Painel monumental para TV com usinagem ripada em CNC, rack inferior suspenso e passagem oculta de fiações.",
+      "categoria": "Salas",
       "imagemPrincipal": "/uploads/1788475908021-WhatsAppImage2026-09-03at13.54.52.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 13,
+      "imagens": [
+        "/uploads/1788475908021-WhatsAppImage2026-09-03at13.54.52.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 12,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Madeirado Louro Freijó",
+        "Iluminação LED 3000K",
+        "Puxadores Cava Usinados"
+      ],
+      "createdAt": "2026-08-24T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-13",
-      "titulo": "Projeto 14",
-      "descricao": "Descrição do projeto 14",
-      "categoria": "Cozinhas",
+      "titulo": "Área Gourmet Integrada #2",
+      "slug": "projeto-espaço-gourmet-13",
+      "descricao": "Bancada gourmet com isolamento para churrasqueira, nichos para adega de vinhos e balcão em MDF resistente.",
+      "categoria": "Espaço Gourmet",
       "imagemPrincipal": "/uploads/1788475908027-WhatsAppImage2026-09-03at13.54.59.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475908027-WhatsAppImage2026-09-03at13.54.59.jpeg"
+      ],
       "destaque": true,
-      "ordem": 14,
+      "ordem": 13,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Naval Ultra",
+        "Laca Acetinada Grafite",
+        "Corrediças Telescópicas Ocultas"
+      ],
+      "createdAt": "2026-08-23T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-14",
-      "titulo": "Projeto 15",
-      "descricao": "Descrição do projeto 15",
-      "categoria": "Cozinhas",
+      "titulo": "Gabinete Suspenso de Banheiro #2",
+      "slug": "projeto-banheiros-14",
+      "descricao": "Gabinete suspenso em MDF ultra hidrorrepelente com gavetões organizadores e espelheira camarim.",
+      "categoria": "Banheiros",
       "imagemPrincipal": "/uploads/1788475908034-WhatsAppImage2026-09-03at13.55.031.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 15,
+      "imagens": [
+        "/uploads/1788475908034-WhatsAppImage2026-09-03at13.55.031.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 14,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Carvalho Nobre",
+        "Vidro Reflecta Bronze",
+        "Perfis de Alumínio Anodizado"
+      ],
+      "createdAt": "2026-08-22T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-15",
-      "titulo": "Projeto 16",
-      "descricao": "Descrição do projeto 16",
-      "categoria": "Cozinhas",
+      "titulo": "Estação de Trabalho Executiva #2",
+      "slug": "projeto-home-office-15",
+      "descricao": "Bancada de trabalho ampla com calha de conectividade oculta, gaveteiro e prateleiras iluminadas.",
+      "categoria": "Home Office",
       "imagemPrincipal": "/uploads/1788475908037-WhatsAppImage2026-09-03at13.55.03.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 16,
+      "imagens": [
+        "/uploads/1788475908037-WhatsAppImage2026-09-03at13.55.03.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 15,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Preto Matt Anti-Marcas",
+        "Serralheria Dourada",
+        "Pistões a Gás Reforçados"
+      ],
+      "createdAt": "2026-08-21T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-16",
-      "titulo": "Projeto 17",
-      "descricao": "Descrição do projeto 17",
-      "categoria": "Cozinhas",
+      "titulo": "Recepção Corporativa de Alto Padrão #2",
+      "slug": "projeto-corporativo-16",
+      "descricao": "Marcenaria corporativa imponente para recepção e salas de reunião com design monolítico.",
+      "categoria": "Corporativo",
       "imagemPrincipal": "/uploads/1788475908040-WhatsAppImage2026-09-03at13.55.041.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475908040-WhatsAppImage2026-09-03at13.55.041.jpeg"
+      ],
       "destaque": true,
-      "ordem": 17,
+      "ordem": 16,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "100% MDF Premium 18mm",
+        "Ferragens Blum Soft-Close",
+        "Fita de Borda PUR Waterproof"
+      ],
+      "createdAt": "2026-08-20T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-17",
-      "titulo": "Projeto 18",
-      "descricao": "Descrição do projeto 18",
+      "titulo": "Cozinha Planejada em MDF de Luxo #3",
+      "slug": "projeto-cozinhas-17",
+      "descricao": "Projeto de cozinha sob medida em 100% MDF naval com ferragens ocultas com amortecimento soft-close e iluminação em LED.",
       "categoria": "Cozinhas",
       "imagemPrincipal": "/uploads/1788475908051-WhatsAppImage2026-09-03at13.55.04.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 18,
+      "imagens": [
+        "/uploads/1788475908051-WhatsAppImage2026-09-03at13.55.04.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 17,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Madeirado Louro Freijó",
+        "Iluminação LED 3000K",
+        "Puxadores Cava Usinados"
+      ],
+      "createdAt": "2026-08-19T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-18",
-      "titulo": "Projeto 19",
-      "descricao": "Descrição do projeto 19",
-      "categoria": "Cozinhas",
+      "titulo": "Suíte Master com Marcenaria Sob Medida #3",
+      "slug": "projeto-quartos-18",
+      "descricao": "Dormitório de alto luxo com cabeceira ripada em madeira nobre, mesas suspensas e iluminação embutida.",
+      "categoria": "Quartos",
       "imagemPrincipal": "/uploads/1788475908056-WhatsAppImage2026-09-03at13.55.071.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 19,
+      "imagens": [
+        "/uploads/1788475908056-WhatsAppImage2026-09-03at13.55.071.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 18,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Naval Ultra",
+        "Laca Acetinada Grafite",
+        "Corrediças Telescópicas Ocultas"
+      ],
+      "createdAt": "2026-08-18T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-19",
-      "titulo": "Projeto 20",
-      "descricao": "Descrição do projeto 20",
-      "categoria": "Cozinhas",
+      "titulo": "Closet Walk-In Sob Medida #3",
+      "slug": "projeto-closets-19",
+      "descricao": "Closet espaçoso com divisões inteligentes para vestuário, sapateiras inclinadas iluminadas e portas em perfil de alumínio.",
+      "categoria": "Closets",
       "imagemPrincipal": "/uploads/1788475908063-WhatsAppImage2026-09-03at13.55.21.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475908063-WhatsAppImage2026-09-03at13.55.21.jpeg"
+      ],
       "destaque": true,
-      "ordem": 20,
+      "ordem": 19,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Carvalho Nobre",
+        "Vidro Reflecta Bronze",
+        "Perfis de Alumínio Anodizado"
+      ],
+      "createdAt": "2026-08-17T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-20",
-      "titulo": "Projeto 21",
-      "descricao": "Descrição do projeto 21",
-      "categoria": "Cozinhas",
+      "titulo": "Home Theater & Painel Ripado #3",
+      "slug": "projeto-salas-20",
+      "descricao": "Painel monumental para TV com usinagem ripada em CNC, rack inferior suspenso e passagem oculta de fiações.",
+      "categoria": "Salas",
       "imagemPrincipal": "/uploads/1788475908068-WhatsAppImage2026-09-03at13.54.42.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 21,
+      "imagens": [
+        "/uploads/1788475908068-WhatsAppImage2026-09-03at13.54.42.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 20,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Preto Matt Anti-Marcas",
+        "Serralheria Dourada",
+        "Pistões a Gás Reforçados"
+      ],
+      "createdAt": "2026-08-16T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-21",
-      "titulo": "Projeto 22",
-      "descricao": "Descrição do projeto 22",
-      "categoria": "Cozinhas",
+      "titulo": "Área Gourmet Integrada #3",
+      "slug": "projeto-espaço-gourmet-21",
+      "descricao": "Bancada gourmet com isolamento para churrasqueira, nichos para adega de vinhos e balcão em MDF resistente.",
+      "categoria": "Espaço Gourmet",
       "imagemPrincipal": "/uploads/1788475908086-WhatsAppImage2026-09-03at13.54.47.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 22,
+      "imagens": [
+        "/uploads/1788475908086-WhatsAppImage2026-09-03at13.54.47.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 21,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "100% MDF Premium 18mm",
+        "Ferragens Blum Soft-Close",
+        "Fita de Borda PUR Waterproof"
+      ],
+      "createdAt": "2026-08-15T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-22",
-      "titulo": "Projeto 23",
-      "descricao": "Descrição do projeto 23",
-      "categoria": "Cozinhas",
+      "titulo": "Gabinete Suspenso de Banheiro #3",
+      "slug": "projeto-banheiros-22",
+      "descricao": "Gabinete suspenso em MDF ultra hidrorrepelente com gavetões organizadores e espelheira camarim.",
+      "categoria": "Banheiros",
       "imagemPrincipal": "/uploads/1788475908089-WhatsAppImage2026-09-03at13.55.05.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475908089-WhatsAppImage2026-09-03at13.55.05.jpeg"
+      ],
       "destaque": true,
-      "ordem": 23,
+      "ordem": 22,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Madeirado Louro Freijó",
+        "Iluminação LED 3000K",
+        "Puxadores Cava Usinados"
+      ],
+      "createdAt": "2026-08-14T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-23",
-      "titulo": "Projeto 24",
-      "descricao": "Descrição do projeto 24",
-      "categoria": "Cozinhas",
+      "titulo": "Estação de Trabalho Executiva #3",
+      "slug": "projeto-home-office-23",
+      "descricao": "Bancada de trabalho ampla com calha de conectividade oculta, gaveteiro e prateleiras iluminadas.",
+      "categoria": "Home Office",
       "imagemPrincipal": "/uploads/1788475908096-WhatsAppImage2026-09-03at13.55.07.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 24,
+      "imagens": [
+        "/uploads/1788475908096-WhatsAppImage2026-09-03at13.55.07.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 23,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Naval Ultra",
+        "Laca Acetinada Grafite",
+        "Corrediças Telescópicas Ocultas"
+      ],
+      "createdAt": "2026-08-13T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-24",
-      "titulo": "Projeto 25",
-      "descricao": "Descrição do projeto 25",
-      "categoria": "Cozinhas",
+      "titulo": "Recepção Corporativa de Alto Padrão #3",
+      "slug": "projeto-corporativo-24",
+      "descricao": "Marcenaria corporativa imponente para recepção e salas de reunião com design monolítico.",
+      "categoria": "Corporativo",
       "imagemPrincipal": "/uploads/1788475908101-WhatsAppImage2026-09-03at13.55.091.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 25,
+      "imagens": [
+        "/uploads/1788475908101-WhatsAppImage2026-09-03at13.55.091.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 24,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Carvalho Nobre",
+        "Vidro Reflecta Bronze",
+        "Perfis de Alumínio Anodizado"
+      ],
+      "createdAt": "2026-08-12T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-25",
-      "titulo": "Projeto 26",
-      "descricao": "Descrição do projeto 26",
+      "titulo": "Cozinha Planejada em MDF de Luxo #4",
+      "slug": "projeto-cozinhas-25",
+      "descricao": "Projeto de cozinha sob medida em 100% MDF naval com ferragens ocultas com amortecimento soft-close e iluminação em LED.",
       "categoria": "Cozinhas",
       "imagemPrincipal": "/uploads/1788475908105-WhatsAppImage2026-09-03at13.55.09.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475908105-WhatsAppImage2026-09-03at13.55.09.jpeg"
+      ],
       "destaque": true,
-      "ordem": 26,
+      "ordem": 25,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Preto Matt Anti-Marcas",
+        "Serralheria Dourada",
+        "Pistões a Gás Reforçados"
+      ],
+      "createdAt": "2026-08-11T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-26",
-      "titulo": "Projeto 27",
-      "descricao": "Descrição do projeto 27",
-      "categoria": "Cozinhas",
+      "titulo": "Suíte Master com Marcenaria Sob Medida #4",
+      "slug": "projeto-quartos-26",
+      "descricao": "Dormitório de alto luxo com cabeceira ripada em madeira nobre, mesas suspensas e iluminação embutida.",
+      "categoria": "Quartos",
       "imagemPrincipal": "/uploads/1788475908110-WhatsAppImage2026-09-03at13.55.111.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 27,
+      "imagens": [
+        "/uploads/1788475908110-WhatsAppImage2026-09-03at13.55.111.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 26,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "100% MDF Premium 18mm",
+        "Ferragens Blum Soft-Close",
+        "Fita de Borda PUR Waterproof"
+      ],
+      "createdAt": "2026-08-10T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-27",
-      "titulo": "Projeto 28",
-      "descricao": "Descrição do projeto 28",
-      "categoria": "Cozinhas",
+      "titulo": "Closet Walk-In Sob Medida #4",
+      "slug": "projeto-closets-27",
+      "descricao": "Closet espaçoso com divisões inteligentes para vestuário, sapateiras inclinadas iluminadas e portas em perfil de alumínio.",
+      "categoria": "Closets",
       "imagemPrincipal": "/uploads/1788475908117-WhatsAppImage2026-09-03at13.55.11.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 28,
+      "imagens": [
+        "/uploads/1788475908117-WhatsAppImage2026-09-03at13.55.11.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 27,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Madeirado Louro Freijó",
+        "Iluminação LED 3000K",
+        "Puxadores Cava Usinados"
+      ],
+      "createdAt": "2026-08-09T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-28",
-      "titulo": "Projeto 29",
-      "descricao": "Descrição do projeto 29",
-      "categoria": "Cozinhas",
+      "titulo": "Home Theater & Painel Ripado #4",
+      "slug": "projeto-salas-28",
+      "descricao": "Painel monumental para TV com usinagem ripada em CNC, rack inferior suspenso e passagem oculta de fiações.",
+      "categoria": "Salas",
       "imagemPrincipal": "/uploads/1788475908120-WhatsAppImage2026-09-03at13.55.16.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475908120-WhatsAppImage2026-09-03at13.55.16.jpeg"
+      ],
       "destaque": true,
-      "ordem": 29,
+      "ordem": 28,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Naval Ultra",
+        "Laca Acetinada Grafite",
+        "Corrediças Telescópicas Ocultas"
+      ],
+      "createdAt": "2026-08-08T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-29",
-      "titulo": "Projeto 30",
-      "descricao": "Descrição do projeto 30",
-      "categoria": "Cozinhas",
+      "titulo": "Área Gourmet Integrada #4",
+      "slug": "projeto-espaço-gourmet-29",
+      "descricao": "Bancada gourmet com isolamento para churrasqueira, nichos para adega de vinhos e balcão em MDF resistente.",
+      "categoria": "Espaço Gourmet",
       "imagemPrincipal": "/uploads/1788475908123-WhatsAppImage2026-09-03at13.55.08.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 30,
+      "imagens": [
+        "/uploads/1788475908123-WhatsAppImage2026-09-03at13.55.08.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 29,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Carvalho Nobre",
+        "Vidro Reflecta Bronze",
+        "Perfis de Alumínio Anodizado"
+      ],
+      "createdAt": "2026-08-07T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-30",
-      "titulo": "Projeto 31",
-      "descricao": "Descrição do projeto 31",
-      "categoria": "Cozinhas",
+      "titulo": "Gabinete Suspenso de Banheiro #4",
+      "slug": "projeto-banheiros-30",
+      "descricao": "Gabinete suspenso em MDF ultra hidrorrepelente com gavetões organizadores e espelheira camarim.",
+      "categoria": "Banheiros",
       "imagemPrincipal": "/uploads/1788475908173-WhatsAppImage2026-09-03at13.55.10.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 31,
+      "imagens": [
+        "/uploads/1788475908173-WhatsAppImage2026-09-03at13.55.10.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 30,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Preto Matt Anti-Marcas",
+        "Serralheria Dourada",
+        "Pistões a Gás Reforçados"
+      ],
+      "createdAt": "2026-08-06T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-31",
-      "titulo": "Projeto 32",
-      "descricao": "Descrição do projeto 32",
-      "categoria": "Cozinhas",
+      "titulo": "Estação de Trabalho Executiva #4",
+      "slug": "projeto-home-office-31",
+      "descricao": "Bancada de trabalho ampla com calha de conectividade oculta, gaveteiro e prateleiras iluminadas.",
+      "categoria": "Home Office",
       "imagemPrincipal": "/uploads/1788475908182-WhatsAppImage2026-09-03at13.55.14.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475908182-WhatsAppImage2026-09-03at13.55.14.jpeg"
+      ],
       "destaque": true,
-      "ordem": 32,
+      "ordem": 31,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "100% MDF Premium 18mm",
+        "Ferragens Blum Soft-Close",
+        "Fita de Borda PUR Waterproof"
+      ],
+      "createdAt": "2026-08-05T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-32",
-      "titulo": "Projeto 33",
-      "descricao": "Descrição do projeto 33",
-      "categoria": "Cozinhas",
+      "titulo": "Recepção Corporativa de Alto Padrão #4",
+      "slug": "projeto-corporativo-32",
+      "descricao": "Marcenaria corporativa imponente para recepção e salas de reunião com design monolítico.",
+      "categoria": "Corporativo",
       "imagemPrincipal": "/uploads/1788475917069-WhatsAppImage2026-09-03at07.44.37.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 33,
+      "imagens": [
+        "/uploads/1788475917069-WhatsAppImage2026-09-03at07.44.37.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 32,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Madeirado Louro Freijó",
+        "Iluminação LED 3000K",
+        "Puxadores Cava Usinados"
+      ],
+      "createdAt": "2026-08-04T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-33",
-      "titulo": "Projeto 34",
-      "descricao": "Descrição do projeto 34",
+      "titulo": "Cozinha Planejada em MDF de Luxo #5",
+      "slug": "projeto-cozinhas-33",
+      "descricao": "Projeto de cozinha sob medida em 100% MDF naval com ferragens ocultas com amortecimento soft-close e iluminação em LED.",
       "categoria": "Cozinhas",
       "imagemPrincipal": "/uploads/1788475917086-WhatsAppImage2026-09-03at07.44.39.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 34,
+      "imagens": [
+        "/uploads/1788475917086-WhatsAppImage2026-09-03at07.44.39.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 33,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Naval Ultra",
+        "Laca Acetinada Grafite",
+        "Corrediças Telescópicas Ocultas"
+      ],
+      "createdAt": "2026-08-03T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-34",
-      "titulo": "Projeto 35",
-      "descricao": "Descrição do projeto 35",
-      "categoria": "Cozinhas",
+      "titulo": "Suíte Master com Marcenaria Sob Medida #5",
+      "slug": "projeto-quartos-34",
+      "descricao": "Dormitório de alto luxo com cabeceira ripada em madeira nobre, mesas suspensas e iluminação embutida.",
+      "categoria": "Quartos",
       "imagemPrincipal": "/uploads/1788475917101-WhatsAppImage2026-09-03at07.44.41.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475917101-WhatsAppImage2026-09-03at07.44.41.jpeg"
+      ],
       "destaque": true,
-      "ordem": 35,
+      "ordem": 34,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Carvalho Nobre",
+        "Vidro Reflecta Bronze",
+        "Perfis de Alumínio Anodizado"
+      ],
+      "createdAt": "2026-08-02T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-35",
-      "titulo": "Projeto 36",
-      "descricao": "Descrição do projeto 36",
-      "categoria": "Cozinhas",
+      "titulo": "Closet Walk-In Sob Medida #5",
+      "slug": "projeto-closets-35",
+      "descricao": "Closet espaçoso com divisões inteligentes para vestuário, sapateiras inclinadas iluminadas e portas em perfil de alumínio.",
+      "categoria": "Closets",
       "imagemPrincipal": "/uploads/1788475917113-WhatsAppImage2026-09-03at07.44.51.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 36,
+      "imagens": [
+        "/uploads/1788475917113-WhatsAppImage2026-09-03at07.44.51.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 35,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Preto Matt Anti-Marcas",
+        "Serralheria Dourada",
+        "Pistões a Gás Reforçados"
+      ],
+      "createdAt": "2026-08-01T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-36",
-      "titulo": "Projeto 37",
-      "descricao": "Descrição do projeto 37",
-      "categoria": "Cozinhas",
+      "titulo": "Home Theater & Painel Ripado #5",
+      "slug": "projeto-salas-36",
+      "descricao": "Painel monumental para TV com usinagem ripada em CNC, rack inferior suspenso e passagem oculta de fiações.",
+      "categoria": "Salas",
       "imagemPrincipal": "/uploads/1788475917119-WhatsAppImage2026-09-03at07.44.53.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 37,
+      "imagens": [
+        "/uploads/1788475917119-WhatsAppImage2026-09-03at07.44.53.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 36,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "100% MDF Premium 18mm",
+        "Ferragens Blum Soft-Close",
+        "Fita de Borda PUR Waterproof"
+      ],
+      "createdAt": "2026-07-31T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-37",
-      "titulo": "Projeto 38",
-      "descricao": "Descrição do projeto 38",
-      "categoria": "Cozinhas",
+      "titulo": "Área Gourmet Integrada #5",
+      "slug": "projeto-espaço-gourmet-37",
+      "descricao": "Bancada gourmet com isolamento para churrasqueira, nichos para adega de vinhos e balcão em MDF resistente.",
+      "categoria": "Espaço Gourmet",
       "imagemPrincipal": "/uploads/1788475917132-WhatsAppImage2026-09-03at07.44.43.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475917132-WhatsAppImage2026-09-03at07.44.43.jpeg"
+      ],
       "destaque": true,
-      "ordem": 38,
+      "ordem": 37,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Madeirado Louro Freijó",
+        "Iluminação LED 3000K",
+        "Puxadores Cava Usinados"
+      ],
+      "createdAt": "2026-07-30T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-38",
-      "titulo": "Projeto 39",
-      "descricao": "Descrição do projeto 39",
-      "categoria": "Cozinhas",
+      "titulo": "Gabinete Suspenso de Banheiro #5",
+      "slug": "projeto-banheiros-38",
+      "descricao": "Gabinete suspenso em MDF ultra hidrorrepelente com gavetões organizadores e espelheira camarim.",
+      "categoria": "Banheiros",
       "imagemPrincipal": "/uploads/1788475917148-WhatsAppImage2026-09-03at07.44.55.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 39,
+      "imagens": [
+        "/uploads/1788475917148-WhatsAppImage2026-09-03at07.44.55.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 38,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Naval Ultra",
+        "Laca Acetinada Grafite",
+        "Corrediças Telescópicas Ocultas"
+      ],
+      "createdAt": "2026-07-29T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-39",
-      "titulo": "Projeto 40",
-      "descricao": "Descrição do projeto 40",
-      "categoria": "Cozinhas",
+      "titulo": "Estação de Trabalho Executiva #5",
+      "slug": "projeto-home-office-39",
+      "descricao": "Bancada de trabalho ampla com calha de conectividade oculta, gaveteiro e prateleiras iluminadas.",
+      "categoria": "Home Office",
       "imagemPrincipal": "/uploads/1788475917159-WhatsAppImage2026-09-03at07.44.45.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 40,
+      "imagens": [
+        "/uploads/1788475917159-WhatsAppImage2026-09-03at07.44.45.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 39,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Carvalho Nobre",
+        "Vidro Reflecta Bronze",
+        "Perfis de Alumínio Anodizado"
+      ],
+      "createdAt": "2026-07-28T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-40",
-      "titulo": "Projeto 41",
-      "descricao": "Descrição do projeto 41",
-      "categoria": "Cozinhas",
+      "titulo": "Recepção Corporativa de Alto Padrão #5",
+      "slug": "projeto-corporativo-40",
+      "descricao": "Marcenaria corporativa imponente para recepção e salas de reunião com design monolítico.",
+      "categoria": "Corporativo",
       "imagemPrincipal": "/uploads/1788475917163-WhatsAppImage2026-09-03at07.44.47.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475917163-WhatsAppImage2026-09-03at07.44.47.jpeg"
+      ],
       "destaque": true,
-      "ordem": 41,
+      "ordem": 40,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Preto Matt Anti-Marcas",
+        "Serralheria Dourada",
+        "Pistões a Gás Reforçados"
+      ],
+      "createdAt": "2026-07-27T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-41",
-      "titulo": "Projeto 42",
-      "descricao": "Descrição do projeto 42",
+      "titulo": "Cozinha Planejada em MDF de Luxo #6",
+      "slug": "projeto-cozinhas-41",
+      "descricao": "Projeto de cozinha sob medida em 100% MDF naval com ferragens ocultas com amortecimento soft-close e iluminação em LED.",
       "categoria": "Cozinhas",
       "imagemPrincipal": "/uploads/1788475917170-WhatsAppImage2026-09-03at07.44.49.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 42,
+      "imagens": [
+        "/uploads/1788475917170-WhatsAppImage2026-09-03at07.44.49.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 41,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "100% MDF Premium 18mm",
+        "Ferragens Blum Soft-Close",
+        "Fita de Borda PUR Waterproof"
+      ],
+      "createdAt": "2026-07-26T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-42",
-      "titulo": "Projeto 43",
-      "descricao": "Descrição do projeto 43",
-      "categoria": "Cozinhas",
+      "titulo": "Suíte Master com Marcenaria Sob Medida #6",
+      "slug": "projeto-quartos-42",
+      "descricao": "Dormitório de alto luxo com cabeceira ripada em madeira nobre, mesas suspensas e iluminação embutida.",
+      "categoria": "Quartos",
       "imagemPrincipal": "/uploads/1788475917176-WhatsAppImage2026-09-03at07.44.57.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 43,
+      "imagens": [
+        "/uploads/1788475917176-WhatsAppImage2026-09-03at07.44.57.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 42,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Madeirado Louro Freijó",
+        "Iluminação LED 3000K",
+        "Puxadores Cava Usinados"
+      ],
+      "createdAt": "2026-07-25T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-43",
-      "titulo": "Projeto 44",
-      "descricao": "Descrição do projeto 44",
-      "categoria": "Cozinhas",
+      "titulo": "Closet Walk-In Sob Medida #6",
+      "slug": "projeto-closets-43",
+      "descricao": "Closet espaçoso com divisões inteligentes para vestuário, sapateiras inclinadas iluminadas e portas em perfil de alumínio.",
+      "categoria": "Closets",
       "imagemPrincipal": "/uploads/1788475917182-WhatsAppImage2026-09-03at07.44.59.jpeg",
-      "imagens": [],
+      "imagens": [
+        "/uploads/1788475917182-WhatsAppImage2026-09-03at07.44.59.jpeg"
+      ],
       "destaque": true,
-      "ordem": 44,
+      "ordem": 43,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Naval Ultra",
+        "Laca Acetinada Grafite",
+        "Corrediças Telescópicas Ocultas"
+      ],
+      "createdAt": "2026-07-24T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     },
     {
       "id": "proj-auto-44",
-      "titulo": "Projeto 45",
-      "descricao": "Descrição do projeto 45",
-      "categoria": "Cozinhas",
+      "titulo": "Home Theater & Painel Ripado #6",
+      "slug": "projeto-salas-44",
+      "descricao": "Painel monumental para TV com usinagem ripada em CNC, rack inferior suspenso e passagem oculta de fiações.",
+      "categoria": "Salas",
       "imagemPrincipal": "/uploads/1788475917205-WhatsAppImage2026-09-03at07.45.01.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 45,
+      "imagens": [
+        "/uploads/1788475917205-WhatsAppImage2026-09-03at07.45.01.jpeg"
+      ],
+      "destaque": false,
+      "ordem": 44,
       "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
       "materiais": [
-        "100% MDF Premium"
-      ]
+        "MDF Carvalho Nobre",
+        "Vidro Reflecta Bronze",
+        "Perfis de Alumínio Anodizado"
+      ],
+      "createdAt": "2026-07-23T17:05:25.216Z",
+      "updatedAt": "2026-09-04T17:05:25.216Z"
     }
   ],
   "clients": [
