@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npx prisma generate && npm run build",
+  "buildCommand": "DATABASE_URL=\"postgresql://postgres:postgres@localhost:5432/postgres\" npx prisma generate && npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
