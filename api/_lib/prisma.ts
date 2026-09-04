@@ -1,25 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-
-let prismaInstance: PrismaClient | null = null;
-let initAttempted = false;
-
-export function getPrisma(): PrismaClient | null {
-  const dbUrl = process.env.DATABASE_URL;
-  if (!dbUrl || dbUrl.includes('dummy') || dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1')) {
-    return null;
-  }
-  if (initAttempted && !prismaInstance) return null;
-  try {
-    if (!prismaInstance) {
-      initAttempted = true;
-      prismaInstance = new PrismaClient();
-    }
-    return prismaInstance;
-  } catch (err) {
-    console.error('Prisma init failed:', err);
-    initAttempted = true;
-    return null;
-  }
+// Prisma disabled - using embedded db-data.ts instead
+export function getPrisma(): null {
+  return null;
 }
 
 export function extractYouTubeId(url: string): string {
