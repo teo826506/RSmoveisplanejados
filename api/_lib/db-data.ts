@@ -1184,4 +1184,4 @@ export const DB_DATA = {
     "/uploads/1788475917182-WhatsAppImage2026-09-03at07.44.59.jpeg",
     "/uploads/1788475917205-WhatsAppImage2026-09-03at07.45.01.jpeg"
   ]
-} as const;
+};

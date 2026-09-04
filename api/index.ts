@@ -1,5 +1,5 @@
 import { DB_DATA } from './_lib/db-data';
-import { getPrisma, extractYouTubeId } from './_lib/prisma';
+import { getPrisma, extractYouTubeId, withTimeout } from './_lib/prisma';
 
 const dbJson: any = DB_DATA || { projects: [], gallery: [], videos: [], settings: {}, budgets: [], messages: [], clients: [] };
 const SETTINGS = dbJson.settings || {};
@@ -16,7 +16,6 @@ export default async function handler(req: any, res: any) {
 
   try {
     const rawUrl = req.url || '';
-    // Normalize path: e.g. /api/health -> /health, /api/gallery -> /gallery, /health -> /health
     let path = rawUrl.split('?')[0];
     if (path.startsWith('/api')) {
       path = path.substring(4);
@@ -33,7 +32,7 @@ export default async function handler(req: any, res: any) {
       try {
         const prisma = getPrisma();
         if (prisma) {
-          await prisma.$queryRaw`SELECT 1`;
+          await withTimeout(prisma.$queryRaw`SELECT 1`, 2000);
           dbStatus = 'connected (Neon PostgreSQL)';
         }
       } catch (e: any) {
@@ -54,11 +53,11 @@ export default async function handler(req: any, res: any) {
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const settings = await prisma.siteSettings.findUnique({ where: { id: 'default' } });
-            if (settings) return res.status(200).json(settings);
+            const settings = await withTimeout(prisma.siteSettings.findUnique({ where: { id: 'default' } }), 2000);
+            if (settings && settings.nomeEmpresa) return res.status(200).json(settings);
           }
         } catch (e) {
-          console.error('Settings DB error:', e);
+          console.warn('Settings DB warning (using fallback):', e);
         }
         return res.status(200).json(SETTINGS);
       }
@@ -68,21 +67,22 @@ export default async function handler(req: any, res: any) {
         delete data.id;
         delete data.updatedAt;
 
+        Object.assign(SETTINGS, data);
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const settings = await prisma.siteSettings.upsert({
+            const settings = await withTimeout(prisma.siteSettings.upsert({
               where: { id: 'default' },
               update: data,
               create: { id: 'default', ...data }
-            });
+            }), 2500);
             return res.status(200).json({ success: true, settings });
           }
         } catch (e) {
-          console.error('Update settings DB error:', e);
+          console.warn('Update settings DB warning (saved in fallback memory):', e);
         }
 
-        Object.assign(SETTINGS, req.body);
         return res.status(200).json({ success: true, settings: SETTINGS });
       }
     }
@@ -93,13 +93,13 @@ export default async function handler(req: any, res: any) {
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const items = await prisma.galeria.findMany({ orderBy: { createdAt: 'desc' } });
+            const items = await withTimeout(prisma.galeria.findMany({ orderBy: { createdAt: 'desc' } }), 2000);
             if (items && items.length > 0) {
               return res.status(200).json(items.map((i: any) => i.url));
             }
           }
         } catch (e) {
-          console.error('Gallery DB error:', e);
+          console.warn('Gallery DB warning (using fallback):', e);
         }
         return res.status(200).json(dbJson.gallery || []);
       }
@@ -107,24 +107,24 @@ export default async function handler(req: any, res: any) {
       if (method === 'PUT') {
         const { urls } = req.body || {};
         const urlArray = Array.isArray(urls) ? urls : [];
+        dbJson.gallery = urlArray;
 
         try {
           const prisma = getPrisma();
           if (prisma) {
-            await prisma.galeria.deleteMany();
+            await withTimeout(prisma.galeria.deleteMany(), 2000);
             if (urlArray.length > 0) {
-              await prisma.galeria.createMany({
+              await withTimeout(prisma.galeria.createMany({
                 data: urlArray.map((url: string) => ({ url })),
                 skipDuplicates: true
-              });
+              }), 2000);
             }
             return res.status(200).json({ success: true, gallery: urlArray });
           }
         } catch (e) {
-          console.error('Update gallery DB error:', e);
+          console.warn('Update gallery DB warning (saved in fallback memory):', e);
         }
 
-        dbJson.gallery = urlArray;
         return res.status(200).json({ success: true, gallery: urlArray });
       }
     }
@@ -134,7 +134,7 @@ export default async function handler(req: any, res: any) {
       try {
         const prisma = getPrisma();
         if (prisma) {
-          const [totalProjetos, projetosDestaque, totalVideos, orcamentosPendentes, orcamentosTotal, mensagensNovas, clientesCadastrados] = await Promise.all([
+          const [totalProjetos, projetosDestaque, totalVideos, orcamentosPendentes, orcamentosTotal, mensagensNovas, clientesCadastrados] = await withTimeout(Promise.all([
             prisma.projeto.count(),
             prisma.projeto.count({ where: { destaque: true, ativo: true } }),
             prisma.video.count(),
@@ -142,11 +142,11 @@ export default async function handler(req: any, res: any) {
             prisma.orcamento.count(),
             prisma.mensagem.count({ where: { status: 'NOVA' } }),
             prisma.cliente.count()
-          ]);
+          ]), 2500);
           return res.status(200).json({ totalProjetos, projetosDestaque, totalVideos, orcamentosPendentes, orcamentosTotal, mensagensNovas, clientesCadastrados });
         }
       } catch (e) {
-        console.error('Stats DB error:', e);
+        console.warn('Stats DB warning (using fallback):', e);
       }
 
       const projects = dbJson.projects || [];
@@ -176,11 +176,11 @@ export default async function handler(req: any, res: any) {
             if (categoria && categoria !== 'Todas') {
               where.categoria = { equals: String(categoria), mode: 'insensitive' };
             }
-            const list = await prisma.video.findMany({ where, orderBy: { ordem: 'asc' } });
+            const list = await withTimeout(prisma.video.findMany({ where, orderBy: { ordem: 'asc' } }), 2000);
             if (list && list.length > 0) return res.status(200).json(list);
           }
         } catch (e) {
-          console.error('Videos DB error:', e);
+          console.warn('Videos DB warning (using fallback):', e);
         }
 
         let list = dbJson.videos || [];
@@ -195,64 +195,77 @@ export default async function handler(req: any, res: any) {
         const { titulo, url } = req.body || {};
         if (!titulo || !url) return res.status(400).json({ error: 'Título e URL são obrigatórios.' });
 
+        const ytId = url.includes('youtube.com') || url.includes('youtu.be') ? extractYouTubeId(url) : undefined;
+        const newVidObj = {
+          id: `vid-${Date.now()}`,
+          titulo,
+          descricao: req.body.descricao || '',
+          tipo: req.body.tipo || (ytId ? 'YOUTUBE' : 'MP4'),
+          url,
+          youtubeId: ytId,
+          thumbnail: req.body.thumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : ''),
+          categoria: req.body.categoria || 'Projetos',
+          duracao: req.body.duracao || '3:00',
+          destaque: Boolean(req.body.destaque),
+          ativo: true,
+          ordem: Number(req.body.ordem) || 1,
+          createdAt: new Date().toISOString()
+        };
+
+        (dbJson.videos = dbJson.videos || []).unshift(newVidObj);
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const ytId = url.includes('youtube.com') || url.includes('youtu.be') ? extractYouTubeId(url) : undefined;
-            const newVid = await prisma.video.create({
-              data: {
-                titulo,
-                descricao: req.body.descricao || '',
-                tipo: req.body.tipo || (ytId ? 'YOUTUBE' : 'MP4'),
-                url,
-                youtubeId: ytId,
-                thumbnail: req.body.thumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : ''),
-                categoria: req.body.categoria || 'Projetos',
-                duracao: req.body.duracao || '3:00',
-                destaque: Boolean(req.body.destaque),
-                ativo: true,
-                ordem: Number(req.body.ordem) || 1
-              }
-            });
+            const newVid = await withTimeout(prisma.video.create({ data: newVidObj }), 2500);
             return res.status(201).json(newVid);
           }
         } catch (e) {
-          console.error('Create video DB error:', e);
+          console.warn('Create video DB warning (saved in fallback memory):', e);
         }
 
-        const newVideo = { id: `vid-${Date.now()}`, ...req.body, ativo: true };
-        (dbJson.videos = dbJson.videos || []).unshift(newVideo);
-        return res.status(201).json(newVideo);
+        return res.status(201).json(newVidObj);
       }
     }
 
     if (path.startsWith('/videos/')) {
       const id = path.replace('/videos/', '');
       if (method === 'PUT') {
+        const data = { ...req.body };
+        delete data.id;
+        delete data.createdAt;
+
+        const list = dbJson.videos || [];
+        const idx = list.findIndex((v: any) => v.id === id);
+        let updatedFallback = { id, ...data };
+        if (idx !== -1) {
+          list[idx] = { ...list[idx], ...data };
+          updatedFallback = list[idx];
+        }
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const data = { ...req.body };
-            delete data.id;
-            delete data.createdAt;
-            const updated = await prisma.video.update({ where: { id }, data });
+            const updated = await withTimeout(prisma.video.update({ where: { id }, data }), 2500);
             return res.status(200).json(updated);
           }
         } catch (e) {
-          console.error('Update video DB error:', e);
+          console.warn('Update video DB warning (saved in fallback memory):', e);
         }
-        return res.status(200).json({ id, ...req.body });
+        return res.status(200).json(updatedFallback);
       }
 
       if (method === 'DELETE') {
+        dbJson.videos = (dbJson.videos || []).filter((v: any) => v.id !== id);
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            await prisma.video.delete({ where: { id } });
+            await withTimeout(prisma.video.delete({ where: { id } }), 2500);
             return res.status(200).json({ success: true });
           }
         } catch (e) {
-          console.error('Delete video DB error:', e);
+          console.warn('Delete video DB warning (removed from fallback memory):', e);
         }
         return res.status(200).json({ success: true });
       }
@@ -274,7 +287,7 @@ export default async function handler(req: any, res: any) {
             if (categoria && categoria !== 'Todas') {
               where.categoria = { equals: String(categoria), mode: 'insensitive' };
             }
-            const list = await prisma.projeto.findMany({ where, orderBy: { ordem: 'asc' } });
+            const list = await withTimeout(prisma.projeto.findMany({ where, orderBy: { ordem: 'asc' } }), 2000);
             if (list && list.length > 0) {
               return res.status(200).json(list.map((p: any) => ({
                 ...p,
@@ -284,7 +297,7 @@ export default async function handler(req: any, res: any) {
             }
           }
         } catch (e) {
-          console.error('Projects DB error:', e);
+          console.warn('Projects DB warning (using fallback):', e);
         }
 
         let list = dbJson.projects || [];
@@ -306,32 +319,34 @@ export default async function handler(req: any, res: any) {
           return res.status(400).json({ error: 'Campos obrigatórios ausentes.' });
         }
 
+        const slugBase = req.body.slug || titulo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+        const newProjObj = {
+          id: `proj-${Date.now()}`,
+          titulo,
+          slug: `${slugBase}-${Date.now()}`,
+          categoria,
+          descricao,
+          imagemPrincipal,
+          imagens: req.body.imagens || [imagemPrincipal],
+          destaque: Boolean(req.body.destaque),
+          ativo: true,
+          materiais: req.body.materiais || ['100% MDF Premium'],
+          createdAt: new Date().toISOString()
+        };
+
+        (dbJson.projects = dbJson.projects || []).unshift(newProjObj);
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const slug = req.body.slug || titulo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-            const newProj = await prisma.projeto.create({
-              data: {
-                titulo,
-                slug: `${slug}-${Date.now()}`,
-                categoria,
-                descricao,
-                imagemPrincipal,
-                imagens: req.body.imagens || [imagemPrincipal],
-                destaque: Boolean(req.body.destaque),
-                ativo: true,
-                materiais: req.body.materiais || ['100% MDF Premium']
-              }
-            });
+            const newProj = await withTimeout(prisma.projeto.create({ data: newProjObj }), 2500);
             return res.status(201).json(newProj);
           }
         } catch (e) {
-          console.error('Create project DB error:', e);
+          console.warn('Create project DB warning (saved in fallback memory):', e);
         }
 
-        const newProject = { id: `proj-${Date.now()}`, ...req.body, ativo: true };
-        (dbJson.projects = dbJson.projects || []).unshift(newProject);
-        return res.status(201).json(newProject);
+        return res.status(201).json(newProjObj);
       }
     }
 
@@ -342,9 +357,9 @@ export default async function handler(req: any, res: any) {
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const project = await prisma.projeto.findFirst({
+            const project = await withTimeout(prisma.projeto.findFirst({
               where: { OR: [{ slug: slugOrId }, { id: slugOrId }] }
-            });
+            }), 2000);
             if (project) {
               return res.status(200).json({
                 ...project,
@@ -354,7 +369,7 @@ export default async function handler(req: any, res: any) {
             }
           }
         } catch (e) {
-          console.error('Project slug DB error:', e);
+          console.warn('Project slug DB warning (using fallback):', e);
         }
 
         const list = dbJson.projects || [];
@@ -364,30 +379,41 @@ export default async function handler(req: any, res: any) {
       }
 
       if (method === 'PUT') {
+        const data = { ...req.body };
+        delete data.id;
+        delete data.createdAt;
+
+        const list = dbJson.projects || [];
+        const idx = list.findIndex((p: any) => p.id === slugOrId || p.slug === slugOrId);
+        let updatedFallback = { id: slugOrId, ...data };
+        if (idx !== -1) {
+          list[idx] = { ...list[idx], ...data };
+          updatedFallback = list[idx];
+        }
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const data = { ...req.body };
-            delete data.id;
-            delete data.createdAt;
-            const updated = await prisma.projeto.update({ where: { id: slugOrId }, data });
+            const updated = await withTimeout(prisma.projeto.update({ where: { id: slugOrId }, data }), 2500);
             return res.status(200).json(updated);
           }
         } catch (e) {
-          console.error('Update project DB error:', e);
+          console.warn('Update project DB warning (saved in fallback memory):', e);
         }
-        return res.status(200).json({ id: slugOrId, ...req.body });
+        return res.status(200).json(updatedFallback);
       }
 
       if (method === 'DELETE') {
+        dbJson.projects = (dbJson.projects || []).filter((p: any) => p.id !== slugOrId && p.slug !== slugOrId);
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            await prisma.projeto.delete({ where: { id: slugOrId } });
+            await withTimeout(prisma.projeto.delete({ where: { id: slugOrId } }), 2500);
             return res.status(200).json({ success: true });
           }
         } catch (e) {
-          console.error('Delete project DB error:', e);
+          console.warn('Delete project DB warning (removed from fallback memory):', e);
         }
         return res.status(200).json({ success: true });
       }
@@ -399,14 +425,14 @@ export default async function handler(req: any, res: any) {
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const budgets = await prisma.orcamento.findMany({
+            const budgets = await withTimeout(prisma.orcamento.findMany({
               include: { cliente: true },
               orderBy: { createdAt: 'desc' }
-            });
+            }), 2000);
             if (budgets && budgets.length > 0) return res.status(200).json(budgets);
           }
         } catch (e) {
-          console.error('Budgets DB error:', e);
+          console.warn('Budgets DB warning (using fallback):', e);
         }
         return res.status(200).json(dbJson.budgets || []);
       }
@@ -421,35 +447,40 @@ export default async function handler(req: any, res: any) {
         const waText = encodeURIComponent(`*Orçamento RS Móveis*\n👤 ${nome}\n📞 ${telefone}\n🏠 ${ambiente}\n📝 ${descricao}`);
         const whatsappUrl = `https://wa.me/${cleanPhone}?text=${waText}`;
 
+        const newB = { id: `budg-${Date.now()}`, ...req.body, status: 'PENDENTE', createdAt: new Date().toISOString() };
+        (dbJson.budgets = dbJson.budgets || []).unshift(newB);
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            let client = await prisma.cliente.findFirst({
+            let client = await withTimeout(prisma.cliente.findFirst({
               where: { telefone: { contains: telefone.replace(/\D/g, '') } }
-            });
+            }), 2000).catch(() => null);
             if (!client) {
-              client = await prisma.cliente.create({
+              client = await withTimeout(prisma.cliente.create({
                 data: { nome, telefone, email: req.body.email || '', cidade: req.body.cidade || '' }
-              });
+              }), 2000).catch(() => null);
             }
-            const newBudget = await prisma.orcamento.create({
-              data: {
-                clienteId: client.id,
-                ambiente,
-                descricao,
-                medidas: req.body.medidas || 'A combinar',
-                status: 'PENDENTE'
-              },
-              include: { cliente: true }
-            });
-            return res.status(201).json({ success: true, budget: newBudget, whatsappUrl });
+            if (client) {
+              const newBudget = await withTimeout(prisma.orcamento.create({
+                data: {
+                  clienteId: client.id,
+                  ambiente,
+                  descricao,
+                  medidas: req.body.medidas || 'A combinar',
+                  status: 'PENDENTE'
+                },
+                include: { cliente: true }
+              }), 2000).catch(() => null);
+              if (newBudget) {
+                return res.status(201).json({ success: true, budget: newBudget, whatsappUrl });
+              }
+            }
           }
         } catch (e) {
-          console.error('Create budget DB error:', e);
+          console.warn('Create budget DB warning (saved in fallback memory):', e);
         }
 
-        const newB = { id: `budg-${Date.now()}`, ...req.body, status: 'PENDENTE', createdAt: new Date().toISOString() };
-        (dbJson.budgets = dbJson.budgets || []).unshift(newB);
         return res.status(201).json({ success: true, budget: newB, whatsappUrl });
       }
     }
@@ -460,27 +491,33 @@ export default async function handler(req: any, res: any) {
       const sub = parts[3];
 
       if (sub === 'status' && method === 'PATCH') {
+        const list = dbJson.budgets || [];
+        const item = list.find((b: any) => b.id === id);
+        if (item) item.status = req.body?.status;
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const updated = await prisma.orcamento.update({ where: { id }, data: { status: req.body.status } });
+            const updated = await withTimeout(prisma.orcamento.update({ where: { id }, data: { status: req.body.status } }), 2000);
             return res.status(200).json(updated);
           }
         } catch (e) {
-          console.error('Update budget DB error:', e);
+          console.warn('Update budget DB warning (saved in fallback memory):', e);
         }
         return res.status(200).json({ id, status: req.body?.status });
       }
 
       if (method === 'DELETE') {
+        dbJson.budgets = (dbJson.budgets || []).filter((b: any) => b.id !== id);
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            await prisma.orcamento.delete({ where: { id } });
+            await withTimeout(prisma.orcamento.delete({ where: { id } }), 2000);
             return res.status(200).json({ success: true });
           }
         } catch (e) {
-          console.error('Delete budget DB error:', e);
+          console.warn('Delete budget DB warning (removed from fallback memory):', e);
         }
         return res.status(200).json({ success: true });
       }
@@ -492,11 +529,11 @@ export default async function handler(req: any, res: any) {
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const messages = await prisma.mensagem.findMany({ orderBy: { createdAt: 'desc' } });
+            const messages = await withTimeout(prisma.mensagem.findMany({ orderBy: { createdAt: 'desc' } }), 2000);
             if (messages && messages.length > 0) return res.status(200).json(messages);
           }
         } catch (e) {
-          console.error('Messages DB error:', e);
+          console.warn('Messages DB warning (using fallback):', e);
         }
         return res.status(200).json(dbJson.messages || []);
       }
@@ -505,10 +542,13 @@ export default async function handler(req: any, res: any) {
         const { nome, mensagem } = req.body || {};
         if (!nome || !mensagem) return res.status(400).json({ error: 'Nome e mensagem são obrigatórios.' });
 
+        const newMsgObj = { id: `msg-${Date.now()}`, ...req.body, status: 'NOVA', createdAt: new Date().toISOString() };
+        (dbJson.messages = dbJson.messages || []).unshift(newMsgObj);
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            await prisma.mensagem.create({
+            await withTimeout(prisma.mensagem.create({
               data: {
                 nome,
                 mensagem,
@@ -517,11 +557,10 @@ export default async function handler(req: any, res: any) {
                 assunto: req.body.assunto || 'Contato via Site',
                 status: 'NOVA'
               }
-            });
-            return res.status(201).json({ success: true });
+            }), 2000);
           }
         } catch (e) {
-          console.error('Create message DB error:', e);
+          console.warn('Create message DB warning (saved in fallback memory):', e);
         }
 
         return res.status(201).json({ success: true });
@@ -534,27 +573,33 @@ export default async function handler(req: any, res: any) {
       const sub = parts[3];
 
       if (sub === 'status' && method === 'PATCH') {
+        const list = dbJson.messages || [];
+        const item = list.find((m: any) => m.id === id);
+        if (item) item.status = req.body?.status;
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            const updated = await prisma.mensagem.update({ where: { id }, data: { status: req.body.status } });
+            const updated = await withTimeout(prisma.mensagem.update({ where: { id }, data: { status: req.body.status } }), 2000);
             return res.status(200).json(updated);
           }
         } catch (e) {
-          console.error('Update message DB error:', e);
+          console.warn('Update message DB warning (saved in fallback memory):', e);
         }
         return res.status(200).json({ id, status: req.body?.status });
       }
 
       if (method === 'DELETE') {
+        dbJson.messages = (dbJson.messages || []).filter((m: any) => m.id !== id);
+
         try {
           const prisma = getPrisma();
           if (prisma) {
-            await prisma.mensagem.delete({ where: { id } });
+            await withTimeout(prisma.mensagem.delete({ where: { id } }), 2000);
             return res.status(200).json({ success: true });
           }
         } catch (e) {
-          console.error('Delete message DB error:', e);
+          console.warn('Delete message DB warning (removed from fallback memory):', e);
         }
         return res.status(200).json({ success: true });
       }
@@ -565,11 +610,11 @@ export default async function handler(req: any, res: any) {
       try {
         const prisma = getPrisma();
         if (prisma) {
-          const clients = await prisma.cliente.findMany({ orderBy: { createdAt: 'desc' } });
+          const clients = await withTimeout(prisma.cliente.findMany({ orderBy: { createdAt: 'desc' } }), 2000);
           if (clients && clients.length > 0) return res.status(200).json(clients);
         }
       } catch (e) {
-        console.error('Clients DB error:', e);
+        console.warn('Clients DB warning (using fallback):', e);
       }
       return res.status(200).json(dbJson.clients || []);
     }
@@ -600,8 +645,22 @@ export default async function handler(req: any, res: any) {
     if (path === '/upload' && method === 'POST') {
       const { fileData, fileName } = req.body || {};
       if (!fileData) return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
+
+      const url = fileData;
+      if (!dbJson.gallery) dbJson.gallery = [];
+      if (!dbJson.gallery.includes(url)) {
+        dbJson.gallery.unshift(url);
+      }
+
+      try {
+        const prisma = getPrisma();
+        if (prisma && url.startsWith('/uploads/')) {
+          await withTimeout(prisma.galeria.create({ data: { url } }), 2000).catch(() => {});
+        }
+      } catch (e) {}
+
       return res.status(200).json({
-        url: fileData,
+        url,
         pathname: fileName || `img-${Date.now()}.webp`,
         contentType: fileData.startsWith('data:image') ? fileData.split(';')[0].replace('data:', '') : 'image/webp'
       });
