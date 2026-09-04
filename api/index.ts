@@ -32,7 +32,7 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 
 // Helper functions with Prisma -> db.json fallback
-async function safeGetSettings() {
+async function safeGetSettings(): Promise<any> {
   const p = getPrisma();
   if (p) {
     try {
@@ -43,7 +43,7 @@ async function safeGetSettings() {
   return INITIAL_SETTINGS;
 }
 
-async function safeGetProjects() {
+async function safeGetProjects(): Promise<any[]> {
   const p = getPrisma();
   if (p) {
     try {
@@ -51,6 +51,8 @@ async function safeGetProjects() {
       if (list && list.length > 0) {
         return list.map(item => ({
           ...item,
+          createdAt: item.createdAt instanceof Date ? item.createdAt.toISOString() : String(item.createdAt),
+          updatedAt: item.updatedAt instanceof Date ? item.updatedAt.toISOString() : String(item.updatedAt),
           imagens: Array.isArray(item.imagens) ? item.imagens : [item.imagemPrincipal],
           materiais: Array.isArray(item.materiais) ? item.materiais : []
         }));
@@ -64,7 +66,7 @@ async function safeGetProjects() {
   }));
 }
 
-async function safeGetGallery() {
+async function safeGetGallery(): Promise<string[]> {
   const p = getPrisma();
   if (p) {
     try {
@@ -72,18 +74,24 @@ async function safeGetGallery() {
       if (items && items.length > 0) return items.map(i => i.url);
     } catch {}
   }
-  return dbJson.gallery || [];
+  return (dbJson.gallery as string[]) || [];
 }
 
-async function safeGetVideos() {
+async function safeGetVideos(): Promise<any[]> {
   const p = getPrisma();
   if (p) {
     try {
       const vids = await p.video.findMany({ orderBy: { ordem: 'asc' } });
-      if (vids && vids.length > 0) return vids;
+      if (vids && vids.length > 0) {
+        return vids.map(v => ({
+          ...v,
+          createdAt: v.createdAt instanceof Date ? v.createdAt.toISOString() : String(v.createdAt),
+          updatedAt: v.updatedAt instanceof Date ? v.updatedAt.toISOString() : String(v.updatedAt)
+        }));
+      }
     } catch {}
   }
-  return dbJson.videos || [];
+  return (dbJson.videos as any[]) || [];
 }
 
 const router = express.Router();
