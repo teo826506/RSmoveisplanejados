@@ -1,29 +1,9 @@
 import express from 'express';
 import { getPrisma, extractYouTubeId } from './_lib/prisma';
-import path from 'path';
-import fs from 'fs';
+import { DB_DATA } from './_lib/db-data';
 
-// Load db.json safely at runtime (works on Vercel with includeFiles)
-function loadDbJson(): any {
-  try {
-    // Try different possible paths for Vercel environment
-    const paths = [
-      path.join(__dirname, '../data/db.json'),
-      path.join(process.cwd(), 'data/db.json'),
-      path.join(__dirname, '../../data/db.json'),
-    ];
-    for (const p of paths) {
-      if (fs.existsSync(p)) {
-        return JSON.parse(fs.readFileSync(p, 'utf-8'));
-      }
-    }
-  } catch (e) {
-    console.error('Could not load db.json:', e);
-  }
-  return null;
-}
-
-const dbJson = loadDbJson() || { projects: [], gallery: [], videos: [], budgets: [], messages: [], clients: [], settings: null };
+// Fallback data from embedded db.json snapshot
+const dbJson: any = DB_DATA as any;
 
 // Default settings fallback from db.json or hardcoded
 const INITIAL_SETTINGS = dbJson.settings || {
@@ -75,7 +55,7 @@ async function safeGetProjects(): Promise<any[]> {
     try {
       const list = await p.projeto.findMany({ orderBy: { ordem: 'asc' } });
       if (list && list.length > 0) {
-        return list.map(item => ({
+        return list.map((item: any) => ({
           ...item,
           createdAt: item.createdAt instanceof Date ? item.createdAt.toISOString() : String(item.createdAt),
           updatedAt: item.updatedAt instanceof Date ? item.updatedAt.toISOString() : String(item.updatedAt),
@@ -85,7 +65,7 @@ async function safeGetProjects(): Promise<any[]> {
       }
     } catch {}
   }
-  return (dbJson.projects || []).map((item: any) => ({
+  return ((dbJson.projects as any[]) || []).map((item: any) => ({
     ...item,
     imagens: Array.isArray(item.imagens) && item.imagens.length > 0 ? item.imagens : [item.imagemPrincipal],
     materiais: Array.isArray(item.materiais) ? item.materiais : []
@@ -97,7 +77,7 @@ async function safeGetGallery(): Promise<string[]> {
   if (p) {
     try {
       const items = await p.galeria.findMany({ orderBy: { createdAt: 'desc' } });
-      if (items && items.length > 0) return items.map(i => i.url);
+      if (items && items.length > 0) return items.map((i: any) => i.url);
     } catch {}
   }
   return (dbJson.gallery as string[]) || [];
@@ -109,7 +89,7 @@ async function safeGetVideos(): Promise<any[]> {
     try {
       const vids = await p.video.findMany({ orderBy: { ordem: 'asc' } });
       if (vids && vids.length > 0) {
-        return vids.map(v => ({
+        return vids.map((v: any) => ({
           ...v,
           createdAt: v.createdAt instanceof Date ? v.createdAt.toISOString() : String(v.createdAt),
           updatedAt: v.updatedAt instanceof Date ? v.updatedAt.toISOString() : String(v.updatedAt)
@@ -139,7 +119,7 @@ router.get('/stats', async (_req, res) => {
     let orcamentosTotal = 0;
     let mensagensNovas = 0;
     let clientesCadastrados = 0;
-    
+
     const db = getPrisma();
     if (db) {
       try {
@@ -151,10 +131,10 @@ router.get('/stats', async (_req, res) => {
         ]);
       } catch {}
     } else {
-      orcamentosPendentes = (dbJson.budgets || []).filter((b: any) => b.status === 'PENDENTE' || b.status === 'EM_CONTATO').length;
-      orcamentosTotal = (dbJson.budgets || []).length;
-      mensagensNovas = (dbJson.messages || []).filter((m: any) => m.status === 'NOVA').length;
-      clientesCadastrados = (dbJson.clients || []).length;
+      orcamentosPendentes = ((dbJson.budgets as any[]) || []).filter((b: any) => b.status === 'PENDENTE' || b.status === 'EM_CONTATO').length;
+      orcamentosTotal = ((dbJson.budgets as any[]) || []).length;
+      mensagensNovas = ((dbJson.messages as any[]) || []).filter((m: any) => m.status === 'NOVA').length;
+      clientesCadastrados = ((dbJson.clients as any[]) || []).length;
     }
     res.json({ totalProjetos, projetosDestaque, totalVideos, orcamentosPendentes, orcamentosTotal, mensagensNovas, clientesCadastrados });
   } catch (err) {
@@ -349,7 +329,7 @@ router.get('/budgets', async (_req, res) => {
       return res.json(await db.orcamento.findMany({ include: { cliente: true }, orderBy: { createdAt: 'desc' } }));
     } catch {}
   }
-  res.json(dbJson.budgets || []);
+  res.json((dbJson.budgets as any[]) || []);
 });
 
 router.post('/budgets', async (req, res) => {
@@ -403,7 +383,7 @@ router.get('/messages', async (_req, res) => {
       return res.json(await db.mensagem.findMany({ orderBy: { createdAt: 'desc' } }));
     } catch {}
   }
-  res.json(dbJson.messages || []);
+  res.json((dbJson.messages as any[]) || []);
 });
 
 router.post('/messages', async (req, res) => {
@@ -447,7 +427,7 @@ router.get('/clients', async (_req, res) => {
       return res.json(await db.cliente.findMany({ orderBy: { createdAt: 'desc' } }));
     } catch {}
   }
-  res.json(dbJson.clients || []);
+  res.json((dbJson.clients as any[]) || []);
 });
 
 // Auth

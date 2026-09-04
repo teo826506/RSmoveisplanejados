@@ -5,7 +5,8 @@ let initAttempted = false;
 
 export function getPrisma(): PrismaClient | null {
   const dbUrl = process.env.DATABASE_URL;
-  if (!dbUrl || dbUrl.includes('dummy') || dbUrl.includes('localhost')) {
+  // Only connect if we have a real remote DATABASE_URL
+  if (!dbUrl || dbUrl.includes('dummy') || dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1')) {
     return null;
   }
   if (initAttempted && !prismaInstance) return null;
