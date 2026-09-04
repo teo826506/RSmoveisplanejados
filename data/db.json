@@ -17,22 +17,6 @@
       ]
     },
     {
-      "id": "proj-auto-1",
-      "titulo": "Projeto 2",
-      "descricao": "Descrição do projeto 2",
-      "categoria": "Cozinhas",
-      "imagemPrincipal": "/uploads/1788477141590-WhatsAppImage2026-09-03at07.45.01.jpeg",
-      "imagens": [],
-      "destaque": true,
-      "ordem": 2,
-      "ativo": true,
-      "createdAt": "2026-09-03T23:26:23.657Z",
-      "updatedAt": "2026-09-03T23:26:23.657Z",
-      "materiais": [
-        "100% MDF Premium"
-      ]
-    },
-    {
       "id": "proj-auto-2",
       "titulo": "Projeto 3",
       "descricao": "Descrição do projeto 3",
@@ -979,6 +963,5 @@
     "/uploads/1788475917176-WhatsAppImage2026-09-03at07.44.57.jpeg",
     "/uploads/1788475917182-WhatsAppImage2026-09-03at07.44.59.jpeg",
     "/uploads/1788475917205-WhatsAppImage2026-09-03at07.45.01.jpeg"
-  ],
-  "updatedAt": "2026-09-03T23:41:58.513Z"
+  ]
 }

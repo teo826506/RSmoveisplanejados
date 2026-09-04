@@ -2,9 +2,11 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
-import { INITIAL_PROJECTS, INITIAL_CLIENTS, INITIAL_BUDGETS, INITIAL_MESSAGES, INITIAL_SETTINGS, INITIAL_VIDEOS } from './src/data/initialData.ts';
-import { Projeto, Cliente, Orcamento, Mensagem, VideoItem, SiteSettings } from './src/types.ts';
+import { PrismaClient } from '@prisma/client';
+import { INITIAL_SETTINGS } from './src/data/initialData.ts';
+import { VideoItem, SiteSettings } from './src/types.ts';
 
+const prisma = new PrismaClient();
 const app = express();
 const PORT = 3000;
 
@@ -12,106 +14,16 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/uploads', express.static(path.join(process.cwd(), 'public', 'uploads')));
 
-// Data file persistence path
-const DATA_DIR = path.join(process.cwd(), 'data');
-const DATA_FILE = path.join(DATA_DIR, 'db.json');
-
-interface DbSchema {
-  projects: Projeto[];
-  clients: Cliente[];
-  budgets: Orcamento[];
-  messages: Mensagem[];
-  videos: VideoItem[];
-  settings: SiteSettings;
-  gallery: string[];
-}
-
 function extractYouTubeId(url: string): string {
   if (!url) return '';
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
   return match ? match[1] : '';
 }
 
-function initDatabase(): DbSchema {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-
-  if (fs.existsSync(DATA_FILE)) {
-    try {
-      const content = fs.readFileSync(DATA_FILE, 'utf-8');
-      const parsed = JSON.parse(content);
-      return {
-        projects: parsed.projects || INITIAL_PROJECTS,
-        clients: parsed.clients || INITIAL_CLIENTS,
-        budgets: parsed.budgets || INITIAL_BUDGETS,
-        messages: parsed.messages || INITIAL_MESSAGES,
-        videos: parsed.videos || INITIAL_VIDEOS,
-        settings: parsed.settings ? { ...INITIAL_SETTINGS, ...parsed.settings } : INITIAL_SETTINGS,
-        gallery: parsed.gallery || []
-      };
-    } catch {
-      console.warn('Could not parse existing database, resetting to initial seed.');
-    }
-  }
-
-  const initialData: DbSchema = {
-    projects: INITIAL_PROJECTS,
-    clients: INITIAL_CLIENTS,
-    budgets: INITIAL_BUDGETS,
-    messages: INITIAL_MESSAGES,
-    videos: INITIAL_VIDEOS,
-    settings: INITIAL_SETTINGS,
-    gallery: []
-  };
-
-  try {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
-  } catch (err) {
-    console.error('Error writing initial db.json', err);
-  }
-
-  return initialData;
-}
-
-function loadDatabase(): DbSchema {
-  if (fs.existsSync(DATA_FILE)) {
-    try {
-      const content = fs.readFileSync(DATA_FILE, 'utf-8');
-      const parsed = JSON.parse(content);
-      return {
-        projects: parsed.projects || INITIAL_PROJECTS,
-        clients: parsed.clients || INITIAL_CLIENTS,
-        budgets: parsed.budgets || INITIAL_BUDGETS,
-        messages: parsed.messages || INITIAL_MESSAGES,
-        videos: parsed.videos || INITIAL_VIDEOS,
-        settings: parsed.settings ? { ...INITIAL_SETTINGS, ...parsed.settings } : INITIAL_SETTINGS,
-        gallery: parsed.gallery || []
-      };
-    } catch {
-      // fallback
-    }
-  }
-  return initDatabase();
-}
-
-let db = loadDatabase();
-
-function saveDatabase() {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
-  } catch (err) {
-    console.error('Failed to persist database:', err);
-  }
-}
-
 // ---------------- API ROUTES ----------------
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
@@ -120,433 +32,530 @@ app.get('/api/health', (req, res) => {
 });
 
 // Stats summary for admin dashboard
-app.get('/api/stats', (req, res) => {
-  const totalProjetos = db.projects.length;
-  const projetosDestaque = db.projects.filter(p => p.destaque && p.ativo).length;
-  const totalVideos = db.videos ? db.videos.length : 0;
-  const orcamentosPendentes = db.budgets.filter(b => b.status === 'PENDENTE' || b.status === 'EM_CONTATO').length;
-  const orcamentosTotal = db.budgets.length;
-  const mensagensNovas = db.messages.filter(m => m.status === 'NOVA').length;
-  const clientesCadastrados = db.clients.length;
-
-  res.json({
-    totalProjetos,
-    projetosDestaque,
-    totalVideos,
-    orcamentosPendentes,
-    orcamentosTotal,
-    mensagensNovas,
-    clientesCadastrados
-  });
+app.get('/api/stats', async (_req, res) => {
+  try {
+    const [totalProjetos, projetosDestaque, totalVideos, orcamentosPendentes, orcamentosTotal, mensagensNovas, clientesCadastrados] = await Promise.all([
+      prisma.projeto.count(),
+      prisma.projeto.count({ where: { destaque: true, ativo: true } }),
+      prisma.video.count(),
+      prisma.orcamento.count({ where: { status: { in: ['PENDENTE', 'EM_CONTATO'] } } }),
+      prisma.orcamento.count(),
+      prisma.mensagem.count({ where: { status: 'NOVA' } }),
+      prisma.cliente.count()
+    ]);
+    res.json({ totalProjetos, projetosDestaque, totalVideos, orcamentosPendentes, orcamentosTotal, mensagensNovas, clientesCadastrados });
+  } catch (err) {
+    console.error('Error fetching stats:', err);
+    res.status(500).json({ error: 'Erro ao buscar estatísticas.' });
+  }
 });
 
 // SITE SETTINGS ENDPOINTS
-app.get('/api/settings', (req, res) => {
-  res.json(db.settings || INITIAL_SETTINGS);
+app.get('/api/settings', async (_req, res) => {
+  try {
+    const settings = await prisma.siteSettings.findUnique({ where: { id: 'default' } });
+    res.json(settings || INITIAL_SETTINGS);
+  } catch (err) {
+    console.error('Error fetching settings:', err);
+    res.json(INITIAL_SETTINGS);
+  }
 });
 
-app.put('/api/settings', (req, res) => {
-  db.settings = {
-    ...db.settings,
-    ...req.body,
-    updatedAt: new Date().toISOString()
-  };
-  saveDatabase();
-  res.json({ success: true, settings: db.settings, message: 'Configurações atualizadas com sucesso!' });
+app.put('/api/settings', async (req, res) => {
+  try {
+    const data = { ...req.body };
+    delete data.id;
+    delete data.updatedAt;
+
+    const settings = await prisma.siteSettings.upsert({
+      where: { id: 'default' },
+      update: data,
+      create: {
+        id: 'default',
+        nomeEmpresa: data.nomeEmpresa || INITIAL_SETTINGS.nomeEmpresa,
+        slogan: data.slogan || INITIAL_SETTINGS.slogan,
+        subtitulo: data.subtitulo || INITIAL_SETTINGS.subtitulo,
+        heroTagline: data.heroTagline || INITIAL_SETTINGS.heroTagline,
+        heroTituloLinha1: data.heroTituloLinha1 || INITIAL_SETTINGS.heroTituloLinha1,
+        heroTituloLinha2: data.heroTituloLinha2 || INITIAL_SETTINGS.heroTituloLinha2,
+        heroDescricao: data.heroDescricao || INITIAL_SETTINGS.heroDescricao,
+        heroImagemFundo: data.heroImagemFundo || INITIAL_SETTINGS.heroImagemFundo,
+        telefonePrincipal: data.telefonePrincipal || '',
+        telefoneFixo: data.telefoneFixo || '',
+        whatsappNumero: data.whatsappNumero || '',
+        emailPrincipal: data.emailPrincipal || '',
+        emailProjetos: data.emailProjetos || '',
+        endereco: data.endereco || '',
+        instagram: data.instagram || '',
+        facebook: data.facebook || '',
+        youtube: data.youtube || '',
+        statProjetos: data.statProjetos || '',
+        statClientes: data.statClientes || '',
+        statAnos: data.statAnos || '',
+        statAtendimento: data.statAtendimento || '',
+        ...data
+      }
+    });
+    res.json({ success: true, settings, message: 'Configurações atualizadas com sucesso!' });
+  } catch (err) {
+    console.error('Error updating settings:', err);
+    res.status(500).json({ error: 'Erro ao salvar configurações.' });
+  }
 });
 
 // GALLERY ENDPOINTS
-app.get('/api/gallery', (req, res) => {
-  res.json(db.gallery || []);
+app.get('/api/gallery', async (_req, res) => {
+  try {
+    const items = await prisma.galeria.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json(items.map(i => i.url));
+  } catch (err) {
+    console.error('Error fetching gallery:', err);
+    res.json([]);
+  }
 });
 
-app.put('/api/gallery', (req, res) => {
+app.put('/api/gallery', async (req, res) => {
   const { urls } = req.body;
   if (!Array.isArray(urls)) {
     return res.status(400).json({ error: 'urls deve ser um array de strings.' });
   }
-  db.gallery = urls;
-  saveDatabase();
-  res.json({ success: true, gallery: db.gallery });
+  try {
+    // Delete all existing gallery items and re-insert the new list
+    await prisma.galeria.deleteMany();
+    if (urls.length > 0) {
+      await prisma.galeria.createMany({
+        data: urls.map((url: string) => ({ url })),
+        skipDuplicates: true
+      });
+    }
+    res.json({ success: true, gallery: urls });
+  } catch (err) {
+    console.error('Error updating gallery:', err);
+    res.status(500).json({ error: 'Erro ao salvar galeria.' });
+  }
 });
 
 // VIDEOS & YOUTUBE ENDPOINTS
-app.get('/api/videos', (req, res) => {
-  const { includeInactive, categoria } = req.query;
-  let list = db.videos ? [...db.videos] : [...INITIAL_VIDEOS];
-
-  if (includeInactive !== 'true') {
-    list = list.filter(v => v.ativo);
+app.get('/api/videos', async (req, res) => {
+  try {
+    const { includeInactive, categoria } = req.query;
+    const where: any = {};
+    if (includeInactive !== 'true') {
+      where.ativo = true;
+    }
+    if (categoria && categoria !== 'Todas') {
+      where.categoria = { equals: categoria as string, mode: 'insensitive' };
+    }
+    const list = await prisma.video.findMany({ where, orderBy: { ordem: 'asc' } });
+    res.json(list);
+  } catch (err) {
+    console.error('Error fetching videos:', err);
+    res.json([]);
   }
-
-  if (categoria && categoria !== 'Todas') {
-    list = list.filter(v => v.categoria.toLowerCase() === (categoria as string).toLowerCase());
-  }
-
-  list.sort((a, b) => a.ordem - b.ordem);
-  res.json(list);
 });
 
-app.post('/api/videos', (req, res) => {
+app.post('/api/videos', async (req, res) => {
   const { titulo, descricao, tipo, url, categoria, thumbnail, duracao, destaque, ordem } = req.body;
-
   if (!titulo || !url) {
     return res.status(400).json({ error: 'Título e URL do vídeo são obrigatórios.' });
   }
+  try {
+    const ytId = tipo === 'YOUTUBE' || url.includes('youtube.com') || url.includes('youtu.be') ? extractYouTubeId(url) : undefined;
+    const defaultThumb = ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : (thumbnail || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80');
+    const count = await prisma.video.count();
 
-  const ytId = tipo === 'YOUTUBE' || url.includes('youtube.com') || url.includes('youtu.be') ? extractYouTubeId(url) : undefined;
-  const defaultThumb = ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : (thumbnail || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80');
-
-  const newVideo: VideoItem = {
-    id: `vid-${Date.now()}`,
-    titulo,
-    descricao: descricao || '',
-    tipo: tipo || (ytId ? 'YOUTUBE' : 'MP4'),
-    url,
-    youtubeId: ytId,
-    thumbnail: thumbnail || defaultThumb,
-    categoria: categoria || 'Projetos',
-    duracao: duracao || '3:00',
-    destaque: Boolean(destaque),
-    ativo: true,
-    ordem: Number(ordem) || (db.videos ? db.videos.length + 1 : 1),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-
-  if (!db.videos) db.videos = [];
-  db.videos.push(newVideo);
-  saveDatabase();
-  res.status(201).json(newVideo);
-});
-
-app.put('/api/videos/:id', (req, res) => {
-  const { id } = req.params;
-  if (!db.videos) db.videos = [];
-  const index = db.videos.findIndex(v => v.id === id);
-
-  if (index === -1) {
-    return res.status(404).json({ error: 'Vídeo não encontrado' });
+    const newVideo = await prisma.video.create({
+      data: {
+        titulo,
+        descricao: descricao || '',
+        tipo: tipo || (ytId ? 'YOUTUBE' : 'MP4'),
+        url,
+        youtubeId: ytId,
+        thumbnail: thumbnail || defaultThumb,
+        categoria: categoria || 'Projetos',
+        duracao: duracao || '3:00',
+        destaque: Boolean(destaque),
+        ativo: true,
+        ordem: Number(ordem) || count + 1
+      }
+    });
+    res.status(201).json(newVideo);
+  } catch (err) {
+    console.error('Error creating video:', err);
+    res.status(500).json({ error: 'Erro ao criar vídeo.' });
   }
-
-  const url = req.body.url || db.videos[index].url;
-  const ytId = url && (url.includes('youtube.com') || url.includes('youtu.be')) ? extractYouTubeId(url) : db.videos[index].youtubeId;
-
-  const updated: VideoItem = {
-    ...db.videos[index],
-    ...req.body,
-    youtubeId: ytId,
-    updatedAt: new Date().toISOString()
-  };
-
-  db.videos[index] = updated;
-  saveDatabase();
-  res.json(updated);
 });
 
-app.delete('/api/videos/:id', (req, res) => {
+app.put('/api/videos/:id', async (req, res) => {
   const { id } = req.params;
-  if (!db.videos) db.videos = [];
-  const initialLen = db.videos.length;
-  db.videos = db.videos.filter(v => v.id !== id);
+  try {
+    const existing = await prisma.video.findUnique({ where: { id } });
+    if (!existing) {
+      return res.status(404).json({ error: 'Vídeo não encontrado' });
+    }
+    const url = req.body.url || existing.url;
+    const ytId = url && (url.includes('youtube.com') || url.includes('youtu.be')) ? extractYouTubeId(url) : existing.youtubeId;
 
-  if (db.videos.length === initialLen) {
-    return res.status(404).json({ error: 'Vídeo não encontrado' });
+    const data = { ...req.body, youtubeId: ytId };
+    delete data.id;
+    delete data.createdAt;
+
+    const updated = await prisma.video.update({ where: { id }, data });
+    res.json(updated);
+  } catch (err) {
+    console.error('Error updating video:', err);
+    res.status(500).json({ error: 'Erro ao atualizar vídeo.' });
   }
-
-  saveDatabase();
-  res.json({ success: true, message: 'Vídeo removido com sucesso.' });
 });
 
+app.delete('/api/videos/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.video.delete({ where: { id } });
+    res.json({ success: true, message: 'Vídeo removido com sucesso.' });
+  } catch (err) {
+    console.error('Error deleting video:', err);
+    res.status(404).json({ error: 'Vídeo não encontrado' });
+  }
+});
 
 // PROJECTS ENDPOINTS
-app.get('/api/projects', (req, res) => {
-  db = loadDatabase();
-  const { categoria, destaque, includeInactive } = req.query;
-  let list = [...db.projects];
-
-  if (includeInactive !== 'true') {
-    list = list.filter(p => p.ativo);
+app.get('/api/projects', async (req, res) => {
+  try {
+    const { categoria, destaque, includeInactive } = req.query;
+    const where: any = {};
+    if (includeInactive !== 'true') {
+      where.ativo = true;
+    }
+    if (categoria && categoria !== 'Todas') {
+      where.categoria = { equals: categoria as string, mode: 'insensitive' };
+    }
+    if (destaque === 'true') {
+      where.destaque = true;
+    }
+    const list = await prisma.projeto.findMany({ where, orderBy: { ordem: 'asc' } });
+    // Map Prisma fields to the frontend expected shape
+    const mapped = list.map(p => ({
+      ...p,
+      imagens: Array.isArray(p.imagens) ? p.imagens : (p.imagens ? [p.imagens] : [p.imagemPrincipal]),
+      materiais: Array.isArray(p.materiais) ? p.materiais : []
+    }));
+    res.json(mapped);
+  } catch (err) {
+    console.error('Error fetching projects:', err);
+    res.json([]);
   }
-
-  if (categoria && categoria !== 'Todas') {
-    list = list.filter(p => p.categoria.toLowerCase() === (categoria as string).toLowerCase());
-  }
-
-  if (destaque === 'true') {
-    list = list.filter(p => p.destaque);
-  }
-
-  list.sort((a, b) => a.ordem - b.ordem);
-  res.json(list);
 });
 
-app.get('/api/projects/:slug', (req, res) => {
+app.get('/api/projects/:slug', async (req, res) => {
   const { slug } = req.params;
-  const project = db.projects.find(p => p.slug === slug || p.id === slug);
-  if (!project) {
-    return res.status(404).json({ error: 'Projeto não encontrado' });
+  try {
+    const project = await prisma.projeto.findFirst({
+      where: { OR: [{ slug }, { id: slug }] }
+    });
+    if (!project) {
+      return res.status(404).json({ error: 'Projeto não encontrado' });
+    }
+    res.json({
+      ...project,
+      imagens: Array.isArray(project.imagens) ? project.imagens : [project.imagemPrincipal],
+      materiais: Array.isArray(project.materiais) ? project.materiais : []
+    });
+  } catch (err) {
+    console.error('Error fetching project:', err);
+    res.status(500).json({ error: 'Erro ao buscar projeto.' });
   }
-  res.json(project);
 });
 
-app.post('/api/projects', (req, res) => {
-  const { titulo, categoria, descricao, imagemPrincipal, imagens, destaque, ordem, materiais, detalhes } = req.body;
-
+app.post('/api/projects', async (req, res) => {
+  const { titulo, categoria, descricao, imagemPrincipal, imagens, destaque, ordem, materiais } = req.body;
   if (!titulo || !categoria || !descricao || !imagemPrincipal) {
     return res.status(400).json({ error: 'Campos obrigatórios ausentes: título, categoria, descrição e imagem principal.' });
   }
+  try {
+    const slug = req.body.slug || titulo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    const count = await prisma.projeto.count();
 
-  const slug = req.body.slug || titulo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-  
-  const newProject: Projeto = {
-    id: `proj-${Date.now()}`,
-    titulo,
-    slug,
-    categoria,
-    descricao,
-    imagemPrincipal,
-    imagens: Array.isArray(imagens) && imagens.length > 0 ? imagens : [imagemPrincipal],
-    destaque: Boolean(destaque),
-    ordem: Number(ordem) || db.projects.length + 1,
-    ativo: true,
-    materiais: Array.isArray(materiais) ? materiais : ['MDF de Alta Qualidade', 'Ferragens com Amortecedor'],
-    detalhes: detalhes || {
-      ambiente: categoria,
-      acabamento: '100% MDF Premium',
-      tempoExecucao: '20 dias úteis',
-      garantia: '5 anos de garantia'
-    },
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-
-  db.projects.push(newProject);
-  saveDatabase();
-  res.status(201).json(newProject);
+    const newProject = await prisma.projeto.create({
+      data: {
+        titulo,
+        slug: slug + '-' + Date.now(),
+        categoria,
+        descricao,
+        imagemPrincipal,
+        imagens: Array.isArray(imagens) && imagens.length > 0 ? imagens : [imagemPrincipal],
+        destaque: Boolean(destaque),
+        ordem: Number(ordem) || count + 1,
+        ativo: true,
+        materiais: Array.isArray(materiais) ? materiais : ['MDF de Alta Qualidade', 'Ferragens com Amortecedor']
+      }
+    });
+    res.status(201).json({
+      ...newProject,
+      imagens: Array.isArray(newProject.imagens) ? newProject.imagens : [newProject.imagemPrincipal],
+      materiais: Array.isArray(newProject.materiais) ? newProject.materiais : []
+    });
+  } catch (err) {
+    console.error('Error creating project:', err);
+    res.status(500).json({ error: 'Erro ao criar projeto.' });
+  }
 });
 
-app.put('/api/projects/:id', (req, res) => {
+app.put('/api/projects/:id', async (req, res) => {
   const { id } = req.params;
-  const index = db.projects.findIndex(p => p.id === id);
+  try {
+    const existing = await prisma.projeto.findUnique({ where: { id } });
+    if (!existing) {
+      return res.status(404).json({ error: 'Projeto não encontrado' });
+    }
+    const data = { ...req.body };
+    delete data.id;
+    delete data.createdAt;
+    // Don't overwrite slug unless explicitly provided
+    if (!data.slug) delete data.slug;
 
-  if (index === -1) {
-    return res.status(404).json({ error: 'Projeto não encontrado' });
+    const updated = await prisma.projeto.update({ where: { id }, data });
+    res.json({
+      ...updated,
+      imagens: Array.isArray(updated.imagens) ? updated.imagens : [updated.imagemPrincipal],
+      materiais: Array.isArray(updated.materiais) ? updated.materiais : []
+    });
+  } catch (err) {
+    console.error('Error updating project:', err);
+    res.status(500).json({ error: 'Erro ao atualizar projeto.' });
   }
-
-  const updated: Projeto = {
-    ...db.projects[index],
-    ...req.body,
-    id: db.projects[index].id,
-    updatedAt: new Date().toISOString()
-  };
-
-  db.projects[index] = updated;
-  saveDatabase();
-  res.json(updated);
 });
 
-app.delete('/api/projects/:id', (req, res) => {
+app.delete('/api/projects/:id', async (req, res) => {
   const { id } = req.params;
-  const initialLen = db.projects.length;
-  db.projects = db.projects.filter(p => p.id !== id);
-
-  if (db.projects.length === initialLen) {
-    return res.status(404).json({ error: 'Projeto não encontrado' });
+  try {
+    await prisma.projeto.delete({ where: { id } });
+    res.json({ success: true, message: 'Projeto excluído com sucesso.' });
+  } catch (err) {
+    console.error('Error deleting project:', err);
+    res.status(404).json({ error: 'Projeto não encontrado' });
   }
-
-  saveDatabase();
-  res.json({ success: true, message: 'Projeto excluído com sucesso.' });
 });
 
 // BUDGETS / ORÇAMENTOS ENDPOINTS
-app.get('/api/budgets', (req, res) => {
-  const budgetsWithClients = db.budgets.map(b => {
-    const client = db.clients.find(c => c.id === b.clienteId);
-    return { ...b, cliente: client };
-  });
-  res.json(budgetsWithClients.reverse());
+app.get('/api/budgets', async (_req, res) => {
+  try {
+    const budgets = await prisma.orcamento.findMany({
+      include: { cliente: true },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json(budgets);
+  } catch (err) {
+    console.error('Error fetching budgets:', err);
+    res.json([]);
+  }
 });
 
-app.post('/api/budgets', (req, res) => {
+app.post('/api/budgets', async (req, res) => {
   const { nome, telefone, email, cidade, ambiente, medidas, descricao, observacoes } = req.body;
-
   if (!nome || !telefone || !ambiente || !descricao) {
     return res.status(400).json({ error: 'Por favor preencha nome, WhatsApp, ambiente e detalhes do projeto.' });
   }
+  try {
+    // Find or create client
+    let client = await prisma.cliente.findFirst({
+      where: { telefone: { contains: telefone.replace(/\D/g, '') } }
+    });
+    if (!client) {
+      client = await prisma.cliente.create({
+        data: {
+          nome,
+          email: email || '',
+          telefone,
+          cidade: cidade || '',
+          observacoes: observacoes || ''
+        }
+      });
+    } else {
+      client = await prisma.cliente.update({
+        where: { id: client.id },
+        data: {
+          nome: nome || client.nome,
+          ...(email ? { email } : {}),
+          ...(cidade ? { cidade } : {})
+        }
+      });
+    }
 
-  // Find or create client
-  let client = db.clients.find(c => c.telefone.replace(/\D/g, '') === telefone.replace(/\D/g, ''));
-  if (!client) {
-    client = {
-      id: `cli-${Date.now()}`,
-      nome,
-      email: email || '',
-      telefone,
-      cidade: cidade || '',
-      observacoes: observacoes || '',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    db.clients.push(client);
-  } else {
-    // Update client details if provided
-    client.nome = nome || client.nome;
-    if (email) client.email = email;
-    if (cidade) client.cidade = cidade;
-    client.updatedAt = new Date().toISOString();
+    const newBudget = await prisma.orcamento.create({
+      data: {
+        clienteId: client.id,
+        ambiente,
+        descricao,
+        medidas: medidas || 'A combinar na medição técnica',
+        orcamentoEstimado: 'Sob avaliação personalizada',
+        status: 'PENDENTE'
+      },
+      include: { cliente: true }
+    });
+
+    // Create WhatsApp message link
+    const settings = await prisma.siteSettings.findUnique({ where: { id: 'default' } });
+    const whatsappNumber = settings?.whatsappNumero || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5511999998888';
+    const cleanPhone = whatsappNumber.replace(/\D/g, '');
+    const waText = encodeURIComponent(
+      `*Solicitação de Orçamento - RS Móveis Planejados*\n\n` +
+      `👤 *Cliente:* ${nome}\n` +
+      `📞 *Telefone:* ${telefone}\n` +
+      `📍 *Cidade:* ${cidade || 'Não informada'}\n` +
+      `🏠 *Ambiente:* ${ambiente}\n` +
+      `📐 *Medidas:* ${medidas || 'A combinar'}\n\n` +
+      `📝 *Descrição:* ${descricao}\n\n` +
+      `_Enviado através do site oficial da RS Móveis Planejados em MDF._`
+    );
+    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${waText}`;
+
+    res.status(201).json({
+      success: true,
+      budget: newBudget,
+      whatsappUrl,
+      message: 'Orçamento cadastrado com sucesso!'
+    });
+  } catch (err) {
+    console.error('Error creating budget:', err);
+    res.status(500).json({ error: 'Erro ao criar orçamento.' });
   }
-
-  const newBudget: Orcamento = {
-    id: `orc-${Date.now()}`,
-    clienteId: client.id,
-    cliente: client,
-    ambiente,
-    descricao,
-    medidas: medidas || 'A combinar na medição técnica',
-    orcamentoEstimado: 'Sob avaliação personalizada',
-    status: 'PENDENTE',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-
-  db.budgets.push(newBudget);
-  saveDatabase();
-
-  // Create WhatsApp message link
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5511999998888';
-  const cleanPhone = whatsappNumber.replace(/\D/g, '');
-  const waText = encodeURIComponent(
-    `*Solicitação de Orçamento - RS Móveis Planejados*\n\n` +
-    `👤 *Cliente:* ${nome}\n` +
-    `📞 *Telefone:* ${telefone}\n` +
-    `📍 *Cidade:* ${cidade || 'Não informada'}\n` +
-    `🏠 *Ambiente:* ${ambiente}\n` +
-    `📐 *Medidas:* ${medidas || 'A combinar'}\n\n` +
-    `📝 *Descrição:* ${descricao}\n\n` +
-    `_Enviado através do site oficial da RS Móveis Planejados em MDF._`
-  );
-  const whatsappUrl = `https://wa.me/${cleanPhone}?text=${waText}`;
-
-  res.status(201).json({
-    success: true,
-    budget: newBudget,
-    whatsappUrl,
-    message: 'Orçamento cadastrado com sucesso!'
-  });
 });
 
-app.patch('/api/budgets/:id/status', (req, res) => {
+app.patch('/api/budgets/:id/status', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
-
-  const budget = db.budgets.find(b => b.id === id);
-  if (!budget) {
-    return res.status(404).json({ error: 'Orçamento não encontrado' });
+  try {
+    const budget = await prisma.orcamento.update({
+      where: { id },
+      data: { status }
+    });
+    res.json(budget);
+  } catch (err) {
+    console.error('Error updating budget status:', err);
+    res.status(404).json({ error: 'Orçamento não encontrado' });
   }
-
-  budget.status = status;
-  budget.updatedAt = new Date().toISOString();
-  saveDatabase();
-  res.json(budget);
 });
 
-app.delete('/api/budgets/:id', (req, res) => {
+app.delete('/api/budgets/:id', async (req, res) => {
   const { id } = req.params;
-  db.budgets = db.budgets.filter(b => b.id !== id);
-  saveDatabase();
-  res.json({ success: true });
+  try {
+    await prisma.orcamento.delete({ where: { id } });
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting budget:', err);
+    res.status(404).json({ error: 'Orçamento não encontrado' });
+  }
 });
 
 // MESSAGES / CONTATO ENDPOINTS
-app.get('/api/messages', (req, res) => {
-  res.json(db.messages.slice().reverse());
+app.get('/api/messages', async (_req, res) => {
+  try {
+    const messages = await prisma.mensagem.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json(messages);
+  } catch (err) {
+    console.error('Error fetching messages:', err);
+    res.json([]);
+  }
 });
 
-app.post('/api/messages', (req, res) => {
+app.post('/api/messages', async (req, res) => {
   const { nome, email, telefone, assunto, mensagem } = req.body;
-
   if (!nome || !mensagem) {
     return res.status(400).json({ error: 'Nome e mensagem são obrigatórios.' });
   }
-
-  const newMessage: Mensagem = {
-    id: `msg-${Date.now()}`,
-    nome,
-    email: email || '',
-    telefone: telefone || '',
-    assunto: assunto || 'Contato via Site',
-    mensagem,
-    status: 'NOVA',
-    createdAt: new Date().toISOString()
-  };
-
-  db.messages.push(newMessage);
-  saveDatabase();
-  res.status(201).json({ success: true, message: 'Mensagem enviada com sucesso!' });
+  try {
+    await prisma.mensagem.create({
+      data: {
+        nome,
+        email: email || '',
+        telefone: telefone || '',
+        assunto: assunto || 'Contato via Site',
+        mensagem,
+        status: 'NOVA'
+      }
+    });
+    res.status(201).json({ success: true, message: 'Mensagem enviada com sucesso!' });
+  } catch (err) {
+    console.error('Error creating message:', err);
+    res.status(500).json({ error: 'Erro ao enviar mensagem.' });
+  }
 });
 
-app.patch('/api/messages/:id/status', (req, res) => {
+app.patch('/api/messages/:id/status', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
-  const msg = db.messages.find(m => m.id === id);
-  if (!msg) {
-    return res.status(404).json({ error: 'Mensagem não encontrada' });
+  try {
+    const msg = await prisma.mensagem.update({ where: { id }, data: { status } });
+    res.json(msg);
+  } catch (err) {
+    console.error('Error updating message:', err);
+    res.status(404).json({ error: 'Mensagem não encontrada' });
   }
-  msg.status = status;
-  saveDatabase();
-  res.json(msg);
 });
 
-app.delete('/api/messages/:id', (req, res) => {
+app.delete('/api/messages/:id', async (req, res) => {
   const { id } = req.params;
-  db.messages = db.messages.filter(m => m.id !== id);
-  saveDatabase();
-  res.json({ success: true });
+  try {
+    await prisma.mensagem.delete({ where: { id } });
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting message:', err);
+    res.status(404).json({ error: 'Mensagem não encontrada' });
+  }
 });
 
 // CLIENTS ENDPOINTS
-app.get('/api/clients', (req, res) => {
-  res.json(db.clients.slice().reverse());
+app.get('/api/clients', async (_req, res) => {
+  try {
+    const clients = await prisma.cliente.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json(clients);
+  } catch (err) {
+    console.error('Error fetching clients:', err);
+    res.json([]);
+  }
 });
 
 // AUTH ADMIN LOGIN
-app.post('/api/auth/login', (req, res) => {
-  db = loadDatabase();
+app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
-  const adminEmail = db.settings?.adminEmail || process.env.ADMIN_EMAIL || 'admin@rsplanejados.com.br';
-  const configuredPassword = db.settings?.adminPassword || process.env.ADMIN_PASSWORD || 'admin';
+  try {
+    const settings = await prisma.siteSettings.findUnique({ where: { id: 'default' } });
+    const adminEmail = settings?.adminEmail || process.env.ADMIN_EMAIL || 'admin@rsplanejados.com.br';
+    const configuredPassword = settings?.adminPassword || process.env.ADMIN_PASSWORD || 'admin';
 
-  // Aceita a senha configurada no painel ou as senhas administrativas padrão
-  const isValidPass =
-    password &&
-    (password === configuredPassword ||
-      password === 'admin' ||
-      password === 'admin123' ||
-      password === 'rs2026');
+    const isValidPass =
+      password &&
+      (password === configuredPassword ||
+        password === 'admin' ||
+        password === 'admin123' ||
+        password === 'rs2026');
 
-  // Aceita o email configurado, o usuário 'admin' ou se foi enviado apenas a senha
-  const isValidUser =
-    !email ||
-    email === adminEmail ||
-    email === 'admin' ||
-    email.toLowerCase() === 'admin' ||
-    email === 'admin@rsplanejados.com.br';
+    const isValidUser =
+      !email ||
+      email === adminEmail ||
+      email === 'admin' ||
+      email.toLowerCase() === 'admin' ||
+      email === 'admin@rsplanejados.com.br';
 
-  if (isValidUser && isValidPass) {
-    return res.json({
-      success: true,
-      token: 'jwt-rs-admin-authenticated-token',
-      user: {
-        id: 'admin-1',
-        nome: 'Administrador RS Móveis',
-        email: adminEmail,
-        role: 'SUPER_ADMIN'
-      }
-    });
+    if (isValidUser && isValidPass) {
+      return res.json({
+        success: true,
+        token: 'jwt-rs-admin-authenticated-token',
+        user: {
+          id: 'admin-1',
+          nome: 'Administrador RS Móveis',
+          email: adminEmail,
+          role: 'SUPER_ADMIN'
+        }
+      });
+    }
+
+    return res.status(401).json({ error: 'Senha ou usuário incorreto. Apenas o administrador possui acesso.' });
+  } catch (err) {
+    console.error('Error during login:', err);
+    res.status(500).json({ error: 'Erro interno.' });
   }
-
-  return res.status(401).json({ error: 'Senha ou usuário incorreto. Apenas o administrador possui acesso.' });
 });
 
 // IMAGE UPLOAD ENDPOINT (Local storage)
@@ -601,7 +610,7 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
+    app.get('*', (_req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
