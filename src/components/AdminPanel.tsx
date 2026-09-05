@@ -44,6 +44,7 @@ import {
   SiteSettings
 } from '../types';
 import { INITIAL_SETTINGS } from '../data/initialData';
+import { LogoRS } from './LogoRS';
 
 interface AdminPanelProps {
   isOpen: boolean;
@@ -123,6 +124,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   // Photos Gallery Manager State
   const [newPhotoUrl, setNewPhotoUrl] = useState('');
   const [photoGallery, setPhotoGallery] = useState<string[]>([]);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   // Status Filter for Budgets
   const [budgetStatusFilter, setBudgetStatusFilter] = useState<string>('ALL');
@@ -285,6 +287,47 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLogoFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Por favor selecione um arquivo de imagem válido (PNG, JPG, SVG, WebP, GIF).');
+      return;
+    }
+
+    setUploadingLogo(true);
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const base64 = event.target?.result as string;
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileData: base64,
+            fileName: file.name,
+            autoAddToGallery: false
+          })
+        });
+        const data = await res.json();
+        if (data.url) {
+          setSiteSettings(prev => ({ ...prev, logoUrl: data.url }));
+          setSaveSuccessMsg('Nova logo carregada com sucesso! Clique em "Salvar Configurações" para confirmar.');
+          setTimeout(() => setSaveSuccessMsg(''), 4000);
+        } else {
+          alert(data.error || 'Erro ao enviar imagem da logo.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Erro de conexão ao fazer upload da logo.');
+      } finally {
+        setUploadingLogo(false);
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   // ---------------- VIDEOS & YOUTUBE ACTIONS ----------------
@@ -858,6 +901,95 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     <Save className="w-4 h-4" />
                     <span>Salvar Configurações</span>
                   </button>
+                </div>
+
+                {/* Logo Upload & Visual Identity Section */}
+                <div className="space-y-5 p-6 rounded-2xl bg-neutral-900/90 border border-[#D4AF37]/40 shadow-xl shadow-black/50">
+                  <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
+                    <div>
+                      <h4 className="text-sm font-bold text-[#D4AF37] uppercase tracking-wider font-display-rs flex items-center gap-2">
+                        <Upload className="w-4 h-4 text-[#D4AF37]" /> Logo Oficial do Site (Upload & Personalização)
+                      </h4>
+                      <p className="text-[11px] text-neutral-400 mt-0.5">
+                        Envie a nova imagem da logo da sua marca (PNG transparente, SVG, WebP ou JPG) para ser usada no topo e no rodapé do site.
+                      </p>
+                    </div>
+                    {siteSettings.logoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setSiteSettings(prev => ({ ...prev, logoUrl: '' }))}
+                        className="px-3 py-1.5 rounded-lg border border-red-900/60 bg-red-950/40 text-red-400 text-[11px] hover:bg-red-900/40 transition-colors flex items-center gap-1.5"
+                        title="Restaurar a logo vetorial padrão dourada"
+                      >
+                        <RefreshCw className="w-3 h-3" /> Restaurar Logo Padrão RS
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    {/* Upload Actions & Direct Input */}
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-neutral-300 mb-2">
+                          Upload de Nova Imagem de Logo
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <label className={`cursor-pointer px-5 py-3 rounded-xl border border-[#D4AF37]/60 bg-gradient-to-r from-[#D4AF37]/25 via-[#F3E5AB]/15 to-[#B8860B]/20 hover:border-[#D4AF37] text-white text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-[#D4AF37]/10 ${uploadingLogo ? 'opacity-50 pointer-events-none' : ''}`}>
+                            {uploadingLogo ? (
+                              <RefreshCw className="w-4 h-4 animate-spin text-[#D4AF37]" />
+                            ) : (
+                              <Upload className="w-4 h-4 text-[#D4AF37]" />
+                            )}
+                            <span>{uploadingLogo ? 'Enviando imagem...' : 'Selecionar Arquivo da Logo'}</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={handleLogoFileUpload}
+                              disabled={uploadingLogo}
+                            />
+                          </label>
+                        </div>
+                        <p className="text-[10px] text-neutral-500 mt-1.5">
+                          Suporta PNG com fundo transparente, SVG, WebP ou JPG.
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs text-neutral-400 mb-1">Caminho ou URL da Imagem da Logo</label>
+                        <input
+                          type="text"
+                          value={siteSettings.logoUrl || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, logoUrl: e.target.value })}
+                          placeholder="Ex: /uploads/minha-logo.png"
+                          className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Live Preview Container */}
+                    <div className="flex flex-col items-center justify-center p-6 rounded-xl bg-black/80 border border-neutral-800/80 min-h-[140px] relative overflow-hidden">
+                      <span className="absolute top-2 left-3 text-[10px] uppercase font-bold text-neutral-500 tracking-wider">
+                        Pré-visualização da Logo
+                      </span>
+                      <div className="pt-4 flex items-center justify-center">
+                        <LogoRS
+                          size="lg"
+                          showSubtitle={true}
+                          withGlow={true}
+                          withShimmer={true}
+                          logoUrl={siteSettings.logoUrl}
+                        />
+                      </div>
+                      <p className="text-[10px] mt-3 text-center">
+                        {siteSettings.logoUrl ? (
+                          <span className="text-[#D4AF37] font-semibold">✓ Usando Logo Personalizada Enviada</span>
+                        ) : (
+                          <span className="text-neutral-500">Usando Monograma Vetorial Dourado RS (Padrão)</span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Identity & Hero Section Settings */}

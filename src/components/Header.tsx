@@ -7,6 +7,7 @@ interface HeaderProps {
   onNavigate: (sectionId: string) => void;
   onOpenAdmin: (initialTab?: string) => void;
   activeSection: string;
+  logoUrl?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -14,6 +15,7 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigate,
   onOpenAdmin,
   activeSection,
+  logoUrl,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -65,6 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
               showSubtitle={true}
               withGlow={true}
               withShimmer={true}
+              logoUrl={logoUrl}
             />
           </button>
 

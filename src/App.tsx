@@ -111,6 +111,7 @@ export default function App() {
         onNavigate={handleNavigate}
         onOpenBudget={() => handleOpenBudget()}
         onOpenAdmin={handleOpenAdmin}
+        logoUrl={siteSettings.logoUrl}
       />
 
       {/* Main Sections */}
@@ -169,6 +170,7 @@ export default function App() {
         onNavigate={handleNavigate}
         onOpenBudget={() => handleOpenBudget()}
         onOpenAdmin={handleOpenAdmin}
+        logoUrl={siteSettings.logoUrl}
       />
 
       {/* Modals & Triggers */}

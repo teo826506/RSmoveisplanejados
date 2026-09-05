@@ -101,6 +101,7 @@ export interface SiteSettings {
   statAtendimento: string;
   logoTamanho: 'normal' | 'grande' | 'monumental';
   brilhoOuroIntensidade: 'alto' | 'extremo' | 'ouro-puro';
+  logoUrl?: string;
   adminEmail?: string;
   adminPassword?: string;
   updatedAt?: string;

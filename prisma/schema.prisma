@@ -115,6 +115,7 @@ model SiteSettings {
   statAtendimento       String
   logoTamanho           String   @default("normal")
   brilhoOuroIntensidade String   @default("alto")
+  logoUrl               String?
   adminEmail            String?
   adminPassword         String?
   updatedAt             DateTime @updatedAt

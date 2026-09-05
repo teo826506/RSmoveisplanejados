@@ -6,12 +6,14 @@ interface FooterProps {
   onNavigate: (sectionId: string) => void;
   onOpenBudget: () => void;
   onOpenAdmin: (initialTab?: string) => void;
+  logoUrl?: string;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   onNavigate,
   onOpenBudget,
   onOpenAdmin,
+  logoUrl,
 }) => {
   return (
     <footer className="bg-[#050505] text-neutral-400 text-xs border-t border-[#D4AF37]/30 relative overflow-hidden">
@@ -23,7 +25,7 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Col 1: Brand Info with High-End Gold Logo */}
           <div className="lg:col-span-2 space-y-5">
             <div className="flex items-start">
-              <LogoRS size="lg" showSubtitle={true} withGlow={true} withShimmer={true} />
+              <LogoRS size="lg" showSubtitle={true} withGlow={true} withShimmer={true} logoUrl={logoUrl} />
             </div>
 
             <p className="text-neutral-300 text-xs leading-relaxed max-w-sm font-light">

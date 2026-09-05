@@ -27,6 +27,7 @@ export const INITIAL_SETTINGS: SiteSettings = (dbJson.settings as SiteSettings) 
   statAtendimento: 'PERSONALIZADO E LOCAL',
   logoTamanho: 'grande',
   brilhoOuroIntensidade: 'extremo',
+  logoUrl: '',
   adminEmail: 'admin@rsplanejados.com.br',
   adminPassword: 'admin',
   updatedAt: new Date().toISOString()
