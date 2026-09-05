@@ -34,8 +34,10 @@ function extractYouTubeId(url: string): string {
   return m ? m[1] : '';
 }
 
+import dataSnapshot from './_data_snapshot.json';
+
 // ─── Inline fallback data (previously in _lib/db-data.ts) ────────────────────
-const DB_DATA: any = { projects: [], gallery: [], videos: [], settings: {}, budgets: [], messages: [], clients: [] };
+const DB_DATA: any = dataSnapshot || { projects: [], gallery: [], videos: [], settings: {}, budgets: [], messages: [], clients: [] };
 
 const dbJson: any = DB_DATA;
 const SETTINGS = dbJson.settings || {};

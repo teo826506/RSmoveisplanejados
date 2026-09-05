@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Sparkles, Eye, ArrowUpRight, Search, Layers, Filter } from 'lucide-react';
 import { Projeto, CategoriaProjeto } from '../types';
+import { INITIAL_PROJECTS } from '../data/initialData';
 
 interface ProjectsGalleryProps {
   projects: Projeto[];
@@ -25,10 +26,11 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
   onSelectProject,
   onOpenBudget,
 }) => {
+  const activeProjects = Array.isArray(projects) && projects.length > 0 ? projects : INITIAL_PROJECTS;
   const [activeCategory, setActiveCategory] = useState<CategoriaProjeto>('Todas');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredProjects = projects.filter((p) => {
+  const filteredProjects = activeProjects.filter((p) => {
     const matchesCategory =
       activeCategory === 'Todas' ||
       p.categoria.toLowerCase() === activeCategory.toLowerCase();
@@ -76,8 +78,8 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
               const isSelected = activeCategory === cat;
               const count =
                 cat === 'Todas'
-                  ? projects.length
-                  : projects.filter((p) => p.categoria.toLowerCase() === cat.toLowerCase()).length;
+                  ? activeProjects.length
+                  : activeProjects.filter((p) => p.categoria.toLowerCase() === cat.toLowerCase()).length;
               return (
                 <button
                   key={cat}

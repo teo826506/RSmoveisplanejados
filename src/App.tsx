@@ -41,16 +41,16 @@ export default function App() {
         fetch('/api/gallery').then((r) => r.json()).catch(() => null),
       ]);
 
-      if (Array.isArray(projRes)) {
+      if (Array.isArray(projRes) && projRes.length > 0) {
         setProjects(projRes);
       }
-      if (Array.isArray(vidRes)) {
+      if (Array.isArray(vidRes) && vidRes.length > 0) {
         setVideos(vidRes);
       }
       if (setRes && setRes.nomeEmpresa) {
         setSiteSettings(setRes);
       }
-      if (Array.isArray(galRes)) {
+      if (Array.isArray(galRes) && galRes.length > 0) {
         setPhotoGallery(galRes);
       }
     } catch (err) {

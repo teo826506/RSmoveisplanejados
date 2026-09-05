@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Camera, Eye, X, ChevronLeft, ChevronRight, Sparkles, MessageCircle, Layers } from 'lucide-react';
+import { INITIAL_GALLERY } from '../data/initialData';
 
 interface PhotoGallerySectionProps {
   photos: string[];
@@ -10,11 +11,12 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
   photos,
   onOpenBudget,
 }) => {
+  const activePhotos = Array.isArray(photos) && photos.length > 0 ? photos : INITIAL_GALLERY;
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const [displayCount, setDisplayCount] = useState<number>(12);
 
-  const visiblePhotos = photos.slice(0, displayCount);
-  const hasMore = displayCount < photos.length;
+  const visiblePhotos = activePhotos.slice(0, displayCount);
+  const hasMore = displayCount < activePhotos.length;
 
   const handleOpenLightbox = (index: number) => {
     setSelectedPhotoIndex(index);
@@ -27,16 +29,16 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
   const handlePrevPhoto = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (selectedPhotoIndex === null) return;
-    setSelectedPhotoIndex((prev) => (prev === 0 ? photos.length - 1 : (prev as number) - 1));
+    setSelectedPhotoIndex((prev) => (prev === 0 ? activePhotos.length - 1 : (prev as number) - 1));
   };
 
   const handleNextPhoto = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (selectedPhotoIndex === null) return;
-    setSelectedPhotoIndex((prev) => (prev === photos.length - 1 ? 0 : (prev as number) + 1));
+    setSelectedPhotoIndex((prev) => (prev === activePhotos.length - 1 ? 0 : (prev as number) + 1));
   };
 
-  if (!photos || photos.length === 0) return null;
+  if (!activePhotos || activePhotos.length === 0) return null;
 
   return (
     <section id="galeria" className="py-24 bg-[#0a0a0a] relative overflow-hidden border-t border-neutral-900">
@@ -66,7 +68,7 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
 
           <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>{photos.length} Fotos Registradas na Galeria</span>
+            <span>{activePhotos.length} Fotos Registradas na Galeria</span>
           </div>
         </div>
 
@@ -107,10 +109,10 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
         {hasMore && (
           <div className="mt-12 text-center">
             <button
-              onClick={() => setDisplayCount((prev) => Math.min(prev + 12, photos.length))}
+              onClick={() => setDisplayCount((prev) => Math.min(prev + 12, activePhotos.length))}
               className="px-8 py-3.5 rounded-full bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-bold uppercase tracking-wider hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
             >
-              Carregar Mais Fotos ({photos.length - displayCount} restantes)
+              Carregar Mais Fotos ({activePhotos.length - displayCount} restantes)
             </button>
           </div>
         )}
@@ -155,14 +157,14 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={photos[selectedPhotoIndex]}
+              src={activePhotos[selectedPhotoIndex]}
               alt={`Foto de Galeria ${selectedPhotoIndex + 1}`}
               className="max-w-full max-h-[75vh] object-contain rounded-lg border border-neutral-800 shadow-[0_0_50px_rgba(0,0,0,0.9)]"
             />
             <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 w-full px-2">
               <div className="text-left">
                 <span className="text-xs text-[#D4AF37] font-mono tracking-widest uppercase">
-                  Foto {selectedPhotoIndex + 1} de {photos.length}
+                  Foto {selectedPhotoIndex + 1} de {activePhotos.length}
                 </span>
                 <h4 className="text-white text-sm sm:text-base font-semibold">
                   Móvel Planejado RS Móveis 100% MDF
