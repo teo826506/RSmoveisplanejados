@@ -3,22 +3,17 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { AboutSection } from './components/AboutSection';
 import { ProjectsGallery } from './components/ProjectsGallery';
-import { VideoShowcase } from './components/VideoShowcase';
 import { ProjectModal } from './components/ProjectModal';
-import { ServicesSection } from './components/ServicesSection';
-import { MaterialsSection } from './components/MaterialsSection';
-import { ProcessSection } from './components/ProcessSection';
-import { Footer } from './components/Footer';
 import { BudgetModal } from './components/BudgetModal';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { AdminPanel } from './components/AdminPanel';
 import { PhotoGallerySection } from './components/PhotoGallerySection';
-import { Projeto, VideoItem, SiteSettings } from './types';
-import { INITIAL_PROJECTS, INITIAL_VIDEOS, INITIAL_SETTINGS, INITIAL_GALLERY } from './data/initialData';
+import { Footer } from './components/Footer';
+import { Projeto, SiteSettings } from './types';
+import { INITIAL_PROJECTS, INITIAL_SETTINGS, INITIAL_GALLERY } from './data/initialData';
 
 export default function App() {
   const [projects, setProjects] = useState<Projeto[]>(INITIAL_PROJECTS);
-  const [videos, setVideos] = useState<VideoItem[]>(INITIAL_VIDEOS);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(INITIAL_SETTINGS);
   const [photoGallery, setPhotoGallery] = useState<string[]>(INITIAL_GALLERY);
   const [selectedProject, setSelectedProject] = useState<Projeto | null>(null);
@@ -31,18 +26,14 @@ export default function App() {
 
   const fetchAppData = async () => {
     try {
-      const [projRes, vidRes, setRes, galRes] = await Promise.all([
+      const [projRes, setRes, galRes] = await Promise.all([
         fetch('/api/projects', { cache: 'no-store' }).then((r) => r.json()).catch(() => null),
-        fetch('/api/videos', { cache: 'no-store' }).then((r) => r.json()).catch(() => null),
         fetch('/api/settings', { cache: 'no-store' }).then((r) => r.json()).catch(() => null),
         fetch('/api/gallery', { cache: 'no-store' }).then((r) => r.json()).catch(() => null),
       ]);
 
       if (Array.isArray(projRes) && projRes.length > 0) {
         setProjects(projRes);
-      }
-      if (Array.isArray(vidRes) && vidRes.length > 0) {
-        setVideos(vidRes);
       }
       if (setRes && setRes.nomeEmpresa) {
         setSiteSettings(setRes);
@@ -59,7 +50,7 @@ export default function App() {
     fetchAppData();
 
     const handleScroll = () => {
-      const sections = ['inicio', 'sobre', 'projetos', 'galeria', 'videos', 'servicos', 'materiais'];
+      const sections = ['inicio', 'sobre', 'projetos', 'galeria'];
       const scrollPos = window.scrollY + 250;
 
       for (const section of sections) {
@@ -135,22 +126,6 @@ export default function App() {
           photos={photoGallery}
           onOpenBudget={(amb) => handleOpenBudget(amb)}
         />
-
-        {/* Video Showcase & YouTube Embed Tours Section */}
-        <VideoShowcase
-          videos={videos}
-          onOpenConfig={() => handleOpenAdmin('videos')}
-          onOpenBudget={() => handleOpenBudget()}
-        />
-
-        {/* Services & Ambientes */}
-        <ServicesSection onOpenBudget={(amb) => handleOpenBudget(amb)} />
-
-        {/* Materials & MDF Textures Explorer */}
-        <MaterialsSection />
-
-        {/* 5-Step Execution Process */}
-        <ProcessSection />
       </main>
 
       {/* Luxury Footer with Gold Monogram and Navigation */}

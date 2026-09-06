@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, Settings, Sparkles, Video, ShieldCheck, Lock } from 'lucide-react';
+import { Menu, X, Phone, Settings, Sparkles, ShieldCheck, Lock } from 'lucide-react';
 import { LogoRS } from './LogoRS';
 
 interface HeaderProps {
@@ -33,9 +33,6 @@ export const Header: React.FC<HeaderProps> = ({
     { label: 'SOBRE NÓS', id: 'sobre' },
     { label: 'PROJETOS', id: 'projetos' },
     { label: 'GALERIA DE FOTOS', id: 'galeria' },
-    { label: 'VÍDEOS & TOURS', id: 'videos' },
-    { label: 'NOSSOS SERVIÇOS', id: 'servicos' },
-    { label: 'MATERIAIS', id: 'materiais' },
   ];
 
   const handleNavClick = (id: string) => {
@@ -85,7 +82,6 @@ export const Header: React.FC<HeaderProps> = ({
                       : 'text-[#E0E0E0] hover:text-[#D4AF37]'
                   }`}
                 >
-                  {item.id === 'videos' && <Video className="w-3.5 h-3.5 text-[#D4AF37]" />}
                   {item.label}
                   {isActive && (
                     <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
@@ -158,7 +154,6 @@ export const Header: React.FC<HeaderProps> = ({
                 }`}
               >
                 <span>{item.label}</span>
-                {item.id === 'videos' && <Video className="w-4 h-4 text-[#D4AF37]" />}
               </button>
             ))}
 
