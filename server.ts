@@ -6,7 +6,26 @@ import { PrismaClient } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { INITIAL_SETTINGS } from './src/data/initialData.ts';
 
-if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+const CLOUDINARY_PLACEHOLDERS = new Set(['your_cloud_name', 'your_api_key', 'your_api_secret', '[SENSITIVE]', '**********', 'placeholder', 'your_api_secret_key']);
+
+function isValidCloudinaryValue(value: string | undefined, placeholder: string): boolean {
+  if (!value) return false;
+  const v = String(value).trim();
+  if (CLOUDINARY_PLACEHOLDERS.has(v.toLowerCase())) return false;
+  if (v.length < 8) return false;
+  if (v.includes(placeholder)) return false;
+  return true;
+}
+
+function isCloudinaryConfigured(): boolean {
+  return (
+    isValidCloudinaryValue(process.env.CLOUDINARY_CLOUD_NAME, 'your_cloud_name') &&
+    isValidCloudinaryValue(process.env.CLOUDINARY_API_KEY, 'your_api_key') &&
+    isValidCloudinaryValue(process.env.CLOUDINARY_API_SECRET, 'your_api_secret')
+  );
+}
+
+if (isCloudinaryConfigured()) {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -712,7 +731,7 @@ app.post('/api/upload', async (req, res) => {
     }
 
     // 1) Try Cloudinary first (persistent, works everywhere).
-    if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+    if (isCloudinaryConfigured()) {
       try {
         const result = await cloudinary.uploader.upload(fileData, { folder: 'rsmoveis' });
         const cloudUrl = result && result.secure_url ? result.secure_url : (result && result.url ? result.url : null);

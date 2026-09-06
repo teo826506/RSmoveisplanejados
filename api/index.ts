@@ -1,11 +1,30 @@
 // ─── Cloudinary upload helper ────────────────────────────────────────────────
+const CLOUDINARY_PLACEHOLDERS = new Set(['your_cloud_name', 'your_api_key', 'your_api_secret', '[SENSITIVE]', '**********', 'placeholder', 'your_api_secret_key']);
+
+function isValidCloudinaryValue(value: string | undefined, placeholder: string): boolean {
+  if (!value) return false;
+  const v = String(value).trim();
+  if (CLOUDINARY_PLACEHOLDERS.has(v.toLowerCase())) return false;
+  if (v.length < 8) return false;
+  if (v.includes(placeholder)) return false;
+  return true;
+}
+
+function isCloudinaryConfigured(): boolean {
+  return (
+    isValidCloudinaryValue(process.env.CLOUDINARY_CLOUD_NAME, 'your_cloud_name') &&
+    isValidCloudinaryValue(process.env.CLOUDINARY_API_KEY, 'your_api_key') &&
+    isValidCloudinaryValue(process.env.CLOUDINARY_API_SECRET, 'your_api_secret')
+  );
+}
+
 let _cloudinary: any = null;
 function getCloudinary(): any {
   if (_cloudinary) return _cloudinary;
+  if (!isCloudinaryConfigured()) return null;
   const name = process.env.CLOUDINARY_CLOUD_NAME;
   const key = process.env.CLOUDINARY_API_KEY;
   const secret = process.env.CLOUDINARY_API_SECRET;
-  if (!name || !key || !secret) return null;
   try {
     const { v2 } = require('cloudinary');
     v2.config({ cloud_name: name, api_key: key, api_secret: secret });
@@ -25,6 +44,41 @@ async function uploadToCloudinary(fileData: string, folder = 'rsmoveis'): Promis
     return result && result.secure_url ? result.secure_url : result && result.url ? result.url : null;
   } catch (e) {
     console.warn('Cloudinary upload warning:', e);
+    return null;
+  }
+}
+
+function extractDataUri(fileData: string): { base64: string; mime: string; ext: string } | null {
+  if (typeof fileData !== 'string' || !fileData.startsWith('data:')) return null;
+  const m = fileData.match(/^data:([A-Za-z0-9\/+.\-]+);base64,([\s\S]+)$/);
+  if (!m || m.length !== 3) return null;
+  const mime = m[1];
+  let ext = mime.split('/')[1] || 'webp';
+  if (ext.includes('+')) ext = ext.split('+')[0];
+  if (ext === 'jpeg') ext = 'jpg';
+  if (ext === 'svg+xml') ext = 'svg';
+  return { base64: m[2], mime, ext };
+}
+
+async function uploadToVercelBlob(fileData: string, fileName?: string): Promise<string | null> {
+  const b64 = extractDataUri(fileData);
+  if (!b64) return null;
+  const token = getBlobToken();
+  if (!token) return null;
+  try {
+    const { put } = await import('@vercel/blob');
+    const safeBase = (fileName || `img-${Date.now()}`).replace(/[^a-zA-Z0-9.\-]/g, '');
+    const safeName = safeBase.includes('.') ? safeBase : `${safeBase}.${b64.ext}`;
+    const pathname = `rsmoveis/uploads/${Date.now()}-${safeName}`;
+    const buffer = Buffer.from(b64.base64, 'base64');
+    const blob = await put(pathname, buffer, {
+      access: 'public',
+      addRandomSuffix: false,
+      contentType: b64.mime,
+    });
+    return (blob && (blob.url || blob.pathname)) || null;
+  } catch (e) {
+    console.warn('Vercel Blob image upload warning:', e);
     return null;
   }
 }
@@ -748,9 +802,11 @@ export default async function handler(req: any, res: any) {
         });
       }
 
-      // 2) Fallback: persist the full data URI in the database so the image
-      //    still works on Vercel (no ephemeral local filesystem available).
-      const url = fileData;
+      // 2) Fallback: save the decoded image as a REAL Blob file so it keeps
+      //    working on Vercel (no ephemeral local filesystem available). This
+      //    avoids bloating the JSON database with huge base64 data URIs.
+      const blobUrl = await uploadToVercelBlob(fileData, fileName);
+      const url = blobUrl || fileData;
       if (!Array.isArray(dbJson.gallery)) dbJson.gallery = [];
       if (!dbJson.gallery.includes(url)) {
         dbJson.gallery.unshift(url);

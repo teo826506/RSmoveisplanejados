@@ -55,6 +55,54 @@ interface AdminPanelProps {
   onDataChanged?: () => void;
 }
 
+const MAX_IMAGE_DIMENSION = 1600;
+const IMAGE_QUALITY = 0.82;
+
+function readFileAsDataUri(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error || new Error('Erro ao ler arquivo.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Falha ao carregar imagem.'));
+    img.src = src;
+  });
+}
+
+async function compressImageToDataUri(file: File): Promise<string> {
+  if (!file.type.startsWith('image/')) {
+    throw new Error('Arquivo selecionado não é uma imagem válida.');
+  }
+  const original = await readFileAsDataUri(file);
+  if (file.type === 'image/svg+xml' || file.type === 'image/gif' || file.size <= 1024 * 1024) {
+    return original;
+  }
+  try {
+    const image = await loadImage(original);
+    const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(image.width, image.height));
+    if (scale >= 1) return original;
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(image.width * scale));
+    canvas.height = Math.max(1, Math.round(image.height * scale));
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return original;
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    const mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+    const compressed = canvas.toDataURL(mime, IMAGE_QUALITY);
+    return compressed.length < original.length ? compressed : original;
+  } catch (err) {
+    console.warn('Image compression failed, sending original:', err);
+    return original;
+  }
+}
+
 export const AdminPanel: React.FC<AdminPanelProps> = ({
   isOpen,
   onClose,
@@ -300,10 +348,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     }
 
     setUploadingLogo(true);
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const base64 = event.target?.result as string;
+    (async () => {
       try {
+        const base64 = await compressImageToDataUri(file);
         const res = await fetch('/api/upload', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -327,8 +374,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       } finally {
         setUploadingLogo(false);
       }
-    };
-    reader.readAsDataURL(file);
+    })();
   };
 
   // ---------------- VIDEOS & YOUTUBE ACTIONS ----------------
@@ -466,30 +512,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
     setLoading(true);
     try {
-      const uploadPromises = Array.from<File>(files).map((file) => {
-        return new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = async () => {
-            try {
-              const fileData = reader.result as string;
-              const res = await fetch('/api/upload', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fileData, fileName: file.name, autoAddToGallery: true }),
-              });
-              
-              if (!res.ok) throw new Error(`Falha no upload: ${file.name}`);
-              const data = await res.json();
-              resolve(data.url);
-            } catch (err) {
-              reject(err);
-            }
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
+      const uploadPromises = Array.from<File>(files).map(async (file) => {
+        const fileData = await compressImageToDataUri(file);
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fileData, fileName: file.name, autoAddToGallery: true }),
         });
+
+        if (!res.ok) throw new Error(`Falha no upload: ${file.name}`);
+        const data = await res.json();
+        return data.url as string;
       });
-      
+
       const urls = await Promise.all(uploadPromises);
       const updatedGallery = Array.from(new Set([...urls, ...photoGallery]));
       setPhotoGallery(updatedGallery);
@@ -510,30 +545,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
     setLoading(true);
     try {
-      const uploadPromises = Array.from<File>(files).map((file) => {
-        return new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = async () => {
-            try {
-              const fileData = reader.result as string;
-              const res = await fetch('/api/upload', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fileData, fileName: file.name, autoAddToGallery: true }),
-              });
-              
-              if (!res.ok) throw new Error(`Falha no upload: ${file.name}`);
-              const data = await res.json();
-              resolve(data.url);
-            } catch (err) {
-              reject(err);
-            }
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
+      const uploadPromises = Array.from<File>(files).map(async (file) => {
+        const fileData = await compressImageToDataUri(file);
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fileData, fileName: file.name, autoAddToGallery: true }),
         });
+
+        if (!res.ok) throw new Error(`Falha no upload: ${file.name}`);
+        const data = await res.json();
+        return data.url as string;
       });
-      
+
       const urls = await Promise.all(uploadPromises);
       if (urls.length > 0) {
         const primary = urls[0];
