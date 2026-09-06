@@ -130,8 +130,6 @@ export default function App() {
 
       {/* Luxury Footer with Gold Monogram and Navigation */}
       <Footer
-        onNavigate={handleNavigate}
-        onOpenBudget={() => handleOpenBudget()}
         onOpenAdmin={handleOpenAdmin}
         logoUrl={siteSettings.logoUrl}
         settings={siteSettings}
