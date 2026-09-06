@@ -248,6 +248,7 @@ export default async function handler(req: any, res: any) {
           snapshotLoaded: !!dataSnapshot,
           galleryCount: (dbJson.gallery || []).length,
           projectsCount: (dbJson.projects || []).length,
+          dbConfigured: !!(process.env.DATABASE_URL && !String(process.env.DATABASE_URL).includes('placeholder')),
           cwd: process.cwd()
         }
       });
