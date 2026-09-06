@@ -26,7 +26,7 @@ function getCloudinary(): any {
   const key = process.env.CLOUDINARY_API_KEY;
   const secret = process.env.CLOUDINARY_API_SECRET;
   try {
-    const { v2 } = require('cloudinary');
+    const v2 = (cloudinaryPkg as any).v2;
     v2.config({ cloud_name: name, api_key: key, api_secret: secret });
     _cloudinary = v2;
     return _cloudinary;
@@ -96,7 +96,6 @@ function getPrisma(): any {
     return null;
   }
   try {
-    const { PrismaClient } = require('@prisma/client');
     _prismaInstance = new PrismaClient({ log: ['error'], datasources: { db: { url: dbUrl } } });
     return _prismaInstance;
   } catch (e) {
@@ -120,6 +119,8 @@ function extractYouTubeId(url: string): string {
 }
 
 // ─── Inline fallback data (previously in _lib/db-data.ts) ────────────────────
+import * as cloudinaryPkg from 'cloudinary';
+import { PrismaClient } from '@prisma/client';
 import dataSnapshot from './_fallback_data.ts';
 const DB_DATA: any = dataSnapshot || { projects: [], gallery: [], videos: [], settings: {}, budgets: [], messages: [], clients: [] };
 
