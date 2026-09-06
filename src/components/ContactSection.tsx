@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send, MessageCircle, CheckCircle2, Sparkles } from 'lucide-react';
+import { SiteSettings } from '../types';
 
-export const ContactSection: React.FC = () => {
+interface ContactSectionProps {
+  settings?: SiteSettings;
+}
+
+export const ContactSection: React.FC<ContactSectionProps> = ({ settings }) => {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -13,6 +18,13 @@ export const ContactSection: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  const whatsappNumero = settings?.whatsappNumero || '5511999998888';
+  const telefonePrincipal = settings?.telefonePrincipal || '(11) 99999-8888';
+  const telefoneFixo = settings?.telefoneFixo || '(11) 3456-7890';
+  const emailPrincipal = settings?.emailPrincipal || 'contato@rsplanejados.com.br';
+  const emailProjetos = settings?.emailProjetos || 'orcamentos@rsplanejados.com.br';
+  const endereco = settings?.endereco || 'São Paulo, SP - Atendimento em toda Grande SP, Alphaville, Litoral e Interior';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +67,7 @@ export const ContactSection: React.FC = () => {
     const text = encodeURIComponent(
       'Olá! Gostaria de conversar com um especialista da RS Móveis Planejados em MDF.'
     );
-    window.open(`https://wa.me/5511999998888?text=${text}`, '_blank');
+    window.open(`https://wa.me/${whatsappNumero}?text=${text}`, '_blank');
   };
 
   return (
@@ -89,8 +101,8 @@ export const ContactSection: React.FC = () => {
                     <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-semibold mb-1">
                       Atendimento Direto & WhatsApp
                     </h4>
-                    <p className="text-sm font-semibold text-white">(11) 99999-8888</p>
-                    <p className="text-xs text-neutral-400">(11) 3456-7890 (Comercial)</p>
+                    <p className="text-sm font-semibold text-white">{telefonePrincipal}</p>
+                    <p className="text-xs text-neutral-400">{telefoneFixo} (Comercial)</p>
                   </div>
                 </div>
 
@@ -102,8 +114,8 @@ export const ContactSection: React.FC = () => {
                     <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-semibold mb-1">
                       E-mail Institucional
                     </h4>
-                    <p className="text-sm font-semibold text-white">contato@rsplanejados.com.br</p>
-                    <p className="text-xs text-neutral-400">projetos@rsplanejados.com.br</p>
+                    <p className="text-sm font-semibold text-white">{emailPrincipal}</p>
+                    <p className="text-xs text-neutral-400">{emailProjetos}</p>
                   </div>
                 </div>
 
@@ -115,7 +127,7 @@ export const ContactSection: React.FC = () => {
                     <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-semibold mb-1">
                       Região de Atendimento
                     </h4>
-                    <p className="text-sm font-semibold text-white">São Paulo, Grande SP & Interior</p>
+                    <p className="text-sm font-semibold text-white">{endereco}</p>
                     <p className="text-xs text-neutral-400">Visitas técnicas sob agendamento prévio</p>
                   </div>
                 </div>

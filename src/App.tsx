@@ -162,7 +162,7 @@ export default function App() {
         <TestimonialsSection />
 
         {/* Contact Form & Studio Location */}
-        <ContactSection />
+        <ContactSection settings={siteSettings} />
       </main>
 
       {/* Luxury Footer with Gold Monogram and Navigation */}
@@ -171,6 +171,7 @@ export default function App() {
         onOpenBudget={() => handleOpenBudget()}
         onOpenAdmin={handleOpenAdmin}
         logoUrl={siteSettings.logoUrl}
+        settings={siteSettings}
       />
 
       {/* Modals & Triggers */}
@@ -178,6 +179,7 @@ export default function App() {
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
         onSelectForBudget={(title, cat) => handleOpenBudget(cat)}
+        settings={siteSettings}
       />
 
       <BudgetModal
@@ -200,7 +202,7 @@ export default function App() {
       />
 
       {/* Floating WhatsApp Action Button */}
-      <WhatsAppFloatingButton />
+      <WhatsAppFloatingButton settings={siteSettings} />
     </div>
   );
 }

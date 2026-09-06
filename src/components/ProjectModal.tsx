@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { X, Check, ShieldCheck, Clock, Layers, Sparkles, MessageCircle, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
-import { Projeto } from '../types';
+import { Projeto, SiteSettings } from '../types';
 
 interface ProjectModalProps {
   project: Projeto | null;
   onClose: () => void;
   onSelectForBudget: (projectTitle: string, category: string) => void;
+  settings?: SiteSettings;
 }
 
 export const ProjectModal: React.FC<ProjectModalProps> = ({
   project,
   onClose,
   onSelectForBudget,
+  settings,
 }) => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
@@ -28,10 +30,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   };
 
   const handleWhatsAppInquiry = () => {
+    const whatsappNumero = settings?.whatsappNumero || '5511999998888';
     const text = encodeURIComponent(
       `Olá! Estive vendo o projeto *"${project.titulo}"* no site da RS Móveis Planejados e gostaria de solicitar um orçamento semelhante para o meu espaço.`
     );
-    window.open(`https://wa.me/5511999998888?text=${text}`, '_blank');
+    window.open(`https://wa.me/${whatsappNumero}?text=${text}`, '_blank');
   };
 
   return (

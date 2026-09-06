@@ -1,12 +1,14 @@
 import React from 'react';
 import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, ShieldCheck, ChevronRight, Video, Lock } from 'lucide-react';
 import { LogoRS } from './LogoRS';
+import { SiteSettings } from '../types';
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
   onOpenBudget: () => void;
   onOpenAdmin: (initialTab?: string) => void;
   logoUrl?: string;
+  settings?: SiteSettings;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -14,7 +16,14 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenBudget,
   onOpenAdmin,
   logoUrl,
+  settings,
 }) => {
+  const telefonePrincipal = settings?.telefonePrincipal || '(11) 99999-8888';
+  const emailPrincipal = settings?.emailPrincipal || 'contato@rsplanejados.com.br';
+  const endereco = settings?.endereco || 'São Paulo, Grande SP e Interior';
+  const instagram = settings?.instagram || 'https://instagram.com';
+  const facebook = settings?.facebook || 'https://facebook.com';
+  const youtube = settings?.youtube || 'https://youtube.com';
   return (
     <footer className="bg-[#050505] text-neutral-400 text-xs border-t border-[#D4AF37]/30 relative overflow-hidden">
       {/* Subtle gold radiance behind footer logo */}
@@ -34,7 +43,7 @@ export const Footer: React.FC<FooterProps> = ({
 
             <div className="pt-2 flex items-center gap-3">
               <a
-                href="https://instagram.com"
+                href={instagram}
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-[#D4AF37] hover:border-[#D4AF37] flex items-center justify-center transition-all hover:scale-110"
@@ -43,7 +52,7 @@ export const Footer: React.FC<FooterProps> = ({
                 <Instagram className="w-4 h-4" />
               </a>
               <a
-                href="https://facebook.com"
+                href={facebook}
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-[#D4AF37] hover:border-[#D4AF37] flex items-center justify-center transition-all hover:scale-110"
@@ -52,7 +61,7 @@ export const Footer: React.FC<FooterProps> = ({
                 <Facebook className="w-4 h-4" />
               </a>
               <a
-                href="https://youtube.com"
+                href={youtube}
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-red-400 hover:border-red-500/50 flex items-center justify-center transition-all hover:scale-110"
@@ -121,15 +130,15 @@ export const Footer: React.FC<FooterProps> = ({
             </h4>
             <p className="flex items-center gap-2 text-white font-medium">
               <Phone className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span>(11) 99999-8888</span>
+              <span>{telefonePrincipal}</span>
             </p>
             <p className="flex items-center gap-2 text-neutral-400">
               <Mail className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span>contato@rsplanejados.com.br</span>
+              <span>{emailPrincipal}</span>
             </p>
             <p className="flex items-start gap-2 text-neutral-400">
               <MapPin className="w-3.5 h-3.5 text-[#D4AF37] shrink-0 mt-0.5" />
-              <span>São Paulo, Grande SP e Interior</span>
+              <span>{endereco}</span>
             </p>
 
             <div className="pt-3">

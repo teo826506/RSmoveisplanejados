@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { MessageCircle, X } from 'lucide-react';
+import { SiteSettings } from '../types';
 
-export const WhatsAppFloatingButton: React.FC = () => {
+interface WhatsAppFloatingButtonProps {
+  settings?: SiteSettings;
+}
+
+export const WhatsAppFloatingButton: React.FC<WhatsAppFloatingButtonProps> = ({ settings }) => {
   const [showTooltip, setShowTooltip] = useState(true);
 
   const handleOpenWhatsApp = () => {
+    const whatsappNumero = settings?.whatsappNumero || '5511999998888';
     const text = encodeURIComponent(
       'Olá! Gostaria de tirar dúvidas e solicitar um orçamento de móveis planejados em MDF com a RS Móveis.'
     );
-    window.open(`https://wa.me/5511999998888?text=${text}`, '_blank');
+    window.open(`https://wa.me/${whatsappNumero}?text=${text}`, '_blank');
   };
 
   return (
