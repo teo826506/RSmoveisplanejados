@@ -256,6 +256,19 @@ export default async function handler(req: any, res: any) {
     // 2. SETTINGS (Blob is the source of truth for persistence)
     if (path === '/settings') {
       if (method === 'GET') {
+        // Prefer Neon (Prisma) as source of truth when connected, so settings
+        // (logo, textos, contatos) persist across cold starts.
+        try {
+          const prisma = getPrisma();
+          if (prisma) {
+            const fromDb = await withTimeout(prisma.siteSettings.findUnique({ where: { id: 'default' } }), 2500);
+            if (fromDb && fromDb.nomeEmpresa) {
+              return res.status(200).json({ ...SETTINGS, ...fromDb });
+            }
+          }
+        } catch (e) {
+          console.warn('Settings GET DB warning, using fallback:', e);
+        }
         return res.status(200).json(SETTINGS);
       }
 
