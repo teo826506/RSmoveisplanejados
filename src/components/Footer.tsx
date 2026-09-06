@@ -85,7 +85,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               <span className="p-3 sm:p-4 rounded-2xl bg-white border border-neutral-800 group-hover:border-[#D4AF37]/70 transition-all duration-300 shadow-lg group-hover:shadow-[0_0_25px_rgba(212,175,55,0.25)] w-28 h-28 sm:w-36 sm:h-36">
                 <img
-                  src="/uploads/qr-rsmoveis.jpg"
+                  src="/uploads/qr-rsmoveis.png"
                   alt="QR Code RS Móveis"
                   className="w-full h-full object-contain"
                   loading="lazy"
