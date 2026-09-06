@@ -173,6 +173,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [newPhotoUrl, setNewPhotoUrl] = useState('');
   const [photoGallery, setPhotoGallery] = useState<string[]>([]);
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [dbStatus, setDbStatus] = useState<string>('');
 
   // Status Filter for Budgets
   const [budgetStatusFilter, setBudgetStatusFilter] = useState<string>('ALL');
@@ -208,6 +209,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   useEffect(() => {
     if (isOpen && isAuthenticated) {
       fetchAllData();
+      fetch('/api/health')
+        .then((r) => r.json())
+        .then((h) => setDbStatus(typeof h?.database === 'string' ? h.database : ''))
+        .catch(() => setDbStatus(''));
     }
   }, [isOpen, isAuthenticated]);
 
@@ -938,6 +943,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     <span>Salvar Configurações</span>
                   </button>
                 </div>
+
+                {dbStatus && (
+                  <p className="flex items-center gap-1.5 text-[10px] -mt-3 mb-4 text-neutral-400">
+                    <span className={`inline-block w-2 h-2 rounded-full ${dbStatus.includes('connected') ? 'bg-emerald-400' : 'bg-red-500'}`} />
+                    Persistência: {dbStatus.includes('connected') ? 'Neon conectado — as alterações serão salvas.' : `${dbStatus} — as alterações podem não ser salvas.`}
+                  </p>
+                )}
 
                 {/* Logo Upload & Visual Identity Section */}
                 <div className="space-y-5 p-6 rounded-2xl bg-neutral-900/90 border border-[#D4AF37]/40 shadow-xl shadow-black/50">
