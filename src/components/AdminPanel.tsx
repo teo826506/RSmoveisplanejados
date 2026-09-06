@@ -230,14 +230,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     setLoading(true);
     try {
       const [statsRes, projRes, budgRes, msgRes, cliRes, vidRes, settRes, galleryRes] = await Promise.all([
-        fetch('/api/stats').then((r) => r.json()).catch(() => null),
-        fetch('/api/projects?includeInactive=true').then((r) => r.json()).catch(() => []),
-        fetch('/api/budgets').then((r) => r.json()).catch(() => []),
-        fetch('/api/messages').then((r) => r.json()).catch(() => []),
-        fetch('/api/clients').then((r) => r.json()).catch(() => []),
-        fetch('/api/videos?includeInactive=true').then((r) => r.json()).catch(() => []),
-        fetch('/api/settings').then((r) => r.json()).catch(() => INITIAL_SETTINGS),
-        fetch('/api/gallery').then((r) => r.json()).catch(() => []),
+        fetch('/api/stats', { cache: 'no-store' }).then((r) => r.json()).catch(() => null),
+        fetch('/api/projects?includeInactive=true', { cache: 'no-store' }).then((r) => r.json()).catch(() => []),
+        fetch('/api/budgets', { cache: 'no-store' }).then((r) => r.json()).catch(() => []),
+        fetch('/api/messages', { cache: 'no-store' }).then((r) => r.json()).catch(() => []),
+        fetch('/api/clients', { cache: 'no-store' }).then((r) => r.json()).catch(() => []),
+        fetch('/api/videos?includeInactive=true', { cache: 'no-store' }).then((r) => r.json()).catch(() => []),
+        fetch('/api/settings', { cache: 'no-store' }).then((r) => r.json()).catch(() => INITIAL_SETTINGS),
+        fetch('/api/gallery', { cache: 'no-store' }).then((r) => r.json()).catch(() => []),
       ]);
 
       if (statsRes) setStats(statsRes);

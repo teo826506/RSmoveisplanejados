@@ -35,10 +35,10 @@ export default function App() {
   const fetchAppData = async () => {
     try {
       const [projRes, vidRes, setRes, galRes] = await Promise.all([
-        fetch('/api/projects').then((r) => r.json()).catch(() => null),
-        fetch('/api/videos').then((r) => r.json()).catch(() => null),
-        fetch('/api/settings').then((r) => r.json()).catch(() => null),
-        fetch('/api/gallery').then((r) => r.json()).catch(() => null),
+        fetch('/api/projects', { cache: 'no-store' }).then((r) => r.json()).catch(() => null),
+        fetch('/api/videos', { cache: 'no-store' }).then((r) => r.json()).catch(() => null),
+        fetch('/api/settings', { cache: 'no-store' }).then((r) => r.json()).catch(() => null),
+        fetch('/api/gallery', { cache: 'no-store' }).then((r) => r.json()).catch(() => null),
       ]);
 
       if (Array.isArray(projRes) && projRes.length > 0) {
