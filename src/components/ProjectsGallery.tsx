@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Sparkles, Eye, ArrowUpRight, Search, Layers, Filter } from 'lucide-react';
-import { Projeto, CategoriaProjeto } from '../types';
+import { Sparkles, Eye, ArrowUpRight, Search, Layers } from 'lucide-react';
+import { Projeto } from '../types';
 import { INITIAL_PROJECTS } from '../data/initialData';
 
 interface ProjectsGalleryProps {
@@ -9,39 +9,22 @@ interface ProjectsGalleryProps {
   onOpenBudget: (ambientePreSelecionado?: string) => void;
 }
 
-const CATEGORIES: CategoriaProjeto[] = [
-  'Todas',
-  'Cozinhas',
-  'Quartos',
-  'Closets',
-  'Salas',
-  'Home Office',
-  'Banheiros',
-  'Espaço Gourmet',
-  'Corporativo',
-];
-
 export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
   projects,
   onSelectProject,
   onOpenBudget,
 }) => {
   const activeProjects = Array.isArray(projects) && projects.length > 0 ? projects : INITIAL_PROJECTS;
-  const [activeCategory, setActiveCategory] = useState<CategoriaProjeto>('Todas');
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredProjects = activeProjects.filter((p) => {
-    const matchesCategory =
-      activeCategory === 'Todas' ||
-      p.categoria.toLowerCase() === activeCategory.toLowerCase();
-
     const matchesSearch =
       searchQuery.trim() === '' ||
       p.titulo.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.descricao.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.categoria.toLowerCase().includes(searchQuery.toLowerCase());
 
-    return matchesCategory && matchesSearch;
+    return matchesSearch;
   });
 
   return (
@@ -72,38 +55,6 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
 
         {/* Filter Pills & Search Bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10">
-          {/* Categories Horizontal Scroll */}
-          <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
-            {CATEGORIES.map((cat) => {
-              const isSelected = activeCategory === cat;
-              const count =
-                cat === 'Todas'
-                  ? activeProjects.length
-                  : activeProjects.filter((p) => p.categoria.toLowerCase() === cat.toLowerCase()).length;
-              return (
-                <button
-                  key={cat}
-                  id={`cat-filter-${cat.toLowerCase().replace(/\s+/g, '-')}`}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
-                    isSelected
-                      ? 'bg-[#D4AF37] text-black shadow-[0_0_15px_rgba(212,175,55,0.4)]'
-                      : 'bg-neutral-900/90 text-neutral-300 hover:text-white hover:bg-neutral-800 border border-neutral-800'
-                  }`}
-                >
-                  <span>{cat}</span>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
-                      isSelected ? 'bg-black/20 text-black' : 'bg-neutral-800 text-neutral-400'
-                    }`}
-                  >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
           {/* Search Input */}
           <div className="relative w-full md:w-64">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
@@ -128,7 +79,6 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
             </p>
             <button
               onClick={() => {
-                setActiveCategory('Todas');
                 setSearchQuery('');
               }}
               className="px-4 py-2 text-xs font-semibold text-[#D4AF37] border border-[#D4AF37] rounded-lg hover:bg-[#D4AF37] hover:text-black transition-colors"
