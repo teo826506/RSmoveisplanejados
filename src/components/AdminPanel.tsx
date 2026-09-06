@@ -319,6 +319,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   // ---------------- SITE SETTINGS ACTIONS ----------------
   const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (siteSettings.logoUrl && siteSettings.logoUrl.startsWith('data:')) {
+      alert('⚠️ A URL da logo é um arquivo temporário (base64). ' +
+        'Ela NÃO será salva no site publicado porque o armazenamento do servidor não está configurado. ' +
+        'Configure as variáveis CLOUDINARY_* e BLOB_READ_WRITE_TOKEN na Vercel ou informe um caminho real (ex: /uploads/minha-logo.png).');
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch('/api/settings', {
@@ -363,8 +369,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         const data = await res.json();
         if (data.url) {
           setSiteSettings(prev => ({ ...prev, logoUrl: data.url }));
-          setSaveSuccessMsg('Nova logo carregada com sucesso! Clique em "Salvar Configurações" para confirmar.');
-          setTimeout(() => setSaveSuccessMsg(''), 4000);
+          if (data.url.startsWith('data:')) {
+            alert('⚠️ Armazenamento do servidor não configurado (Cloudinary/Blob). ' +
+              'A logo aparece na prévia, mas NÃO vai persistir no site publicado. ' +
+              'Configure as variáveis CLOUDINARY_* e BLOB_READ_WRITE_TOKEN na Vercel ou informe um URL real (ex: /uploads/minha-logo.png).');
+          } else {
+            setSaveSuccessMsg('Nova logo carregada com sucesso! Clique em "Salvar Configurações" para confirmar.');
+            setTimeout(() => setSaveSuccessMsg(''), 4000);
+          }
         } else {
           alert(data.error || 'Erro ao enviar imagem da logo.');
         }
@@ -1014,6 +1026,15 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       </p>
                     </div>
                   </div>
+
+                  {siteSettings.logoUrl && siteSettings.logoUrl.startsWith('data:') && (
+                    <div className="rounded-lg border border-red-900/70 bg-red-950/40 px-4 py-3 text-[11px] leading-relaxed text-red-300">
+                      ⚠️ <strong className="text-red-200">Atenção:</strong> a logo está como um arquivo temporário (base64).
+                      O armazenamento do servidor (Cloudinary/Blob) não está configurado, então ela <strong>NÃO vai persistir</strong> no site publicado.
+                      Configure as variáveis <code className="text-red-100">CLOUDINARY_*</code> e <code className="text-red-100">BLOB_READ_WRITE_TOKEN</code> na Vercel,
+                      ou informe um URL real no campo acima (ex: <code className="text-red-100">/uploads/minha-logo.png</code>).
+                    </div>
+                  )}
                 </div>
 
                 {/* Identity & Hero Section Settings */}

@@ -265,7 +265,23 @@ export default async function handler(req: any, res: any) {
         delete data.updatedAt;
 
         Object.assign(SETTINGS, data);
+        SETTINGS.updatedAt = new Date().toISOString();
         await saveRuntime(dbJson);
+
+        // Best-effort sync to Neon/Postgres (Prisma) so settings survive cold
+        // starts even when Vercel Blob is not configured.
+        try {
+          const prisma = getPrisma();
+          if (prisma) {
+            await withTimeout(prisma.siteSettings.upsert({
+              where: { id: 'default' },
+              update: data,
+              create: { id: 'default', ...data }
+            }), 3000);
+          }
+        } catch (e) {
+          console.warn('Settings Prisma upsert warning (blob/memory only):', e);
+        }
 
         return res.status(200).json({ success: true, settings: SETTINGS });
       }
