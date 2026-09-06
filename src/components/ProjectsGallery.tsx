@@ -236,25 +236,6 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
             ))}
           </div>
         )}
-
-        {/* Bottom CTA Banner */}
-        <div className="mt-16 rounded-2xl bg-gradient-to-r from-neutral-900 via-[#151515] to-neutral-900 border border-[#D4AF37]/30 p-8 sm:p-10 text-center relative overflow-hidden">
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <h3 className="text-2xl sm:text-3xl font-serif-luxury font-bold text-white mb-3">
-              Tem um projeto personalizado em mente?
-            </h3>
-            <p className="text-sm text-neutral-300 mb-6 font-light">
-              Envie sua planta ou medidas para recebermos uma proposta técnica exclusiva em 100% MDF sob medida.
-            </p>
-            <button
-              id="gallery-bottom-budget-btn"
-              onClick={() => onOpenBudget()}
-              className="px-8 py-3.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-black font-bold text-xs tracking-widest uppercase hover:brightness-110 transition-all shadow-lg shadow-[#D4AF37]/20"
-            >
-              SOLICITAR ORÇAMENTO AGORA
-            </button>
-          </div>
-        </div>
       </div>
     </section>
   );
