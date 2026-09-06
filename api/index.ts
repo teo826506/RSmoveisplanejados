@@ -65,9 +65,25 @@ function extractYouTubeId(url: string): string {
   return m ? m[1] : '';
 }
 
-import dataSnapshot from './_data_snapshot.json';
-
 // ─── Inline fallback data (previously in _lib/db-data.ts) ────────────────────
+let dataSnapshot: any = null;
+try {
+  const fs = require('fs');
+  const path = require('path');
+  const candidates = [
+    path.join(__dirname, '_data_snapshot.json'),
+    path.join(process.cwd(), 'api', '_data_snapshot.json'),
+    path.join(process.cwd(), '_data_snapshot.json'),
+  ];
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) {
+      dataSnapshot = JSON.parse(fs.readFileSync(candidate, 'utf-8'));
+      break;
+    }
+  }
+} catch (e) {
+  console.warn('Snapshot load failed, using empty fallback:', e);
+}
 const DB_DATA: any = dataSnapshot || { projects: [], gallery: [], videos: [], settings: {}, budgets: [], messages: [], clients: [] };
 
 const dbJson: any = DB_DATA;
