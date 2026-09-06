@@ -1,3 +1,34 @@
+// ─── Cloudinary upload helper ────────────────────────────────────────────────
+let _cloudinary: any = null;
+function getCloudinary(): any {
+  if (_cloudinary) return _cloudinary;
+  const name = process.env.CLOUDINARY_CLOUD_NAME;
+  const key = process.env.CLOUDINARY_API_KEY;
+  const secret = process.env.CLOUDINARY_API_SECRET;
+  if (!name || !key || !secret) return null;
+  try {
+    const { v2 } = require('cloudinary');
+    v2.config({ cloud_name: name, api_key: key, api_secret: secret });
+    _cloudinary = v2;
+    return _cloudinary;
+  } catch (e) {
+    console.error('Cloudinary init failed:', e);
+    return null;
+  }
+}
+
+async function uploadToCloudinary(fileData: string, folder = 'rsmoveis'): Promise<string | null> {
+  const cloudinary = getCloudinary();
+  if (!cloudinary || typeof fileData !== 'string' || !fileData.startsWith('data:')) return null;
+  try {
+    const result = await cloudinary.uploader.upload(fileData, { folder });
+    return result && result.secure_url ? result.secure_url : result && result.url ? result.url : null;
+  } catch (e) {
+    console.warn('Cloudinary upload warning:', e);
+    return null;
+  }
+}
+
 // ─── Inline helpers (previously in _lib/prisma.ts) ───────────────────────────
 let _prismaInstance: any = null;
 let _prismaDisabled = false;
@@ -681,21 +712,46 @@ export default async function handler(req: any, res: any) {
 
     // 11. UPLOAD
     if (path === '/upload' && method === 'POST') {
-      const { fileData, fileName } = req.body || {};
+      const { fileData, fileName, autoAddToGallery = true } = req.body || {};
       if (!fileData) return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
 
-      const url = fileData;
-      if (!dbJson.gallery) dbJson.gallery = [];
-      if (!dbJson.gallery.includes(url)) {
-        dbJson.gallery.unshift(url);
+      // 1) Try Cloudinary first (persistent across serverless instances).
+      const cloudinaryUrl = await uploadToCloudinary(fileData);
+      if (cloudinaryUrl) {
+        const cleanName = (fileName || `img-${Date.now()}.webp`).replace(/[^a-zA-Z0-9.\-]/g, '');
+        // Optionally auto-add to the gallery.
+        if (autoAddToGallery) {
+          if (!Array.isArray(dbJson.gallery)) dbJson.gallery = [];
+          if (!dbJson.gallery.includes(cloudinaryUrl)) {
+            dbJson.gallery.unshift(cloudinaryUrl);
+            try {
+              const prisma = getPrisma();
+              if (prisma) {
+                await withTimeout(prisma.galeria.create({ data: { url: cloudinaryUrl } }), 2000).catch(() => {});
+              }
+            } catch (e) {}
+          }
+        }
+        return res.status(200).json({
+          url: cloudinaryUrl,
+          pathname: cleanName,
+          contentType: fileData.startsWith('data:image') ? fileData.split(';')[0].replace('data:', '') : 'image/webp'
+        });
       }
 
-      try {
-        const prisma = getPrisma();
-        if (prisma && url.startsWith('/uploads/')) {
-          await withTimeout(prisma.galeria.create({ data: { url } }), 2000).catch(() => {});
-        }
-      } catch (e) {}
+      // 2) Fallback: persist the full data URI in the database so the image
+      //    still works on Vercel (no ephemeral local filesystem available).
+      const url = fileData;
+      if (!Array.isArray(dbJson.gallery)) dbJson.gallery = [];
+      if (!dbJson.gallery.includes(url)) {
+        dbJson.gallery.unshift(url);
+        try {
+          const prisma = getPrisma();
+          if (prisma) {
+            await withTimeout(prisma.galeria.create({ data: { url } }), 2000).catch(() => {});
+          }
+        } catch (e) {}
+      }
 
       return res.status(200).json({
         url,

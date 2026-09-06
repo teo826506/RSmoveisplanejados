@@ -3,7 +3,16 @@ import path from 'path';
 import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 import { PrismaClient } from '@prisma/client';
+import { v2 as cloudinary } from 'cloudinary';
 import { INITIAL_SETTINGS } from './src/data/initialData.ts';
+
+if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+}
 
 const prisma = new PrismaClient();
 const app = express();
@@ -689,8 +698,8 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// IMAGE UPLOAD ENDPOINT (Local storage)
-app.post('/api/upload', (req, res) => {
+// IMAGE UPLOAD ENDPOINT (Cloudinary first, local disk fallback for dev)
+app.post('/api/upload', async (req, res) => {
   const { fileData, fileName, autoAddToGallery = true } = req.body;
   if (!fileData) {
     return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
@@ -701,22 +710,49 @@ app.post('/api/upload', (req, res) => {
     if (!matches || matches.length !== 3) {
       return res.status(400).json({ error: 'Formato de arquivo inválido.' });
     }
-    
+
+    // 1) Try Cloudinary first (persistent, works everywhere).
+    if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+      try {
+        const result = await cloudinary.uploader.upload(fileData, { folder: 'rsmoveis' });
+        const cloudUrl = result && result.secure_url ? result.secure_url : (result && result.url ? result.url : null);
+        if (cloudUrl) {
+          const cleanName = (fileName || `img-${Date.now()}.jpg`).replace(/[^a-zA-Z0-9.\-]/g, '');
+          if (autoAddToGallery) {
+            const dbData = readDbJson();
+            const currentGallery: string[] = Array.isArray(dbData.gallery) ? dbData.gallery : [];
+            if (!currentGallery.includes(cloudUrl)) {
+              writeDbJson({ gallery: [cloudUrl, ...currentGallery] });
+              prisma.galeria.create({ data: { url: cloudUrl } }).catch(() => {});
+            }
+          }
+          return res.json({
+            url: cloudUrl,
+            pathname: cleanName,
+            contentType: matches[1]
+          });
+        }
+      } catch (err) {
+        console.warn('Cloudinary upload warning, falling back to local disk:', err);
+      }
+    }
+
+    // 2) Fallback: local disk storage (dev only).
     const extParts = matches[1].split('/');
     let ext = extParts[1] ? extParts[1].split('+')[0] : 'webp';
     if (ext === 'jpeg') ext = 'jpg';
-    
+
     const buffer = Buffer.from(matches[2], 'base64');
-    
+
     // Create a safe file name
     const safeName = (fileName || `img-${Date.now()}.${ext}`).replace(/[^a-zA-Z0-9.\-]/g, '');
     const finalName = `${Date.now()}-${safeName}`;
     const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    
+
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
-    
+
     fs.writeFileSync(path.join(uploadDir, finalName), buffer);
     const fileUrl = `/uploads/${finalName}`;
 
@@ -730,7 +766,7 @@ app.post('/api/upload', (req, res) => {
         prisma.galeria.create({ data: { url: fileUrl } }).catch(() => {});
       }
     }
-    
+
     return res.json({
       url: fileUrl,
       pathname: finalName,
