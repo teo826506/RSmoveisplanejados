@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, Facebook, Youtube, ShieldCheck, Lock } from 'lucide-react';
+import { Instagram, Facebook, Youtube, ShieldCheck, Lock, Download } from 'lucide-react';
 import { LogoRS } from './LogoRS';
 import { SiteSettings } from '../types';
 
@@ -78,21 +78,32 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           <div className="flex flex-wrap items-start justify-center gap-6 sm:gap-10">
-            <a
-              href="/"
-              className="group flex flex-col items-center gap-3"
-              title="Site RS Móveis"
-            >
-              <span className="p-3 sm:p-4 rounded-2xl bg-white border border-neutral-800 group-hover:border-[#D4AF37]/70 transition-all duration-300 shadow-lg group-hover:shadow-[0_0_25px_rgba(212,175,55,0.25)] w-28 h-28 sm:w-36 sm:h-36">
-                <img
-                  src="/uploads/qr-rsmoveis.png"
-                  alt="QR Code RS Móveis"
-                  className="w-full h-full object-contain"
-                  loading="lazy"
-                />
-              </span>
-              <span className="text-neutral-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">Site RS Móveis</span>
-            </a>
+            <div className="flex flex-col items-center gap-3">
+              <a
+                href="/"
+                className="group flex flex-col items-center gap-3"
+                title="Site RS Móveis"
+              >
+                <span className="p-3 sm:p-4 rounded-2xl bg-white border border-neutral-800 group-hover:border-[#D4AF37]/70 transition-all duration-300 shadow-lg group-hover:shadow-[0_0_25px_rgba(212,175,55,0.25)] w-28 h-28 sm:w-36 sm:h-36">
+                  <img
+                    src="/uploads/qr-rsmoveis.png"
+                    alt="QR Code RS Móveis"
+                    className="w-full h-full object-contain"
+                    loading="lazy"
+                  />
+                </span>
+                <span className="text-neutral-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">Site RS Móveis</span>
+              </a>
+              <a
+                href="/uploads/qr-rsmoveis.png"
+                download="QR-RS-Moveis.png"
+                title="Baixar QR Code para imprimir"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-neutral-900 border border-[#D4AF37]/40 text-[#D4AF37] text-[11px] font-semibold uppercase tracking-wider hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-md hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+              >
+                <Download className="w-3.5 h-3.5" />
+                Baixar (Imprimir)
+              </a>
+            </div>
 
             <a
               href="https://www.instagram.com/rayone_gomes31"
