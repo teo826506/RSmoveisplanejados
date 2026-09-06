@@ -69,8 +69,82 @@ function extractYouTubeId(url: string): string {
 import dataSnapshot from './_fallback_data.ts';
 const DB_DATA: any = dataSnapshot || { projects: [], gallery: [], videos: [], settings: {}, budgets: [], messages: [], clients: [] };
 
-const dbJson: any = DB_DATA;
-const SETTINGS = dbJson.settings || {};
+// ─── Vercel Blob persistence (survives cold starts / multiple instances) ─────
+const BLOB_PATH = 'rsmoveis/db.json';
+let _blobToken: string | null = null;
+let _cachedDb: any = null;
+let _cachedAt = 0;
+const CACHE_TTL = 10000; // 10s in-memory cache to avoid excessive reads
+
+function getBlobToken(): string | null {
+  if (_blobToken !== null) return _blobToken;
+  _blobToken = process.env.BLOB_READ_WRITE_TOKEN || null;
+  return _blobToken;
+}
+
+async function loadDbFromBlob(): Promise<any | null> {
+  const token = getBlobToken();
+  if (!token) return null;
+  try {
+    const { list } = await import('@vercel/blob');
+    const { blobs } = await list({});
+    const blob = blobs.find((b: any) => b.pathname === BLOB_PATH);
+    if (!blob) return null;
+    const res = await fetch(blob.url);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    console.warn('Blob read warning:', e);
+    return null;
+  }
+}
+
+async function getDb(): Promise<any> {
+  if (_cachedDb && Date.now() - _cachedAt < CACHE_TTL) return _cachedDb;
+  const blobDb = await loadDbFromBlob();
+  if (blobDb) {
+    _cachedDb = { ...DB_DATA, ...blobDb };
+    _cachedAt = Date.now();
+    return _cachedDb;
+  }
+  return DB_DATA;
+}
+
+async function persistDb(data: any): Promise<void> {
+  _cachedDb = data;
+  _cachedAt = Date.now();
+  const token = getBlobToken();
+  if (!token) return;
+  try {
+    const { put } = await import('@vercel/blob');
+    await put(BLOB_PATH, JSON.stringify(data), {
+      access: 'public',
+      addRandomSuffix: false,
+      contentType: 'application/json',
+    });
+  } catch (e) {
+    console.warn('Blob write warning:', e);
+  }
+}
+
+// ─── Runtime mutable db (fallback to snapshot) ───────────────────────────────
+async function getRuntimeDb(): Promise<any> {
+  const blobDb = await loadDbFromBlob();
+  if (blobDb) return { ...DB_DATA, settings: { ...(DB_DATA.settings || {}), ...(blobDb.settings || {}) }, ...blobDb };
+  return DB_DATA;
+}
+
+async function saveRuntime(db: any): Promise<void> {
+  await persistDb(db);
+}
+
+function cloneData<T = any>(data: T): T {
+  try {
+    return JSON.parse(JSON.stringify(data));
+  } catch {
+    return data;
+  }
+}
 
 export default async function handler(req: any, res: any) {
   // Set CORS headers
@@ -93,6 +167,9 @@ export default async function handler(req: any, res: any) {
     }
 
     const method = req.method?.toUpperCase();
+
+    const dbJson: any = await getRuntimeDb();
+    const SETTINGS = dbJson.settings || {};
 
     // 1. HEALTH CHECK
     if (path === '/health') {
@@ -142,6 +219,7 @@ export default async function handler(req: any, res: any) {
         delete data.updatedAt;
 
         Object.assign(SETTINGS, data);
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -182,6 +260,7 @@ export default async function handler(req: any, res: any) {
         const { urls } = req.body || {};
         const urlArray = Array.isArray(urls) ? urls : [];
         dbJson.gallery = urlArray;
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -287,6 +366,7 @@ export default async function handler(req: any, res: any) {
         };
 
         (dbJson.videos = dbJson.videos || []).unshift(newVidObj);
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -316,6 +396,7 @@ export default async function handler(req: any, res: any) {
           list[idx] = { ...list[idx], ...data };
           updatedFallback = list[idx];
         }
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -331,6 +412,7 @@ export default async function handler(req: any, res: any) {
 
       if (method === 'DELETE') {
         dbJson.videos = (dbJson.videos || []).filter((v: any) => v.id !== id);
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -409,6 +491,7 @@ export default async function handler(req: any, res: any) {
         };
 
         (dbJson.projects = dbJson.projects || []).unshift(newProjObj);
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -464,6 +547,7 @@ export default async function handler(req: any, res: any) {
           list[idx] = { ...list[idx], ...data };
           updatedFallback = list[idx];
         }
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -479,6 +563,7 @@ export default async function handler(req: any, res: any) {
 
       if (method === 'DELETE') {
         dbJson.projects = (dbJson.projects || []).filter((p: any) => p.id !== slugOrId && p.slug !== slugOrId);
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -523,6 +608,7 @@ export default async function handler(req: any, res: any) {
 
         const newB = { id: `budg-${Date.now()}`, ...req.body, status: 'PENDENTE', createdAt: new Date().toISOString() };
         (dbJson.budgets = dbJson.budgets || []).unshift(newB);
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -568,6 +654,7 @@ export default async function handler(req: any, res: any) {
         const list = dbJson.budgets || [];
         const item = list.find((b: any) => b.id === id);
         if (item) item.status = req.body?.status;
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -583,6 +670,7 @@ export default async function handler(req: any, res: any) {
 
       if (method === 'DELETE') {
         dbJson.budgets = (dbJson.budgets || []).filter((b: any) => b.id !== id);
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -618,6 +706,7 @@ export default async function handler(req: any, res: any) {
 
         const newMsgObj = { id: `msg-${Date.now()}`, ...req.body, status: 'NOVA', createdAt: new Date().toISOString() };
         (dbJson.messages = dbJson.messages || []).unshift(newMsgObj);
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -650,6 +739,7 @@ export default async function handler(req: any, res: any) {
         const list = dbJson.messages || [];
         const item = list.find((m: any) => m.id === id);
         if (item) item.status = req.body?.status;
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -665,6 +755,7 @@ export default async function handler(req: any, res: any) {
 
       if (method === 'DELETE') {
         dbJson.messages = (dbJson.messages || []).filter((m: any) => m.id !== id);
+        await saveRuntime(dbJson);
 
         try {
           const prisma = getPrisma();
@@ -729,6 +820,7 @@ export default async function handler(req: any, res: any) {
           if (!Array.isArray(dbJson.gallery)) dbJson.gallery = [];
           if (!dbJson.gallery.includes(cloudinaryUrl)) {
             dbJson.gallery.unshift(cloudinaryUrl);
+            await saveRuntime(dbJson);
             try {
               const prisma = getPrisma();
               if (prisma) {
@@ -750,6 +842,7 @@ export default async function handler(req: any, res: any) {
       if (!Array.isArray(dbJson.gallery)) dbJson.gallery = [];
       if (!dbJson.gallery.includes(url)) {
         dbJson.gallery.unshift(url);
+        await saveRuntime(dbJson);
         try {
           const prisma = getPrisma();
           if (prisma) {
