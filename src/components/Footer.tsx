@@ -66,6 +66,72 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
 
+        {/* QR Codes Section */}
+        <div className="pt-4 pb-12 border-t border-neutral-900">
+          <div className="flex flex-col items-center justify-center text-center mb-8">
+            <span className="text-xs uppercase tracking-[0.25em] font-semibold text-[#D4AF37] font-display-rs">
+              NOSSOS CANAIS
+            </span>
+            <h3 className="mt-2 text-xl sm:text-2xl font-serif-luxury font-bold text-white">
+              Escaneie e Fale Conosco
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap items-start justify-center gap-6 sm:gap-10">
+            <a
+              href="/"
+              className="group flex flex-col items-center gap-3"
+              title="Site RS Móveis"
+            >
+              <span className="p-3 sm:p-4 rounded-2xl bg-white border border-neutral-800 group-hover:border-[#D4AF37]/70 transition-all duration-300 shadow-lg group-hover:shadow-[0_0_25px_rgba(212,175,55,0.25)] w-28 h-28 sm:w-36 sm:h-36">
+                <img
+                  src="/uploads/qr-rsmoveis.jpg"
+                  alt="QR Code RS Móveis"
+                  className="w-full h-full object-contain"
+                  loading="lazy"
+                />
+              </span>
+              <span className="text-neutral-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">Site RS Móveis</span>
+            </a>
+
+            <a
+              href="https://www.instagram.com/rayone_gomes31"
+              target="_blank"
+              rel="noreferrer"
+              className="group flex flex-col items-center gap-3"
+              title="Instagram"
+            >
+              <span className="p-3 sm:p-4 rounded-2xl bg-white border border-neutral-800 group-hover:border-[#D4AF37]/70 transition-all duration-300 shadow-lg group-hover:shadow-[0_0_25px_rgba(212,175,55,0.25)] w-28 h-28 sm:w-36 sm:h-36">
+                <img
+                  src="/uploads/qr-instagram.jpeg"
+                  alt="QR Code Instagram"
+                  className="w-full h-full object-contain"
+                  loading="lazy"
+                />
+              </span>
+              <span className="text-neutral-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">Instagram</span>
+            </a>
+
+            <a
+              href="https://wa.me/message/SCUY52VVOWT6C1?src=qr"
+              target="_blank"
+              rel="noreferrer"
+              className="group flex flex-col items-center gap-3"
+              title="WhatsApp"
+            >
+              <span className="p-3 sm:p-4 rounded-2xl bg-white border border-neutral-800 group-hover:border-[#D4AF37]/70 transition-all duration-300 shadow-lg group-hover:shadow-[0_0_25px_rgba(212,175,55,0.25)] w-28 h-28 sm:w-36 sm:h-36">
+                <img
+                  src="/uploads/qr-zap.jpeg"
+                  alt="QR Code WhatsApp"
+                  className="w-full h-full object-contain"
+                  loading="lazy"
+                />
+              </span>
+              <span className="text-neutral-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">WhatsApp</span>
+            </a>
+          </div>
+        </div>
+
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-neutral-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-neutral-400">
           <p>© 2026 Desenvolvedor Kaliton Goncalves Leite</p>
