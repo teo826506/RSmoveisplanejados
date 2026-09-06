@@ -8,9 +8,6 @@ import { ProjectModal } from './components/ProjectModal';
 import { ServicesSection } from './components/ServicesSection';
 import { MaterialsSection } from './components/MaterialsSection';
 import { ProcessSection } from './components/ProcessSection';
-import { BudgetSimulatorSection } from './components/BudgetSimulatorSection';
-import { TestimonialsSection } from './components/TestimonialsSection';
-import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { BudgetModal } from './components/BudgetModal';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
@@ -62,7 +59,7 @@ export default function App() {
     fetchAppData();
 
     const handleScroll = () => {
-      const sections = ['inicio', 'sobre', 'projetos', 'galeria', 'videos', 'servicos', 'materiais', 'orcamento', 'contato'];
+      const sections = ['inicio', 'sobre', 'projetos', 'galeria', 'videos', 'servicos', 'materiais'];
       const scrollPos = window.scrollY + 250;
 
       for (const section of sections) {
@@ -154,15 +151,6 @@ export default function App() {
 
         {/* 5-Step Execution Process */}
         <ProcessSection />
-
-        {/* Interactive Budget Simulator */}
-        <BudgetSimulatorSection onOpenModal={(amb) => handleOpenBudget(amb)} />
-
-        {/* Real Customer Testimonials */}
-        <TestimonialsSection />
-
-        {/* Contact Form & Studio Location */}
-        <ContactSection settings={siteSettings} />
       </main>
 
       {/* Luxury Footer with Gold Monogram and Navigation */}

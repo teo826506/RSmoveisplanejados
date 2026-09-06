@@ -85,7 +85,6 @@ export const Footer: React.FC<FooterProps> = ({
                 { label: 'Vídeos & Tours Virtuais', id: 'videos' },
                 { label: 'Nossos Serviços', id: 'servicos' },
                 { label: 'Materiais & MDF', id: 'materiais' },
-                { label: 'Fale Conosco', id: 'contato' },
               ].map((item) => (
                 <li key={item.id}>
                   <button
