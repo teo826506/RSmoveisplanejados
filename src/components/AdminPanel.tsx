@@ -280,6 +280,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       });
       if (!res.ok) throw new Error('Falha ao salvar configurações.');
       setSaveSuccessMsg('Configurações salvas e aplicadas com sucesso!');
+      alert('Configurações salvas com sucesso!');
       setTimeout(() => setSaveSuccessMsg(''), 4000);
       if (onDataChanged) onDataChanged();
     } catch (err: any) {
