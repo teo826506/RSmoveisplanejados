@@ -86,15 +86,14 @@ async function loadDbFromBlob(): Promise<any | null> {
   const token = getBlobToken();
   if (!token) return null;
   try {
-    const { list } = await import('@vercel/blob');
-    const { blobs } = await list({});
-    const blob = blobs.find((b: any) => b.pathname === BLOB_PATH);
-    if (!blob) return null;
-    const res = await fetch(blob.url);
-    if (!res.ok) return null;
-    return await res.json();
-  } catch (e) {
-    console.warn('Blob read warning:', e);
+    const { get } = await import('@vercel/blob');
+    const res: any = await get(`rsmoveis/db.json`, { access: 'public', token });
+    if (!res || !res.stream) return null;
+    const dataText = await new Response(res.stream).text();
+    if (!dataText) return null;
+    return JSON.parse(dataText);
+  } catch (e: any) {
+    console.warn('Blob read warning:', e?.message || e);
     return null;
   }
 }
@@ -200,18 +199,9 @@ export default async function handler(req: any, res: any) {
       });
     }
 
-    // 2. SETTINGS
+    // 2. SETTINGS (Blob is the source of truth for persistence)
     if (path === '/settings') {
       if (method === 'GET') {
-        try {
-          const prisma = getPrisma();
-          if (prisma) {
-            const settings = await withTimeout(prisma.siteSettings.findUnique({ where: { id: 'default' } }), 2000);
-            if (settings && settings.nomeEmpresa) return res.status(200).json(settings);
-          }
-        } catch (e) {
-          console.warn('Settings DB warning (using fallback):', e);
-        }
         return res.status(200).json(SETTINGS);
       }
 
@@ -223,20 +213,6 @@ export default async function handler(req: any, res: any) {
         Object.assign(SETTINGS, data);
         await saveRuntime(dbJson);
 
-        try {
-          const prisma = getPrisma();
-          if (prisma) {
-            const settings = await withTimeout(prisma.siteSettings.upsert({
-              where: { id: 'default' },
-              update: data,
-              create: { id: 'default', ...data }
-            }), 2500);
-            return res.status(200).json({ success: true, settings });
-          }
-        } catch (e) {
-          console.warn('Update settings DB warning (saved in fallback memory):', e);
-        }
-
         return res.status(200).json({ success: true, settings: SETTINGS });
       }
     }
@@ -244,17 +220,6 @@ export default async function handler(req: any, res: any) {
     // 3. GALLERY
     if (path === '/gallery') {
       if (method === 'GET') {
-        try {
-          const prisma = getPrisma();
-          if (prisma) {
-            const items = await withTimeout(prisma.galeria.findMany({ orderBy: { createdAt: 'desc' } }), 2000);
-            if (items && items.length > 0) {
-              return res.status(200).json(items.map((i: any) => i.url));
-            }
-          }
-        } catch (e) {
-          console.warn('Gallery DB warning (using fallback):', e);
-        }
         return res.status(200).json(dbJson.gallery || []);
       }
 
@@ -322,21 +287,6 @@ export default async function handler(req: any, res: any) {
       if (method === 'GET') {
         const includeInactive = req.query?.includeInactive;
         const categoria = req.query?.categoria;
-
-        try {
-          const prisma = getPrisma();
-          if (prisma) {
-            const where: any = {};
-            if (includeInactive !== 'true') where.ativo = true;
-            if (categoria && categoria !== 'Todas') {
-              where.categoria = { equals: String(categoria), mode: 'insensitive' };
-            }
-            const list = await withTimeout(prisma.video.findMany({ where, orderBy: { ordem: 'asc' } }), 2000);
-            if (list && list.length > 0) return res.status(200).json(list);
-          }
-        } catch (e) {
-          console.warn('Videos DB warning (using fallback):', e);
-        }
 
         let list = dbJson.videos || [];
         if (includeInactive !== 'true') list = list.filter((v: any) => v.ativo !== false);
@@ -436,28 +386,6 @@ export default async function handler(req: any, res: any) {
         const destaque = req.query?.destaque;
         const categoria = req.query?.categoria;
 
-        try {
-          const prisma = getPrisma();
-          if (prisma) {
-            const where: any = {};
-            if (includeInactive !== 'true') where.ativo = true;
-            if (destaque === 'true') where.destaque = true;
-            if (categoria && categoria !== 'Todas') {
-              where.categoria = { equals: String(categoria), mode: 'insensitive' };
-            }
-            const list = await withTimeout(prisma.projeto.findMany({ where, orderBy: { ordem: 'asc' } }), 2000);
-            if (list && list.length > 0) {
-              return res.status(200).json(list.map((p: any) => ({
-                ...p,
-                imagens: Array.isArray(p.imagens) ? p.imagens : [p.imagemPrincipal],
-                materiais: Array.isArray(p.materiais) ? p.materiais : []
-              })));
-            }
-          }
-        } catch (e) {
-          console.warn('Projects DB warning (using fallback):', e);
-        }
-
         let list = dbJson.projects || [];
         if (includeInactive !== 'true') list = list.filter((p: any) => p.ativo !== false);
         if (destaque === 'true') list = list.filter((p: any) => Boolean(p.destaque));
@@ -513,24 +441,6 @@ export default async function handler(req: any, res: any) {
       const slugOrId = path.replace('/projects/', '');
 
       if (method === 'GET') {
-        try {
-          const prisma = getPrisma();
-          if (prisma) {
-            const project = await withTimeout(prisma.projeto.findFirst({
-              where: { OR: [{ slug: slugOrId }, { id: slugOrId }] }
-            }), 2000);
-            if (project) {
-              return res.status(200).json({
-                ...project,
-                imagens: Array.isArray(project.imagens) ? project.imagens : [project.imagemPrincipal],
-                materiais: Array.isArray(project.materiais) ? project.materiais : []
-              });
-            }
-          }
-        } catch (e) {
-          console.warn('Project slug DB warning (using fallback):', e);
-        }
-
         const list = dbJson.projects || [];
         const p = list.find((item: any) => item.slug === slugOrId || item.id === slugOrId);
         if (!p) return res.status(404).json({ error: 'Projeto não encontrado' });
