@@ -321,8 +321,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     e.preventDefault();
     if (siteSettings.logoUrl && siteSettings.logoUrl.startsWith('data:')) {
       alert('⚠️ A URL da logo é um arquivo temporário (base64). ' +
-        'Ela NÃO será salva no site publicado porque o armazenamento do servidor não está configurado. ' +
-        'Configure as variáveis CLOUDINARY_* e BLOB_READ_WRITE_TOKEN na Vercel ou informe um caminho real (ex: /uploads/minha-logo.png).');
+        'Para publicá-la, informe um caminho real do arquivo: ' +
+        'ex: /uploads/minha-logo.png ou um endereço https:// completo.');
       return;
     }
     setLoading(true);
@@ -370,9 +370,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         if (data.url) {
           setSiteSettings(prev => ({ ...prev, logoUrl: data.url }));
           if (data.url.startsWith('data:')) {
-            alert('⚠️ Armazenamento do servidor não configurado (Cloudinary/Blob). ' +
-              'A logo aparece na prévia, mas NÃO vai persistir no site publicado. ' +
-              'Configure as variáveis CLOUDINARY_* e BLOB_READ_WRITE_TOKEN na Vercel ou informe um URL real (ex: /uploads/minha-logo.png).');
+            alert('⚠️ O upload gerou um arquivo temporário (base64). ' +
+              'Ele só aparece na prévia — para publicar, informe um caminho real no campo "Caminho ou URL": ' +
+              'ex: /uploads/minha-logo.png (arquivo em public/uploads) ou um endereço https:// completo.');
           } else {
             setSaveSuccessMsg('Nova logo carregada com sucesso! Clique em "Salvar Configurações" para confirmar.');
             setTimeout(() => setSaveSuccessMsg(''), 4000);
@@ -1030,9 +1030,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   {siteSettings.logoUrl && siteSettings.logoUrl.startsWith('data:') && (
                     <div className="rounded-lg border border-red-900/70 bg-red-950/40 px-4 py-3 text-[11px] leading-relaxed text-red-300">
                       ⚠️ <strong className="text-red-200">Atenção:</strong> a logo está como um arquivo temporário (base64).
-                      O armazenamento do servidor (Cloudinary/Blob) não está configurado, então ela <strong>NÃO vai persistir</strong> no site publicado.
-                      Configure as variáveis <code className="text-red-100">CLOUDINARY_*</code> e <code className="text-red-100">BLOB_READ_WRITE_TOKEN</code> na Vercel,
-                      ou informe um URL real no campo acima (ex: <code className="text-red-100">/uploads/minha-logo.png</code>).
+                      Ela aparece só na prévia e <strong>NÃO vai ser publicada</strong>.
+                      Informe um caminho real do arquivo no campo acima
+                      (ex: <code className="text-red-100">/uploads/minha-logo.png</code> ou um endereço <code className="text-red-100">https://</code> completo) e utilize "Restaurar Logo Padrão RS" para voltar ao monograma.
                     </div>
                   )}
                 </div>
