@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Send, MessageCircle, CheckCircle2, Sparkles } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, MessageCircle, CheckCircle2 } from 'lucide-react';
 import { SiteSettings } from '../types';
 
 interface ContactSectionProps {
@@ -77,21 +77,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ settings }) => {
           {/* Info Side Left */}
           <div className="lg:col-span-5 flex flex-col justify-between">
             <div>
-              <div className="inline-flex items-center gap-2 mb-3">
-                <span className="h-[1px] w-6 bg-[#D4AF37]" />
-                <span className="text-xs uppercase tracking-[0.25em] font-semibold text-[#D4AF37] font-display-rs">
-                  FALE CONOSCO
-                </span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-white mb-6">
-                Vamos Criar Seu Novo Espaço Juntos?
-              </h2>
-
-              <p className="text-neutral-400 text-sm leading-relaxed mb-8 font-light">
-                Agende uma visita técnica ou envie suas ideias para nossa equipe de consultores e projetistas. Atendemos com agilidade e compromisso.
-              </p>
-
               <div className="space-y-6 mb-8">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/25 flex items-center justify-center text-[#D4AF37] shrink-0 mt-0.5">
