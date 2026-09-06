@@ -150,7 +150,7 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-neutral-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-neutral-400">
-          <p>© 2026 RS Móveis Planejados em MDF. Todos os direitos reservados.</p>
+          <p>© 2026 Desenvolvedor Kaliton Goncalves Leite</p>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5 text-neutral-400">
               <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" /> 100% MDF Garantido
