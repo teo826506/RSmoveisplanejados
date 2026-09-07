@@ -1140,66 +1140,28 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   <h4 className="text-sm font-bold text-[#D4AF37] uppercase tracking-wider font-display-rs flex items-center gap-2">
                     <Phone className="w-4 h-4" /> 2. Contatos, Telefones & Redes Sociais
                   </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="space-y-4">
                     <div>
-                      <label className="block text-xs text-neutral-400 mb-1">WhatsApp (Número Completo com DDD)</label>
+                      <label className="block text-xs text-neutral-400 mb-1">Telefone / WhatsApp (Exibição)</label>
                       <input
                         type="text"
                         value={siteSettings.whatsappNumero}
                         onChange={(e) => setSiteSettings({ ...siteSettings, whatsappNumero: e.target.value })}
-                        placeholder="Ex: 5511999998888"
-                        className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none font-mono"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-neutral-400 mb-1">E-mail Principal</label>
-                      <input
-                        type="email"
-                        value={siteSettings.emailPrincipal}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, emailPrincipal: e.target.value })}
+                        placeholder="Ex: (97) 8409-8295 ou 559784098295"
                         className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none"
                       />
+                      <p className="text-[10px] text-neutral-500 mt-1">O traço e a formatação serão mantidos como você digitar.</p>
                     </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs text-neutral-400 mb-1">Instagram URL</label>
+                      <label className="block text-xs text-neutral-400 mb-1">Endereço / Região de Atendimento</label>
                       <input
                         type="text"
-                        value={siteSettings.instagram}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, instagram: e.target.value })}
+                        value={siteSettings.endereco}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, endereco: e.target.value })}
                         className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none"
                       />
                     </div>
-                    <div>
-                      <label className="block text-xs text-neutral-400 mb-1">Facebook URL</label>
-                      <input
-                        type="text"
-                        value={siteSettings.facebook}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, facebook: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-neutral-400 mb-1">Canal do YouTube URL</label>
-                      <input
-                        type="text"
-                        value={siteSettings.youtube}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, youtube: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs text-neutral-400 mb-1">Endereço / Região de Atendimento</label>
-                    <input
-                      type="text"
-                      value={siteSettings.endereco}
-                      onChange={(e) => setSiteSettings({ ...siteSettings, endereco: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none"
-                    />
                   </div>
                 </div>
 

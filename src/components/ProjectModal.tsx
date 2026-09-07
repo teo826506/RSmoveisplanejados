@@ -32,7 +32,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   };
 
   const handleWhatsAppInquiry = () => {
-    const whatsappNumero = settings?.whatsappNumero || '5511999998888';
+    const whatsappNumero = (settings?.whatsappNumero || '5511999998888').replace(/\D/g, '');
     const text = encodeURIComponent(
       `Olá! Estive vendo o projeto *"${project.titulo}"* no site da RS Móveis Planejados e gostaria de solicitar um orçamento semelhante para o meu espaço.`
     );

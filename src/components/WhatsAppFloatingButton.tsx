@@ -22,7 +22,7 @@ export const WhatsAppFloatingButton: React.FC<WhatsAppFloatingButtonProps> = ({ 
     });
   }, []);
 
-  const whatsappNumero = settings?.whatsappNumero || '5511999998888';
+  const whatsappNumero = (settings?.whatsappNumero || '5511999998888').replace(/\D/g, '');
   const handleOpenWhatsApp = () => {
     const text = encodeURIComponent(
       'Olá! Gostaria de tirar dúvidas e solicitar um orçamento de móveis planejados em MDF com a RS Móveis.'

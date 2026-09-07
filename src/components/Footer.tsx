@@ -18,11 +18,9 @@ export const Footer: React.FC<FooterProps> = ({
   const facebook = settings?.facebook || 'https://facebook.com';
   const youtube = settings?.youtube || 'https://youtube.com';
 
-  const whatsappRaw = (settings?.whatsappNumero || '559784098295').replace(/\D/g, '');
-  const whatsappDisplay =
-    whatsappRaw.length === 13
-      ? `+${whatsappRaw.slice(0, 2)} (${whatsappRaw.slice(2, 4)}) ${whatsappRaw.slice(4, 9)}-${whatsappRaw.slice(9, 13)}`
-      : whatsappRaw;
+  const whatsappRaw = settings?.whatsappNumero || '55219784098295';
+  const whatsappPhone = whatsappRaw.replace(/\D/g, '');
+  const whatsappDisplay = whatsappRaw;
   return (
     <footer className="bg-[#050505] text-neutral-400 text-xs border-t border-[#D4AF37]/30 relative overflow-hidden">
       {/* Subtle gold radiance behind footer logo */}
@@ -89,7 +87,7 @@ export const Footer: React.FC<FooterProps> = ({
                 <Phone className="w-5 h-5" />
               </span>
               <a
-                href={`https://wa.me/${settings?.whatsappNumero || '55219784098295'}`}
+                href={`https://wa.me/${whatsappPhone}`}
                 target="_blank"
                 rel="noreferrer"
                 className="text-neutral-300 font-medium hover:text-[#D4AF37] transition-colors"
