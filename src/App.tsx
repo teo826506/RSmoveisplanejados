@@ -138,6 +138,7 @@ export default function App() {
       {/* Modals & Triggers */}
       <ProjectModal
         project={selectedProject}
+        projectIndex={selectedProject ? projects.findIndex((p) => p.id === selectedProject.id) : undefined}
         onClose={() => setSelectedProject(null)}
         onSelectForBudget={(title, cat) => handleOpenBudget(cat)}
         settings={siteSettings}

@@ -88,7 +88,7 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {filteredProjects.map((project) => (
+            {filteredProjects.map((project, index) => (
               <div
                 key={project.id}
                 id={`project-card-${project.id}`}
@@ -140,9 +140,12 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
                       {project.titulo}
                     </h3>
 
-                    <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed mb-4">
-                      {project.descricao}
-                    </p>
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-3xl font-serif-luxury font-extrabold text-gold-gradient leading-none">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="h-px flex-1 bg-gradient-to-r from-[#D4AF37]/50 to-transparent" />
+                    </div>
 
                     {/* Key materials badges */}
                     {project.materiais && project.materiais.length > 0 && (

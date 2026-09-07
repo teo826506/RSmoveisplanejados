@@ -4,6 +4,7 @@ import { Projeto, SiteSettings } from '../types';
 
 interface ProjectModalProps {
   project: Projeto | null;
+  projectIndex?: number;
   onClose: () => void;
   onSelectForBudget: (projectTitle: string, category: string) => void;
   settings?: SiteSettings;
@@ -11,6 +12,7 @@ interface ProjectModalProps {
 
 export const ProjectModal: React.FC<ProjectModalProps> = ({
   project,
+  projectIndex,
   onClose,
   onSelectForBudget,
   settings,
@@ -124,9 +126,14 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               </h3>
 
               {/* Description */}
-              <p className="text-sm text-neutral-300 leading-relaxed mb-6 font-light">
-                {project.descricao}
-              </p>
+              {projectIndex !== undefined && (
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="text-4xl font-serif-luxury font-extrabold text-gold-gradient leading-none">
+                    {String(projectIndex + 1).padStart(2, '0')}
+                  </span>
+                  <span className="h-px flex-1 bg-gradient-to-r from-[#D4AF37]/40 to-transparent" />
+                </div>
+              )}
 
               {/* Specs Grid */}
               <div className="grid grid-cols-2 gap-3 mb-6 p-4 rounded-xl bg-neutral-900/90 border border-neutral-800">
