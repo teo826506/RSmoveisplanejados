@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Camera, Eye, X, ChevronLeft, ChevronRight, Sparkles, MessageCircle, Layers } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { INITIAL_GALLERY } from '../data/initialData';
 
 interface PhotoGallerySectionProps {
@@ -9,7 +9,6 @@ interface PhotoGallerySectionProps {
 
 export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
   photos,
-  onOpenBudget,
 }) => {
   const activePhotos = Array.isArray(photos) && photos.length > 0 ? photos : INITIAL_GALLERY;
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
@@ -47,31 +46,6 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 mb-3">
-            <span className="h-[1px] w-6 bg-[#D4AF37]" />
-            <span className="text-xs uppercase tracking-[0.25em] font-semibold text-[#D4AF37] font-display-rs flex items-center gap-1.5">
-              <Camera className="w-3.5 h-3.5" />
-              GALERIA DE FOTOS REALIZADAS
-            </span>
-            <span className="h-[1px] w-6 bg-[#D4AF37]" />
-          </div>
-
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif-luxury font-bold text-white mb-4">
-            Fotos de Nossos <span className="text-gold-gradient font-serif-luxury">Trabalhos & Ambientes</span>
-          </h2>
-
-          <p className="text-neutral-400 text-sm sm:text-base leading-relaxed font-light">
-            Confira detalhes reais dos nossos móveis instalados. Cada foto reflete a qualidade do nosso MDF 100%, acabamento de luxo e atenção aos detalhes.
-          </p>
-
-          <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{activePhotos.length} Fotos Registradas na Galeria</span>
-          </div>
-        </div>
-
         {/* Photo Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {visiblePhotos.map((url, index) => (
@@ -86,11 +60,6 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-opacity duration-300 flex items-center justify-center">
-                <span className="p-2 rounded-full bg-black/60 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/40 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <Eye className="w-4 h-4" />
-                </span>
-              </div>
             </div>
           ))}
         </div>
@@ -141,26 +110,16 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
             <ChevronRight className="w-6 h-6" />
           </button>
 
-          {/* Image & Caption Container */}
+          {/* Image */}
           <div
-            className="relative max-w-5xl max-h-[85vh] flex flex-col items-center justify-center"
+            className="relative max-w-5xl max-h-[85vh] flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             <img
               src={activePhotos[selectedPhotoIndex]}
               alt={`Foto de Galeria ${selectedPhotoIndex + 1}`}
-              className="max-w-full max-h-[75vh] object-contain rounded-lg border border-neutral-800 shadow-[0_0_50px_rgba(0,0,0,0.9)]"
+              className="max-w-full max-h-[85vh] object-contain rounded-lg border border-neutral-800 shadow-[0_0_50px_rgba(0,0,0,0.9)]"
             />
-            <button
-              onClick={() => {
-                handleCloseLightbox();
-                onOpenBudget();
-              }}
-              className="mt-4 px-6 py-2.5 rounded-full bg-gold-gradient text-black font-bold text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-md flex items-center gap-2"
-            >
-              <MessageCircle className="w-4 h-4" />
-              Quero um Orçamento Deste Modelo
-            </button>
           </div>
         </div>
       )}
