@@ -45,14 +45,14 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
       <div className="absolute top-1/3 right-10 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Photo Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-0">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {visiblePhotos.map((url, index) => (
             <div
               key={index}
               onClick={() => handleOpenLightbox(index)}
-              className="relative aspect-square overflow-hidden bg-neutral-900 cursor-pointer group"
+              className="relative aspect-square rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800/80 group cursor-pointer shadow-lg"
             >
               <img
                 src={url}
@@ -61,7 +61,7 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
                 loading="lazy"
               />
               <span className="absolute top-2 left-2 flex items-center justify-center w-8 h-8 rounded-full bg-black/70 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/40 text-xs font-bold font-mono shadow-md">
-                {index + 1}
+                {45 + index}
               </span>
             </div>
           ))}
@@ -124,7 +124,7 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
               className="max-w-full max-h-[85vh] object-contain rounded-lg border border-neutral-800 shadow-[0_0_50px_rgba(0,0,0,0.9)]"
             />
             <span className="absolute top-2 left-2 flex items-center justify-center w-10 h-10 rounded-full bg-black/70 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/40 text-sm font-bold font-mono shadow-md">
-              {selectedPhotoIndex + 1}
+              {45 + selectedPhotoIndex}
             </span>
           </div>
         </div>
