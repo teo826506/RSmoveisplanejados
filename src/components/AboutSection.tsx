@@ -1,7 +1,8 @@
 import React from 'react';
 import { Compass, Cpu, CheckCircle2, Hammer, Sparkles } from 'lucide-react';
+import { SiteSettings } from '../types';
 
-export const AboutSection: React.FC = () => {
+export const AboutSection: React.FC<{ settings?: SiteSettings }> = ({ settings }) => {
   return (
     <section id="sobre" className="py-24 bg-[#0d0d0d] relative overflow-hidden border-t border-b border-[#D4AF37]/15">
       {/* Decorative Gold Glow */}
@@ -16,8 +17,8 @@ export const AboutSection: React.FC = () => {
               {/* Main Image */}
               <div className="relative rounded-2xl overflow-hidden border border-[#D4AF37]/30 shadow-2xl shadow-black/90 group">
                 <img
-                  src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80"
-                  alt="Marcenaria de Luxo RS Móveis Planejados"
+                  src={settings?.heroImagemFundo || 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80'}
+                  alt="Propaganda RS Móveis Planejados"
                   className="w-full h-[420px] sm:h-[480px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />

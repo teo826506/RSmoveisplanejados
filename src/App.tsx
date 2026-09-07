@@ -111,7 +111,7 @@ export default function App() {
         />
 
         {/* About the brand & high-end 100% MDF carpentry */}
-        <AboutSection />
+        <AboutSection settings={siteSettings} />
 
         {/* Dynamic Filterable Projects Gallery */}
         <ProjectsGallery
