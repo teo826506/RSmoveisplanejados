@@ -45,19 +45,19 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
       <div className="absolute top-1/3 right-10 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="relative z-10">
         {/* Photo Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-0">
           {visiblePhotos.map((url, index) => (
             <div
               key={index}
               onClick={() => handleOpenLightbox(index)}
-              className="group relative aspect-square rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800/80 hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-[0_10px_25px_rgba(212,175,55,0.15)] hover:-translate-y-1"
+              className="relative aspect-square overflow-hidden bg-neutral-900 cursor-pointer group"
             >
               <img
                 src={url}
                 alt={`Foto de Ambiente RS Móveis ${index + 1}`}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 loading="lazy"
               />
               <span className="absolute top-2 left-2 flex items-center justify-center w-8 h-8 rounded-full bg-black/70 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/40 text-xs font-bold font-mono shadow-md">
