@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, Facebook, Youtube, ShieldCheck, Lock, Download } from 'lucide-react';
+import { Instagram, Facebook, Youtube, ShieldCheck, Lock, Download, Phone, MapPin } from 'lucide-react';
 import { LogoRS } from './LogoRS';
 import { SiteSettings } from '../types';
 
@@ -62,6 +62,42 @@ export const Footer: React.FC<FooterProps> = ({
               >
                 <Youtube className="w-4 h-4" />
               </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Info */}
+        <div className="pt-4 pb-12 border-t border-neutral-900">
+          <div className="flex flex-col items-center justify-center text-center mb-8">
+            <span className="text-xs uppercase tracking-[0.25em] font-semibold text-[#D4AF37] font-display-rs">
+              FALE CONOSCO
+            </span>
+            <h3 className="mt-2 text-xl sm:text-2xl font-serif-luxury font-bold text-white">
+              Atendimento RS Móveis
+            </h3>
+          </div>
+
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-6 sm:gap-12 text-sm">
+            <div className="flex flex-col items-center gap-2">
+              <span className="w-11 h-11 rounded-full bg-neutral-900 border border-[#D4AF37]/40 text-[#D4AF37] flex items-center justify-center">
+                <Phone className="w-5 h-5" />
+              </span>
+              <a
+                href={`https://wa.me/${settings?.whatsappNumero || '55219784098295'}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-neutral-300 font-medium hover:text-[#D4AF37] transition-colors"
+              >
+                {settings?.telefonePrincipal || '(97) 8409-8295'}
+              </a>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <span className="w-11 h-11 rounded-full bg-neutral-900 border border-[#D4AF37]/40 text-[#D4AF37] flex items-center justify-center">
+                <MapPin className="w-5 h-5" />
+              </span>
+              <span className="text-neutral-300 font-medium max-w-xs text-center">
+                {settings?.endereco || 'Próximo ao Posto Martins 2, na Orlinha'}
+              </span>
             </div>
           </div>
         </div>
