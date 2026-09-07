@@ -405,6 +405,51 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     })();
   };
 
+  const handleHeroImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Por favor selecione um arquivo de imagem válido (PNG, JPG, SVG, WebP, GIF).');
+      return;
+    }
+
+    setUploadingLogo(true);
+    (async () => {
+      try {
+        const base64 = await compressImageToDataUri(file);
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileData: base64,
+            fileName: file.name,
+            autoAddToGallery: false
+          })
+        });
+        const data = await res.json();
+        if (data.url) {
+          setSiteSettings(prev => ({ ...prev, heroImagemFundo: data.url }));
+          if (data.url.startsWith('data:')) {
+            alert('⚠️ O upload gerou um arquivo temporário (base64). ' +
+              'Ele só aparece na prévia — para publicar, informe um caminho real no campo acima: ' +
+              'ex: /uploads/minha-imagem.jpg (arquivo em public/uploads) ou um endereço https:// completo.');
+          } else {
+            setSaveSuccessMsg('Nova imagem do Hero carregada! Clique em "Salvar Configurações" para confirmar.');
+            setTimeout(() => setSaveSuccessMsg(''), 4000);
+          }
+        } else {
+          alert(data.error || 'Erro ao enviar imagem do Hero.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Erro de conexão ao fazer upload da imagem do Hero.');
+      } finally {
+        setUploadingLogo(false);
+      }
+    })();
+  };
+
   // ---------------- VIDEOS & YOUTUBE ACTIONS ----------------
   const handleSaveVideo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1125,13 +1170,21 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs text-neutral-400 mb-1">URL da Imagem de Fundo (Hero Background)</label>
-                    <input
-                      type="text"
-                      value={siteSettings.heroImagemFundo}
-                      onChange={(e) => setSiteSettings({ ...siteSettings, heroImagemFundo: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none font-mono"
-                    />
+                    <label className="block text-xs text-neutral-400 mb-1">Imagem de Fundo (Hero - mulher na cozinha)</label>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <input
+                        type="text"
+                        value={siteSettings.heroImagemFundo}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, heroImagemFundo: e.target.value })}
+                        placeholder="Colar URL da imagem aqui"
+                        className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none font-mono"
+                      />
+                      <label className="shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-[#D4AF37]/20 transition-all duration-200">
+                        {uploadingLogo ? 'Enviando...' : 'Importar do PC'}
+                        <input type="file" accept="image/*" className="hidden" onChange={handleHeroImageFileUpload} disabled={uploadingLogo} />
+                      </label>
+                    </div>
+                    <p className="text-[10px] text-neutral-500 mt-1">Cole uma URL ou importe a imagem do seu computador.</p>
                   </div>
                 </div>
 
