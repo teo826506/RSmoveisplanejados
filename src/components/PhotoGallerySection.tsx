@@ -86,20 +86,10 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3 sm:p-4">
-                <div className="flex justify-end">
-                  <span className="p-2 rounded-full bg-black/60 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/40 shadow-md">
-                    <Eye className="w-4 h-4" />
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[11px] text-[#D4AF37] font-mono tracking-wider font-bold uppercase">
-                    Ambiente #{index + 1}
-                  </span>
-                  <p className="text-white text-xs font-semibold line-clamp-1">
-                    Ver em alta resolução
-                  </p>
-                </div>
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-opacity duration-300 flex items-center justify-center">
+                <span className="p-2 rounded-full bg-black/60 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/40 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <Eye className="w-4 h-4" />
+                </span>
               </div>
             </div>
           ))}
@@ -161,26 +151,16 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
               alt={`Foto de Galeria ${selectedPhotoIndex + 1}`}
               className="max-w-full max-h-[75vh] object-contain rounded-lg border border-neutral-800 shadow-[0_0_50px_rgba(0,0,0,0.9)]"
             />
-            <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 w-full px-2">
-              <div className="text-left">
-                <span className="text-xs text-[#D4AF37] font-mono tracking-widest uppercase">
-                  Foto {selectedPhotoIndex + 1} de {activePhotos.length}
-                </span>
-                <h4 className="text-white text-sm sm:text-base font-semibold">
-                  Móvel Planejado RS Móveis 100% MDF
-                </h4>
-              </div>
-              <button
-                onClick={() => {
-                  handleCloseLightbox();
-                  onOpenBudget();
-                }}
-                className="px-6 py-2.5 rounded-full bg-gold-gradient text-black font-bold text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-md flex items-center gap-2"
-              >
-                <MessageCircle className="w-4 h-4" />
-                Quero um Orçamento Deste Modelo
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                handleCloseLightbox();
+                onOpenBudget();
+              }}
+              className="mt-4 px-6 py-2.5 rounded-full bg-gold-gradient text-black font-bold text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-md flex items-center gap-2"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Quero um Orçamento Deste Modelo
+            </button>
           </div>
         </div>
       )}
