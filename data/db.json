@@ -1134,6 +1134,7 @@
     "statAtendimento": "PERSONALIZADO E LOCAL",
     "logoTamanho": "grande",
     "brilhoOuroIntensidade": "extremo",
+    "logoUrl": "/uploads/logo-rs.png",
     "adminEmail": "admin@rsplanejados.com.br",
     "adminPassword": "admin",
     "updatedAt": "2026-09-03T22:09:12.760Z"
