@@ -17,6 +17,12 @@ export const Footer: React.FC<FooterProps> = ({
   const instagram = settings?.instagram || 'https://instagram.com';
   const facebook = settings?.facebook || 'https://facebook.com';
   const youtube = settings?.youtube || 'https://youtube.com';
+
+  const whatsappRaw = (settings?.whatsappNumero || '559784098295').replace(/\D/g, '');
+  const whatsappDisplay =
+    whatsappRaw.length === 13
+      ? `+${whatsappRaw.slice(0, 2)} (${whatsappRaw.slice(2, 4)}) ${whatsappRaw.slice(4, 9)}-${whatsappRaw.slice(9, 13)}`
+      : whatsappRaw;
   return (
     <footer className="bg-[#050505] text-neutral-400 text-xs border-t border-[#D4AF37]/30 relative overflow-hidden">
       {/* Subtle gold radiance behind footer logo */}
@@ -88,7 +94,7 @@ export const Footer: React.FC<FooterProps> = ({
                 rel="noreferrer"
                 className="text-neutral-300 font-medium hover:text-[#D4AF37] transition-colors"
               >
-                {settings?.telefonePrincipal || '(97) 8409-8295'}
+                {whatsappDisplay}
               </a>
             </div>
             <div className="flex flex-col items-center gap-2">

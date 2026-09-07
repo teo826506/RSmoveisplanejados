@@ -4,7 +4,6 @@ import {
   Ruler,
   Leaf,
   ShieldCheck,
-  ArrowRight,
   Armchair,
   Smile,
   Calendar,
@@ -132,15 +131,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBudget, onExploreProjects, set
 
           {/* Primary Action Button */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-            <button
-              id="hero-solicitar-orcamento-btn"
-              onClick={onOpenBudget}
-              className="relative group px-8 py-4 rounded-lg border-2 border-[#D4AF37] bg-black/50 text-[#D4AF37] hover:text-black hover:bg-[#D4AF37] font-bold text-xs sm:text-sm tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_25px_rgba(212,175,55,0.25)] hover:shadow-[0_0_35px_rgba(212,175,55,0.6)]"
-            >
-              <span>SOLICITE UM ORÇAMENTO</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-            </button>
-
             <button
               id="hero-ver-projetos-btn"
               onClick={onExploreProjects}
