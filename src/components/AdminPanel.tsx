@@ -1170,13 +1170,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs text-neutral-400 mb-1">Imagem de Fundo (Hero - mulher na cozinha)</label>
+                    <label className="block text-xs text-neutral-400 mb-1">Imagem de Fundo do Hero (Upload de Propaganda)</label>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <input
                         type="text"
                         value={siteSettings.heroImagemFundo}
                         onChange={(e) => setSiteSettings({ ...siteSettings, heroImagemFundo: e.target.value })}
-                        placeholder="Colar URL da imagem aqui"
+                        placeholder="Colar URL da imagem de propaganda aqui"
                         className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none font-mono"
                       />
                       <label className="shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-[#D4AF37]/20 transition-all duration-200">
@@ -1184,7 +1184,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                         <input type="file" accept="image/*" className="hidden" onChange={handleHeroImageFileUpload} disabled={uploadingLogo} />
                       </label>
                     </div>
-                    <p className="text-[10px] text-neutral-500 mt-1">Cole uma URL ou importe a imagem do seu computador.</p>
+                    <p className="text-[10px] text-neutral-500 mt-1">Faça upload de uma imagem de propaganda ou cole a URL da imagem.</p>
                   </div>
                 </div>
 
