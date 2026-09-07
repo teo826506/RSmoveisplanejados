@@ -61,7 +61,7 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
                 loading="lazy"
               />
               <span className="absolute top-2 left-2 flex items-center justify-center w-8 h-8 rounded-full bg-black/70 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/40 text-xs font-bold font-mono shadow-md">
-                {44 + index}
+                {index + 1}
               </span>
             </div>
           ))}
@@ -124,7 +124,7 @@ export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
               className="max-w-full max-h-[85vh] object-contain rounded-lg border border-neutral-800 shadow-[0_0_50px_rgba(0,0,0,0.9)]"
             />
             <span className="absolute top-2 left-2 flex items-center justify-center w-10 h-10 rounded-full bg-black/70 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/40 text-sm font-bold font-mono shadow-md">
-              {44 + selectedPhotoIndex}
+              {selectedPhotoIndex + 1}
             </span>
           </div>
         </div>
