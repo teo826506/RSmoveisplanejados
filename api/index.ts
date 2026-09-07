@@ -314,7 +314,7 @@ export default async function handler(req: any, res: any) {
           const prisma = getPrisma();
           if (prisma) {
             const items = await withTimeout(prisma.galeria.findMany({ orderBy: { createdAt: 'desc' } }), 2000);
-            if (items) {
+            if (items && items.length > 0) {
               return res.status(200).json(items.map((i: any) => i.url));
             }
           }
@@ -486,6 +486,28 @@ export default async function handler(req: any, res: any) {
         const includeInactive = req.query?.includeInactive;
         const destaque = req.query?.destaque;
         const categoria = req.query?.categoria;
+
+        try {
+          const prisma = getPrisma();
+          if (prisma) {
+            const where: any = {};
+            if (includeInactive !== 'true') where.ativo = true;
+            if (destaque === 'true') where.destaque = true;
+            if (categoria && categoria !== 'Todas') {
+              where.categoria = { equals: String(categoria), mode: 'insensitive' } as any;
+            }
+            const list = await withTimeout(prisma.projeto.findMany({ where, orderBy: { ordem: 'asc' } }), 2500);
+            if (list && list.length > 0) {
+              return res.status(200).json(list.map((p: any) => ({
+                ...p,
+                imagens: Array.isArray(p.imagens) && p.imagens.length > 0 ? p.imagens : [p.imagemPrincipal],
+                materiais: Array.isArray(p.materiais) ? p.materiais : []
+              })));
+            }
+          }
+        } catch (e) {
+          console.warn('Projects GET DB warning, using fallback:', e);
+        }
 
         let list = dbJson.projects || [];
         if (includeInactive !== 'true') list = list.filter((p: any) => p.ativo !== false);
