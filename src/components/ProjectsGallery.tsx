@@ -146,13 +146,6 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
                       <span>Galeria completa</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </button>
-
-                    <button
-                      onClick={() => onOpenBudget(project.categoria)}
-                      className="text-xs font-bold text-[#D4AF37] hover:underline uppercase tracking-wider"
-                    >
-                      Pedir Orçamento
-                    </button>
                   </div>
                 </div>
               </div>

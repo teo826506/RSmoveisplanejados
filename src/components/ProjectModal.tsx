@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Sparkles, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Projeto, SiteSettings } from '../types';
 
 interface ProjectModalProps {
@@ -108,17 +108,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
           {/* Details Right */}
           <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between bg-[#111111]">
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30">
-                  {project.categoria}
-                </span>
-                {project.destaque && (
-                  <span className="px-2.5 py-0.5 rounded text-[10px] uppercase font-semibold text-white bg-neutral-800 flex items-center gap-1 border border-neutral-700">
-                    <Sparkles className="w-3 h-3 text-[#D4AF37]" /> Destaque
-                  </span>
-                )}
-              </div>
-
               {projectIndex !== undefined && (
                 <div className="flex items-center gap-3 mb-6">
                   <span className="text-5xl font-serif-luxury font-extrabold text-gold-gradient leading-none">
@@ -131,18 +120,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
             {/* Action Buttons */}
             <div className="space-y-2.5 pt-4 border-t border-neutral-800">
-              <button
-                id="modal-solicitar-orcamento-btn"
-                onClick={() => {
-                  onClose();
-                  onSelectForBudget(project.titulo, project.categoria);
-                }}
-                className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B8860B] hover:from-[#e3be47] hover:to-[#ca9614] text-black font-bold text-xs tracking-widest uppercase flex items-center justify-center gap-2 shadow-lg shadow-[#D4AF37]/20 transition-all duration-200"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>SOLICITAR ORÇAMENTO DESTE PROJETO</span>
-              </button>
-
               <button
                 id="modal-whatsapp-btn"
                 onClick={handleWhatsAppInquiry}
