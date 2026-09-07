@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, Compass, Cpu, CheckCircle2, Hammer, Sparkles } from 'lucide-react';
+import { Compass, Cpu, CheckCircle2, Hammer, Sparkles } from 'lucide-react';
 
 export const AboutSection: React.FC = () => {
   return (
@@ -29,22 +29,6 @@ export const AboutSection: React.FC = () => {
                     Precisão milimétrica em usinagem CNC e acabamento artesanal.
                   </p>
                 </div>
-              </div>
-
-              {/* Overlapping Floating Badge */}
-              <div className="absolute -bottom-6 -right-4 sm:-right-6 bg-[#141414] border border-[#D4AF37] rounded-xl p-5 shadow-2xl shadow-black/80 max-w-[240px] hidden sm:block">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-full bg-[#D4AF37]/15 flex items-center justify-center text-[#D4AF37]">
-                    <Award className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-xl font-bold text-white font-display-rs block leading-none">100%</span>
-                    <span className="text-[10px] text-[#D4AF37] font-semibold uppercase tracking-wider">MDF PRIMEIRA LINHA</span>
-                  </div>
-                </div>
-                <p className="text-[11px] text-neutral-400 leading-snug">
-                  Sem misturas de aglomerados ou materiais inferiores.
-                </p>
               </div>
             </div>
           </div>
@@ -76,32 +60,8 @@ export const AboutSection: React.FC = () => {
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-semibold text-white">Projetos 3D Realistas</h4>
-                  <p className="text-xs text-neutral-400">Visualize cores e iluminação antes de fabricar.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-sm font-semibold text-white">Ferragens Premium</h4>
-                  <p className="text-xs text-neutral-400">Sistemas com amortecimento suave e silencioso.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" />
-                <div>
                   <h4 className="text-sm font-semibold text-white">Montagem Especializada</h4>
                   <p className="text-xs text-neutral-400">Instalação limpa, pontual e sem improvisos.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-sm font-semibold text-white">5 Anos de Garantia</h4>
-                  <p className="text-xs text-neutral-400">Compromisso e segurança para o seu investimento.</p>
                 </div>
               </div>
             </div>
