@@ -183,8 +183,13 @@ async function persistDb(data: any): Promise<void> {
 
 // ─── Runtime mutable db (fallback to snapshot) ───────────────────────────────
 async function getRuntimeDb(): Promise<any> {
+  if (_cachedDb && Date.now() - _cachedAt < CACHE_TTL) return _cachedDb;
   const blobDb = await loadDbFromBlob();
-  if (blobDb) return { ...DB_DATA, settings: { ...(DB_DATA.settings || {}), ...(blobDb.settings || {}) }, ...blobDb };
+  if (blobDb) {
+    _cachedDb = { ...DB_DATA, settings: { ...(DB_DATA.settings || {}), ...(blobDb.settings || {}) }, ...blobDb };
+    _cachedAt = Date.now();
+    return _cachedDb;
+  }
   return DB_DATA;
 }
 
@@ -305,6 +310,17 @@ export default async function handler(req: any, res: any) {
     // 3. GALLERY
     if (path === '/gallery') {
       if (method === 'GET') {
+        try {
+          const prisma = getPrisma();
+          if (prisma) {
+            const items = await withTimeout(prisma.galeria.findMany({ orderBy: { createdAt: 'desc' } }), 2000);
+            if (items) {
+              return res.status(200).json(items.map((i: any) => i.url));
+            }
+          }
+        } catch (e) {
+          console.warn('Gallery GET DB warning, using fallback:', e);
+        }
         return res.status(200).json(dbJson.gallery || []);
       }
 

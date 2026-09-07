@@ -10,7 +10,7 @@ interface PhotoGallerySectionProps {
 export const PhotoGallerySection: React.FC<PhotoGallerySectionProps> = ({
   photos,
 }) => {
-  const activePhotos = Array.isArray(photos) && photos.length > 0 ? photos : INITIAL_GALLERY;
+  const activePhotos = Array.isArray(photos) ? photos : INITIAL_GALLERY;
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const [displayCount, setDisplayCount] = useState<number>(12);
 

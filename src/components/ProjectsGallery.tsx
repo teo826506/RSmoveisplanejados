@@ -14,7 +14,7 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
   onSelectProject,
   onOpenBudget,
 }) => {
-  const activeProjects = Array.isArray(projects) && projects.length > 0 ? projects : INITIAL_PROJECTS;
+  const activeProjects = Array.isArray(projects) ? projects : INITIAL_PROJECTS;
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredProjects = activeProjects.filter((p) => {

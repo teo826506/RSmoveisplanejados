@@ -32,13 +32,13 @@ export default function App() {
         fetch('/api/gallery', { cache: 'no-store' }).then((r) => r.json()).catch(() => null),
       ]);
 
-      if (Array.isArray(projRes) && projRes.length > 0) {
+      if (Array.isArray(projRes)) {
         setProjects(projRes);
       }
       if (setRes && setRes.nomeEmpresa) {
         setSiteSettings(setRes);
       }
-      if (Array.isArray(galRes) && galRes.length > 0) {
+      if (Array.isArray(galRes)) {
         setPhotoGallery(galRes);
       }
     } catch (err) {
