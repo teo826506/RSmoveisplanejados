@@ -60,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <LogoRS
               size={isScrolled ? 'md' : 'lg'}
-              showSubtitle={true}
+              showSubtitle={false}
               withGlow={true}
               withShimmer={true}
               logoUrl={logoUrl}
@@ -183,7 +183,20 @@ export const Header: React.FC<HeaderProps> = ({
                 Área Restrita (Acesso ADM)
               </button>
             </div>
-          </div>
+</div>
+        </div>
+      )}
+
+      {/* Brand words in the middle, below the nav row */}
+      {!isScrolled && (
+        <div className="hidden xl:flex justify-center items-center gap-2 pt-0.5 pb-1">
+          <span className="font-extrabold tracking-[0.26em] uppercase text-white font-display-rs text-[10px] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+            RS MÓVEIS PLANEJADOS
+          </span>
+          <div className="h-[1.5px] w-10 bg-gradient-to-r from-transparent via-[#D4AF37] to-[#FFF6D5]" />
+          <span className="font-bold tracking-[0.32em] uppercase font-display-rs text-gold-gradient text-[9px]">
+            EM MDF DE ALTO PADRÃO
+          </span>
         </div>
       )}
     </header>
