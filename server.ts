@@ -149,7 +149,7 @@ app.put('/api/settings', async (req, res) => {
     await prisma.siteSettings.upsert({
       where: { id: 'default' },
       update: data,
-      create: { id: 'default', ...data }
+      create: { id: 'default', ...updatedSettings }
     });
   } catch (err) {
     console.warn('Prisma settings upsert warning (saved to db.json):', err);

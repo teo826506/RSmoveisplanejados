@@ -296,7 +296,7 @@ export default async function handler(req: any, res: any) {
             await withTimeout(prisma.siteSettings.upsert({
               where: { id: 'default' },
               update: data,
-              create: { id: 'default', ...data }
+              create: { id: 'default', ...SETTINGS, ...data }
             }), 3000);
           }
         } catch (e) {
