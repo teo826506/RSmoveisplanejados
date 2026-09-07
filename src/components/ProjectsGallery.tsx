@@ -136,35 +136,12 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
                 {/* Content */}
                 <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-lg sm:text-xl font-serif-luxury font-bold text-white mb-2 group-hover:text-[#D4AF37] transition-colors">
-                      {project.titulo}
-                    </h3>
-
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="text-3xl font-serif-luxury font-extrabold text-gold-gradient leading-none">
+                      <span className="text-5xl font-serif-luxury font-extrabold text-gold-gradient leading-none">
                         {String(index + 1).padStart(2, '0')}
                       </span>
                       <span className="h-px flex-1 bg-gradient-to-r from-[#D4AF37]/50 to-transparent" />
                     </div>
-
-                    {/* Key materials badges */}
-                    {project.materiais && project.materiais.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mb-5">
-                        {project.materiais.slice(0, 2).map((m, i) => (
-                          <span
-                            key={i}
-                            className="text-[10px] px-2 py-0.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300"
-                          >
-                            {m}
-                          </span>
-                        ))}
-                        {project.materiais.length > 2 && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-neutral-900 text-neutral-400">
-                            +{project.materiais.length - 2}
-                          </span>
-                        )}
-                      </div>
-                    )}
                   </div>
 
                   {/* Footer Actions */}

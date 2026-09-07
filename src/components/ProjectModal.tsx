@@ -121,14 +121,9 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               </div>
 
               {/* Title */}
-              <h3 className="text-2xl sm:text-3xl font-serif-luxury font-bold text-white mb-4">
-                {project.titulo}
-              </h3>
-
-              {/* Description */}
               {projectIndex !== undefined && (
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="text-4xl font-serif-luxury font-extrabold text-gold-gradient leading-none">
+                  <span className="text-5xl font-serif-luxury font-extrabold text-gold-gradient leading-none">
                     {String(projectIndex + 1).padStart(2, '0')}
                   </span>
                   <span className="h-px flex-1 bg-gradient-to-r from-[#D4AF37]/40 to-transparent" />
