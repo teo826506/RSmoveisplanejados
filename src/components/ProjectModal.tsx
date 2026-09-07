@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Check, ShieldCheck, Clock, Layers, Sparkles, MessageCircle, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { X, Sparkles, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Projeto, SiteSettings } from '../types';
 
 interface ProjectModalProps {
@@ -108,7 +108,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
           {/* Details Right */}
           <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between bg-[#111111]">
             <div>
-              {/* Category & Badge */}
               <div className="flex items-center gap-2 mb-3">
                 <span className="px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30">
                   {project.categoria}
@@ -120,65 +119,12 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 )}
               </div>
 
-              {/* Title */}
               {projectIndex !== undefined && (
                 <div className="flex items-center gap-3 mb-6">
                   <span className="text-5xl font-serif-luxury font-extrabold text-gold-gradient leading-none">
                     {String(projectIndex + 1).padStart(2, '0')}
                   </span>
                   <span className="h-px flex-1 bg-gradient-to-r from-[#D4AF37]/40 to-transparent" />
-                </div>
-              )}
-
-              {/* Specs Grid */}
-              <div className="grid grid-cols-2 gap-3 mb-6 p-4 rounded-xl bg-neutral-900/90 border border-neutral-800">
-                <div>
-                  <div className="flex items-center gap-1.5 text-xs text-[#D4AF37] font-semibold mb-1">
-                    <Layers className="w-3.5 h-3.5" />
-                    <span>Acabamento</span>
-                  </div>
-                  <p className="text-xs text-neutral-300">
-                    {project.detalhes?.acabamento || '100% MDF Premium'}
-                  </p>
-                </div>
-
-                <div>
-                  <div className="flex items-center gap-1.5 text-xs text-[#D4AF37] font-semibold mb-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>Prazo Médio</span>
-                  </div>
-                  <p className="text-xs text-neutral-300">
-                    {project.detalhes?.tempoExecucao || '20 dias úteis'}
-                  </p>
-                </div>
-
-                <div className="col-span-2 pt-2 border-t border-neutral-800/80">
-                  <div className="flex items-center gap-1.5 text-xs text-[#D4AF37] font-semibold mb-1">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Garantia de Fábrica</span>
-                  </div>
-                  <p className="text-xs text-neutral-300">
-                    {project.detalhes?.garantia || '5 anos de garantia contra defeitos de fabricação'}
-                  </p>
-                </div>
-              </div>
-
-              {/* Materials List */}
-              {project.materiais && project.materiais.length > 0 && (
-                <div className="mb-6">
-                  <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-semibold mb-2">
-                    Materiais Utilizados
-                  </h4>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.materiais.map((mat, i) => (
-                      <span
-                        key={i}
-                        className="text-[11px] px-2.5 py-1 rounded bg-neutral-800/80 border border-neutral-700/60 text-neutral-200"
-                      >
-                        {mat}
-                      </span>
-                    ))}
-                  </div>
                 </div>
               )}
             </div>

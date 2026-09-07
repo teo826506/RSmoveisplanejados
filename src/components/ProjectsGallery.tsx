@@ -104,13 +104,6 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/20 to-transparent" />
 
-                  {/* Category Pill */}
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-black/70 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/30">
-                      {project.categoria}
-                    </span>
-                  </div>
-
                   {/* Featured Badge */}
                   {project.destaque && (
                     <div className="absolute top-4 right-4">
