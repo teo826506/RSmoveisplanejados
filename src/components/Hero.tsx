@@ -49,7 +49,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBudget, onExploreProjects, set
       </div>
 
       {/* Main Content Area */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-10 sm:pt-16 md:pt-20 flex-1 flex flex-col justify-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20 flex-1 flex flex-col justify-center">
         <div className="max-w-3xl">
           {/* Eyebrow / Tagline */}
           <div className="inline-flex items-center gap-2 mb-4 sm:mb-6">
