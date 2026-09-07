@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, Settings, Sparkles, ShieldCheck, Lock } from 'lucide-react';
+import { Menu, X, Lock } from 'lucide-react';
 import { LogoRS } from './LogoRS';
 
 interface HeaderProps {
-  onOpenBudget: () => void;
   onNavigate: (sectionId: string) => void;
   onOpenAdmin: (initialTab?: string) => void;
   activeSection: string;
@@ -11,7 +10,6 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  onOpenBudget,
   onNavigate,
   onOpenAdmin,
   activeSection,
@@ -93,16 +91,6 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Action & Admin Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Quote Button - Principal CTA para os Clientes */}
-            <button
-              id="header-budget-cta"
-              onClick={onOpenBudget}
-              className="relative group px-6 py-2.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#B8860B] text-black font-extrabold text-xs tracking-widest uppercase transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_25px_rgba(212,175,55,0.6)] flex items-center gap-2 shadow-md shadow-[#D4AF37]/20"
-            >
-              <Phone className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
-              <span>SOLICITAR ORÇAMENTO</span>
-            </button>
-
             {/* Acesso Restrito do ADM com cadeado */}
             <button
               id="header-admin-lock-btn"
@@ -116,13 +104,6 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Mobile Menu Trigger */}
           <div className="flex md:hidden items-center gap-2">
-            <button
-              id="mobile-budget-quick"
-              onClick={onOpenBudget}
-              className="px-3 py-1.5 rounded-full bg-[#D4AF37] text-black text-[11px] font-extrabold tracking-wider uppercase shadow"
-            >
-              ORÇAMENTO
-            </button>
             <button
               id="mobile-menu-toggle"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -158,18 +139,6 @@ export const Header: React.FC<HeaderProps> = ({
             ))}
 
             <div className="pt-4 flex flex-col gap-3">
-              <button
-                id="mobile-drawer-budget-btn"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenBudget();
-                }}
-                className="w-full py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-black font-bold text-xs tracking-widest uppercase flex items-center justify-center gap-2 shadow-lg shadow-[#D4AF37]/20"
-              >
-                <Sparkles className="w-4 h-4" />
-                SOLICITAR ORÇAMENTO
-              </button>
-
               {/* Mobile Admin Lock Button */}
               <button
                 id="mobile-drawer-admin-btn"

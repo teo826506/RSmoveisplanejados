@@ -1152,15 +1152,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-neutral-400 mb-1">Telefone Principal (Exibição)</label>
-                      <input
-                        type="text"
-                        value={siteSettings.telefonePrincipal}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, telefonePrincipal: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-lg bg-black border border-neutral-800 focus:border-[#D4AF37] text-white text-xs outline-none"
-                      />
-                    </div>
-                    <div>
                       <label className="block text-xs text-neutral-400 mb-1">E-mail Principal</label>
                       <input
                         type="email"

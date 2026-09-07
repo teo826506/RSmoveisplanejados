@@ -97,7 +97,6 @@ export default function App() {
       <Header
         activeSection={activeSection}
         onNavigate={handleNavigate}
-        onOpenBudget={() => handleOpenBudget()}
         onOpenAdmin={handleOpenAdmin}
         logoUrl={siteSettings.logoUrl}
       />
