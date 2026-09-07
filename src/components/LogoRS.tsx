@@ -33,6 +33,15 @@ export const LogoRS: React.FC<LogoRSProps> = ({
 
   const hasCustomLogo = Boolean(logoUrl && logoUrl.trim() !== '' && !imageError);
 
+  // Larger display bounds for custom image logos so the brand text stays readable.
+  const customDisplaySize = {
+    sm: 70,
+    md: 110,
+    lg: 150,
+    xl: 180,
+    hero: 220,
+  }[size];
+
   return (
     <div
       onClick={onClick}
@@ -56,7 +65,7 @@ export const LogoRS: React.FC<LogoRSProps> = ({
             src={logoUrl}
             alt="Logo RS Móveis Planejados"
             onError={() => setImageError(true)}
-            style={{ maxHeight: `${dimensions.svgH * 1.15}px`, maxWidth: `${dimensions.svgW * 1.8}px` }}
+            style={{ maxHeight: `${customDisplaySize}px`, maxWidth: `${Math.round(customDisplaySize * 1.8)}px` }}
             className="object-contain drop-shadow-[0_4px_18px_rgba(212,175,55,0.6)] group-hover:drop-shadow-[0_6px_28px_rgba(255,235,140,0.85)] transition-all duration-500 transform group-hover:scale-[1.03]"
           />
         ) : (
