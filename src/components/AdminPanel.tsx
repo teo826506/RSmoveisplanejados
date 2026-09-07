@@ -87,16 +87,27 @@ async function compressImageToDataUri(file: File): Promise<string> {
   try {
     const image = await loadImage(original);
     const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(image.width, image.height));
-    if (scale >= 1) return original;
+    const needResize = scale < 1;
+    if (!needResize && file.size <= 2.5 * 1024 * 1024) return original;
     const canvas = document.createElement('canvas');
     canvas.width = Math.max(1, Math.round(image.width * scale));
     canvas.height = Math.max(1, Math.round(image.height * scale));
     const ctx = canvas.getContext('2d');
     if (!ctx) return original;
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    const mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
-    const compressed = canvas.toDataURL(mime, IMAGE_QUALITY);
-    return compressed.length < original.length ? compressed : original;
+    const isPng = file.type === 'image/png';
+    let compressed: string;
+    if (isPng) {
+      const webp = canvas.toDataURL('image/webp', IMAGE_QUALITY);
+      compressed = webp.startsWith('data:image/webp') ? webp : canvas.toDataURL('image/jpeg', 0.82);
+    } else {
+      compressed = canvas.toDataURL('image/jpeg', IMAGE_QUALITY);
+    }
+    if (compressed.length >= original.length) {
+      const jpeg = canvas.toDataURL('image/jpeg', 0.7);
+      return jpeg.length < original.length ? jpeg : original;
+    }
+    return compressed;
   } catch (err) {
     console.warn('Image compression failed, sending original:', err);
     return original;
