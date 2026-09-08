@@ -29,6 +29,16 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBudget, onExploreProjects, set
   const statAnos = settings?.statAnos || '+10 ANOS';
   const statAtendimento = settings?.statAtendimento || 'PERSONALIZADO E LOCAL';
 
+  const padUri = (url: string, w: number, h: number): string => {
+    const marker = '/image/upload/';
+    if (!url.includes(marker)) return url;
+    const idx = url.indexOf(marker) + marker.length;
+    return `${url.slice(0, idx)}c_pad,b_rgb:080808,w_${w},h_${h},f_auto,q_auto/${url.slice(idx)}`;
+  };
+  const bgMobile = padUri(bgImg, 1080, 1920);
+  const bgTablet = padUri(bgImg, 1280, 800);
+  const bgDesktop = padUri(bgImg, 1920, 1080);
+
   return (
     <section
       id="inicio"
@@ -36,11 +46,16 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBudget, onExploreProjects, set
     >
       {/* Background Luxury Interior with Dark Vignette & Gold Lighting */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={bgImg}
-          alt="Cozinha e Móveis Planejados em MDF de Luxo"
-          className="w-full h-full object-cover object-center scale-105 transform duration-1000 ease-out"
-        />
+        <picture>
+          <source media="(min-width: 1280px)" srcSet={bgDesktop} />
+          <source media="(min-width: 640px)" srcSet={bgTablet} />
+          <source srcSet={bgMobile} />
+          <img
+            src={bgImg}
+            alt="Propaganda RS Móveis Planejados"
+            className="w-full h-full object-contain object-center"
+          />
+        </picture>
         {/* Layered overlays for dramatic atmosphere & maximum contrast */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-black/60" />

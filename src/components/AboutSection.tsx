@@ -19,17 +19,8 @@ export const AboutSection: React.FC<{ settings?: SiteSettings }> = ({ settings }
                 <img
                   src={settings?.heroImagemFundo || 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80'}
                   alt="Propaganda RS Móveis Planejados"
-                  className="w-full h-[420px] sm:h-[480px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-[420px] sm:h-[480px] object-contain object-center group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <span className="text-xs uppercase tracking-widest text-[#D4AF37] font-semibold">
-                    FABRICAÇÃO PRÓPRIA & TECNOLOGIA
-                  </span>
-                  <p className="text-white text-lg font-serif-luxury font-medium mt-1">
-                    Precisão milimétrica em usinagem CNC e acabamento artesanal.
-                  </p>
-                </div>
               </div>
             </div>
           </div>
